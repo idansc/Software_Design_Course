@@ -143,8 +143,6 @@ public abstract class Parser implements CommandLineParser {
         requiredOptions = options.getRequiredOptions();
         cmd = new CommandLine();
 
-        boolean eatTheRest = false;
-
         if (arguments == null)
             arguments = new String[0];
 
@@ -161,51 +159,46 @@ public abstract class Parser implements CommandLineParser {
 
             // the value is the double-dash
             if ("--".equals(t))
-                eatTheRest = true;
+                break;
 
             // the value is a single dash
-            else if ("-".equals(t))
+            if ("-".equals(t))
             {
                 if (stopAtNonOption)
-                    eatTheRest = true;
-                else
-                    cmd.addArg(t);
+                    break;
+                cmd.addArg(t);
+                continue;
             }
 
             // the value is an option
-            else if (t.startsWith("-"))
+            if (t.startsWith("-"))
             {
                 if (stopAtNonOption && !options.hasOption(t))
                 {
-                    eatTheRest = true;
                     cmd.addArg(t);
+                    break;
                 }
-                else
-                    processOption(t, iterator);
+                processOption(t, iterator);
+            	continue;
             }
 
             // the value is an argument
-            else
-            {
-                cmd.addArg(t);
+            cmd.addArg(t);
 
-                if (stopAtNonOption)
-                    eatTheRest = true;
-            }
-
-            // eat the remaining tokens
-            if (eatTheRest)
-            {
-                while (iterator.hasNext())
-                {
-                    String str = (String) iterator.next();
-
-                    // ensure only one double-dash is added
-                    if (!"--".equals(str))
-                        cmd.addArg(str);
-                }
-            }
+            if (stopAtNonOption)
+            	break;
         }
+        
+        // eat the remaining tokens
+        while (iterator.hasNext())
+        {
+            String str = (String) iterator.next();
+
+            // ensure only one double-dash is added
+            if (!"--".equals(str))
+                cmd.addArg(str);
+        }
+
 
         processProperties(properties);
         checkRequiredOptions();
