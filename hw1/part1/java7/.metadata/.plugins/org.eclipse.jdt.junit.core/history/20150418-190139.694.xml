@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="test" project="Spartanization" tests="108" started="108" failures="1" errors="0" ignored="0">
+  <testsuite name="org.apache.commons.cli.PatternOptionBuilderTest" time="0.01">
+    <testcase name="testSimplePattern" classname="org.apache.commons.cli.PatternOptionBuilderTest" time="0.01"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ParseRequiredTest" time="0.0">
+    <testcase name="testMissingRequiredOption" classname="org.apache.commons.cli.ParseRequiredTest" time="0.0"/>
+    <testcase name="testWithRequiredOption" classname="org.apache.commons.cli.ParseRequiredTest" time="0.0"/>
+    <testcase name="testOptionAndRequiredOption" classname="org.apache.commons.cli.ParseRequiredTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.bug.BugCLI13Test" time="0.0">
+    <testcase name="testCLI13" classname="org.apache.commons.cli.bug.BugCLI13Test" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ValueTest" time="0.0">
+    <testcase name="testShortOptionalArgValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongOptionalArgValue" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testPropertyOverrideValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testShortOptionalArgNoValue" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongWithArg" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testPropertyOptionSingularValue" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testPropertyOptionMultipleValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testPropertyOptionFlags" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongOptionalNArgValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testShortWithArg" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongOptionalArgValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testShortOptionalNArgValues" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongNoArg" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testShortNoArg" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testLongOptionalNoValue" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+    <testcase name="testShortOptionalArgValue" classname="org.apache.commons.cli.ValueTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.GnuParseTest" time="0.0">
+    <testcase name="testSimpleLong" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testSimpleShort" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testStop" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testMissingArg" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testMultipleWithLong" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testDoubleDash" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testSingleDash" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testExtraOption" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+    <testcase name="testMultiple" classname="org.apache.commons.cli.GnuParseTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.OptionBuilderTest" time="0.0">
+    <testcase name="testBaseOptionStringOpt" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testTwoCompleteOptions" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testCompleteOption" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testOptionArgNumbers" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testIllegalOptions" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testSpecialOptChars" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+    <testcase name="testBaseOptionCharOpt" classname="org.apache.commons.cli.OptionBuilderTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.OptionTest" time="0.0">
+    <testcase name="testSubclass" classname="org.apache.commons.cli.OptionTest" time="0.0"/>
+    <testcase name="testClear" classname="org.apache.commons.cli.OptionTest" time="0.0"/>
+    <testcase name="testClone" classname="org.apache.commons.cli.OptionTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.HelpFormatterTest" time="0.01">
+    <testcase name="testPrintWrapped" classname="org.apache.commons.cli.HelpFormatterTest" time="0.0"/>
+    <testcase name="testPrintUsage" classname="org.apache.commons.cli.HelpFormatterTest" time="0.0"/>
+    <testcase name="testPrintOptions" classname="org.apache.commons.cli.HelpFormatterTest" time="0.01"/>
+    <testcase name="testAutomaticUsage" classname="org.apache.commons.cli.HelpFormatterTest" time="0.0"/>
+    <testcase name="testFindWrapPos" classname="org.apache.commons.cli.HelpFormatterTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ParseTest" time="0.0">
+    <testcase name="testSimpleLong" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testSimpleShort" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testStop" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testMissingArg" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testMultipleWithLong" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testDoubleDash" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testSingleDash" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testExtraOption" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testComplexShort" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+    <testcase name="testMultiple" classname="org.apache.commons.cli.ParseTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.UtilTest" time="0.0">
+    <testcase name="testStripLeadingHyphens" classname="org.apache.commons.cli.UtilTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.LongOptionWithShort" time="0.0">
+    <testcase name="testLongOptionWithShort" classname="org.apache.commons.cli.LongOptionWithShort" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.BugsTest" time="0.0">
+    <testcase name="test11456" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test11457" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test11458" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test11680" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test12210" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test13425" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test13666" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test13935" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test14786" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test15046" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test15648" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test19383" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test21215" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test27635" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+    <testcase name="test31148" classname="org.apache.commons.cli.BugsTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.bug.BugCLI18Test" time="0.0">
+    <testcase name="testCLI18" classname="org.apache.commons.cli.bug.BugCLI18Test" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.bug.BugCLI133Test" time="0.0">
+    <testcase name="testOrder" classname="org.apache.commons.cli.bug.BugCLI133Test" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.bug.BugCLI71Test" time="0.0">
+    <testcase name="testBasic" classname="org.apache.commons.cli.bug.BugCLI71Test" time="0.0"/>
+    <testcase name="testLackOfError" classname="org.apache.commons.cli.bug.BugCLI71Test" time="0.0"/>
+    <testcase name="testMistakenArgument" classname="org.apache.commons.cli.bug.BugCLI71Test" time="0.0"/>
+    <testcase name="testGetsDefaultIfOptional" classname="org.apache.commons.cli.bug.BugCLI71Test" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.OptionsTest" time="0.04">
+    <testcase name="testMissingOptionsException" classname="org.apache.commons.cli.OptionsTest" time="0.0"/>
+    <testcase name="testHelpOptions" classname="org.apache.commons.cli.OptionsTest" time="0.0"/>
+    <testcase name="testMissingOptionException" classname="org.apache.commons.cli.OptionsTest" time="0.04">
+      <failure>
+        <expected>Missing required option: f</expected>
+        <actual>Missing required optionf</actual>junit.framework.ComparisonFailure: expected:&lt;...sing required option[: ]f&gt; but was:&lt;...sing required option[]f&gt;&#13;
+	at junit.framework.Assert.assertEquals(Assert.java:100)&#13;
+	at junit.framework.Assert.assertEquals(Assert.java:107)&#13;
+	at junit.framework.TestCase.assertEquals(TestCase.java:269)&#13;
+	at org.apache.commons.cli.OptionsTest.testMissingOptionException(OptionsTest.java:104)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#13;
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)&#13;
+	at java.lang.reflect.Method.invoke(Unknown Source)&#13;
+	at junit.framework.TestCase.runTest(TestCase.java:176)&#13;
+	at junit.framework.TestCase.runBare(TestCase.java:141)&#13;
+	at junit.framework.TestResult$1.protect(TestResult.java:122)&#13;
+	at junit.framework.TestResult.runProtected(TestResult.java:142)&#13;
+	at junit.framework.TestResult.run(TestResult.java:125)&#13;
+	at junit.framework.TestCase.run(TestCase.java:129)&#13;
+	at junit.framework.TestSuite.runTest(TestSuite.java:255)&#13;
+	at junit.framework.TestSuite.run(TestSuite.java:250)&#13;
+	at org.eclipse.jdt.internal.junit.runner.junit3.JUnit3TestReference.run(JUnit3TestReference.java:131)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:675)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:192)&#13;
+&#13;
+</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.BuildTest" time="0.0">
+    <testcase name="testLong" classname="org.apache.commons.cli.BuildTest" time="0.0"/>
+    <testcase name="testDuplicateSimple" classname="org.apache.commons.cli.BuildTest" time="0.0"/>
+    <testcase name="testDuplicateLong" classname="org.apache.commons.cli.BuildTest" time="0.0"/>
+    <testcase name="testSimple" classname="org.apache.commons.cli.BuildTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.bug.BugCLI51Test" time="0.0">
+    <testcase name="test" classname="org.apache.commons.cli.bug.BugCLI51Test" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.OptionGroupTest" time="0.0">
+    <testcase name="testTwoOptionsFromDifferentGroup" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testNoOptionsExtraArgs" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testTwoValidOptions" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testSingleOption" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testTwoOptionsFromGroup" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testTwoValidLongOptions" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testSingleOptionFromGroup" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testTwoLongOptionsFromGroup" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testSingleLongOption" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+    <testcase name="testValidLongOnlyOptions" classname="org.apache.commons.cli.OptionGroupTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ArgumentIsOptionTest" time="0.0">
+    <testcase name="testOptionWithArgument" classname="org.apache.commons.cli.ArgumentIsOptionTest" time="0.0"/>
+    <testcase name="testOptionAndOptionWithArgument" classname="org.apache.commons.cli.ArgumentIsOptionTest" time="0.0"/>
+    <testcase name="testOption" classname="org.apache.commons.cli.ArgumentIsOptionTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ValuesTest" time="0.0">
+    <testcase name="testTwoArgValues" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testShortArgs" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testCharSeparator" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testExtraArgs" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testShortArgsWithValue" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testComplexValues" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+    <testcase name="testMultipleArgValues" classname="org.apache.commons.cli.ValuesTest" time="0.0"/>
+  </testsuite>
+  <testsuite name="org.apache.commons.cli.ApplicationTest" time="0.01">
+    <testcase name="testAnt" classname="org.apache.commons.cli.ApplicationTest" time="0.0"/>
+    <testcase name="testLs" classname="org.apache.commons.cli.ApplicationTest" time="0.01"/>
+  </testsuite>
+</testrun>

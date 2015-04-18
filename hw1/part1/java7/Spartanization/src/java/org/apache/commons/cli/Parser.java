@@ -33,13 +33,13 @@ import java.util.Properties;
 public abstract class Parser implements CommandLineParser {
 
     /** commandline instance */
-    private CommandLine cmd;
+    private CommandLine _cmd;
 
     /** current Options */
-    private Options options;
+    private Options _options;
 
     /** list of required options strings */
-    private List requiredOptions;
+    private List _requiredOptions;
 
     /**
      * <p>Subclasses must implement this method to reduce
@@ -132,7 +132,7 @@ public abstract class Parser implements CommandLineParser {
         throws ParseException
     {
         // initialise members
-        this.options = options;
+        _options = options;
 
         // clear out the data in options in case it's been used before (CLI-71)
         for (Iterator it = options.helpOptions().iterator(); it.hasNext();) {
@@ -140,13 +140,13 @@ public abstract class Parser implements CommandLineParser {
             opt.clearValues();
         }
 
-        requiredOptions = options.getRequiredOptions();
-        cmd = new CommandLine();
+        _requiredOptions = options.getRequiredOptions();
+        _cmd = new CommandLine();
 
         if (arguments == null)
             arguments = new String[0];
 
-        List tokenList = Arrays.asList(flatten(this.options, 
+        List tokenList = Arrays.asList(flatten(_options, 
                                                arguments, 
                                                stopAtNonOption));
 
@@ -166,7 +166,7 @@ public abstract class Parser implements CommandLineParser {
             {
                 if (stopAtNonOption)
                     break;
-                cmd.addArg(t);
+                _cmd.addArg(t);
                 continue;
             }
 
@@ -175,7 +175,7 @@ public abstract class Parser implements CommandLineParser {
             {
                 if (stopAtNonOption && !options.hasOption(t))
                 {
-                    cmd.addArg(t);
+                    _cmd.addArg(t);
                     break;
                 }
                 processOption(t, iterator);
@@ -183,7 +183,7 @@ public abstract class Parser implements CommandLineParser {
             }
 
             // the value is an argument
-            cmd.addArg(t);
+            _cmd.addArg(t);
 
             if (stopAtNonOption)
             	break;
@@ -196,15 +196,17 @@ public abstract class Parser implements CommandLineParser {
 
             // ensure only one double-dash is added
             if (!"--".equals(str))
-                cmd.addArg(str);
+                _cmd.addArg(str);
         }
 
 
         processProperties(properties);
         checkRequiredOptions();
 
-        return cmd;
+        return _cmd;
     }
+    
+
 
     /**
      * <p>Sets the values of Options using the values in 
@@ -222,35 +224,28 @@ public abstract class Parser implements CommandLineParser {
         {
             String option = e.nextElement().toString();
 
-            if (!cmd.hasOption(option))
+            if (_cmd.hasOption(option))
+            	continue;
+
+            Option opt = _options.getOption(option);
+
+            // get the value from the properties instance
+            String value = properties.getProperty(option);
+
+            if (opt.hasArg())
             {
-                Option opt = options.getOption(option);
-
-                // get the value from the properties instance
-                String value = properties.getProperty(option);
-
-                if (opt.hasArg())
-                {
-                    if ((opt.getValues() == null)
-                        || (opt.getValues().length == 0))
-                        try
-                        {
-                            opt.addValueForProcessing(value);
-                        }
-                        catch (RuntimeException exp)
-                        {
-                            // if we cannot add the value don't worry about it
-                        }
-                }
-                else if (!("yes".equalsIgnoreCase(value) 
-                           || "true".equalsIgnoreCase(value)
-                           || "1".equalsIgnoreCase(value)))
-                    // if the value is not yes, true or 1 then don't add the
-                    // option to the CommandLine
-                    break;
-
-                cmd.addOption(opt);
+                if ((opt.getValues() == null)
+                    || (opt.getValues().length == 0))
+                        opt.addValueForProcessing(value);
             }
+            else if (!("yes".equalsIgnoreCase(value) 
+                       || "true".equalsIgnoreCase(value)
+                       || "1".equalsIgnoreCase(value)))
+                // if the value is not yes, true or 1 then don't add the
+                // option to the CommandLine
+                break;
+
+            _cmd.addOption(opt);
         }
     }
 
@@ -266,20 +261,19 @@ public abstract class Parser implements CommandLineParser {
     {
         // if there are required options that have not been
         // processsed
-        if (requiredOptions.size() > 0)
-        {
-            Iterator iter = requiredOptions.iterator();
-            StringBuffer buff = new StringBuffer("Missing required option");
-            buff.append(requiredOptions.size() == 1 ? "" : "s");
-            buff.append(": ");
+        if (_requiredOptions.size() <= 0)
+        	return;
+
+        Iterator iter = _requiredOptions.iterator();
+        StringBuffer buff = new StringBuffer("Missing required option");
+        buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
 
 
-            // loop through the required options
-            while (iter.hasNext())
-                buff.append(iter.next());
+        // loop through the required options
+        while (iter.hasNext())
+            buff.append(iter.next());
 
-            throw new MissingOptionException(buff.toString());
-        }
+        throw new MissingOptionException(buff.toString());
     }
 
     /**
@@ -303,7 +297,7 @@ public abstract class Parser implements CommandLineParser {
             String str = (String) iter.next();
 
             // found an Option, not an argument
-            if (options.hasOption(str) && str.startsWith("-"))
+            if (_options.hasOption(str) && str.startsWith("-"))
             {
                 iter.previous();
                 break;
@@ -341,29 +335,27 @@ public abstract class Parser implements CommandLineParser {
     private void processOption(String arg, ListIterator iter)
         throws ParseException
     {
-        boolean hasOption = options.hasOption(arg);
-
         // if there is no option throw an UnrecognisedOptionException
-        if (!hasOption)
+        if (!_options.hasOption(arg))
             throw new UnrecognizedOptionException("Unrecognized option: " 
                                                   + arg);
         
         // get the option represented by arg
-        final Option opt = options.getOption(arg);
+        final Option opt = _options.getOption(arg);
 
         // if the option is a required option remove the option from
         // the requiredOptions list
         if (opt.isRequired())
-            requiredOptions.remove(opt.getKey());
+            _requiredOptions.remove(opt.getKey());
 
         // if the option is in an OptionGroup make that option the selected
         // option of the group
-        if (options.getOptionGroup(opt) != null)
+        if (_options.getOptionGroup(opt) != null)
         {
-            OptionGroup group = options.getOptionGroup(opt);
+            OptionGroup group = _options.getOptionGroup(opt);
 
             if (group.isRequired())
-                requiredOptions.remove(group);
+                _requiredOptions.remove(group);
 
             group.setSelected(opt);
         }
@@ -374,6 +366,6 @@ public abstract class Parser implements CommandLineParser {
 
 
         // set the option on the command line
-        cmd.addOption(opt);
+        _cmd.addOption(opt);
     }
 }
