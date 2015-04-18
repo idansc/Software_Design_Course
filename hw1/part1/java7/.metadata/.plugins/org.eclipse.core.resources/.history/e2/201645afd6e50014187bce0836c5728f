@@ -377,7 +377,9 @@ public abstract class Parser implements CommandLineParser {
 
         // if the option takes an argument value
         if (opt.hasArg())
+        {
             processArgs(opt, iter);
+        }
 
 
         // set the option on the command line

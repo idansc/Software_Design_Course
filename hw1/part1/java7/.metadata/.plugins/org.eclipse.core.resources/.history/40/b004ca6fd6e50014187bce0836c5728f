@@ -224,7 +224,6 @@ public abstract class Parser implements CommandLineParser {
         if (properties == null)
             return;
 
-
         for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
         {
             String option = e.nextElement().toString();
@@ -237,7 +236,6 @@ public abstract class Parser implements CommandLineParser {
                 String value = properties.getProperty(option);
 
                 if (opt.hasArg())
-                {
                     if ((opt.getValues() == null)
                         || (opt.getValues().length == 0))
                         try
@@ -248,7 +246,6 @@ public abstract class Parser implements CommandLineParser {
                         {
                             // if we cannot add the value don't worry about it
                         }
-                }
                 else if (!("yes".equalsIgnoreCase(value) 
                            || "true".equalsIgnoreCase(value)
                            || "1".equalsIgnoreCase(value)))
@@ -283,7 +280,9 @@ public abstract class Parser implements CommandLineParser {
 
             // loop through the required options
             while (iter.hasNext())
+            {
                 buff.append(iter.next());
+            }
 
             throw new MissingOptionException(buff.toString());
         }
@@ -329,8 +328,10 @@ public abstract class Parser implements CommandLineParser {
         }
 
         if ((opt.getValues() == null) && !opt.hasOptionalArg())
+        {
             throw new MissingArgumentException("Missing argument for option:"
                                                + opt.getKey());
+        }
     }
 
     /**
@@ -352,8 +353,10 @@ public abstract class Parser implements CommandLineParser {
 
         // if there is no option throw an UnrecognisedOptionException
         if (!hasOption)
+        {
             throw new UnrecognizedOptionException("Unrecognized option: " 
                                                   + arg);
+        }
         
         // get the option represented by arg
         final Option opt = options.getOption(arg);
@@ -361,7 +364,9 @@ public abstract class Parser implements CommandLineParser {
         // if the option is a required option remove the option from
         // the requiredOptions list
         if (opt.isRequired())
+        {
             requiredOptions.remove(opt.getKey());
+        }
 
         // if the option is in an OptionGroup make that option the selected
         // option of the group
@@ -370,14 +375,18 @@ public abstract class Parser implements CommandLineParser {
             OptionGroup group = options.getOptionGroup(opt);
 
             if (group.isRequired())
+            {
                 requiredOptions.remove(group);
+            }
 
             group.setSelected(opt);
         }
 
         // if the option takes an argument value
         if (opt.hasArg())
+        {
             processArgs(opt, iter);
+        }
 
 
         // set the option on the command line
