@@ -287,7 +287,7 @@ public abstract class Parser implements CommandLineParser {
      * @throws ParseException if an argument value is required
      * and it is has not been found.
      */
-    public void processArgs(Option opt, ListIterator iter)
+    private void processArgs(Option opt, ListIterator iter)
         throws ParseException
     {
         // loop until an option is found
