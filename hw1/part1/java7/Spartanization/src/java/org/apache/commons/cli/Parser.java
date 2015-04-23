@@ -199,54 +199,43 @@ public abstract class Parser implements CommandLineParser {
         }
 
 
-        processProperties(properties);
+        if (properties != null)
+		{
+		
+		    for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
+		    {
+		        String option = e.nextElement().toString();
+		
+		        if (_cmd.hasOption(option))
+		        	continue;
+		
+		        Option opt = _options.getOption(option);
+		
+		        // get the value from the properties instance
+		        String value = properties.getProperty(option);
+		
+		        if (opt.hasArg())
+		        {
+		            if ((opt.getValues() == null)
+		                || (opt.getValues().length == 0))
+		                    opt.addValueForProcessing(value);
+		        }
+		        else if (!("yes".equalsIgnoreCase(value) 
+		                   || "true".equalsIgnoreCase(value)
+		                   || "1".equalsIgnoreCase(value)))
+		            // if the value is not yes, true or 1 then don't add the
+		            // option to the CommandLine
+		            break;
+		
+		        _cmd.addOption(opt);
+		    }
+		}
         checkRequiredOptions();
 
         return _cmd;
     }
     
 
-
-    /**
-     * <p>Sets the values of Options using the values in 
-     * <code>properties</code>.</p>
-     *
-     * @param properties The value properties to be processed.
-     */
-    private void processProperties(Properties properties)
-    {
-        if (properties == null)
-            return;
-
-
-        for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
-        {
-            String option = e.nextElement().toString();
-
-            if (_cmd.hasOption(option))
-            	continue;
-
-            Option opt = _options.getOption(option);
-
-            // get the value from the properties instance
-            String value = properties.getProperty(option);
-
-            if (opt.hasArg())
-            {
-                if ((opt.getValues() == null)
-                    || (opt.getValues().length == 0))
-                        opt.addValueForProcessing(value);
-            }
-            else if (!("yes".equalsIgnoreCase(value) 
-                       || "true".equalsIgnoreCase(value)
-                       || "1".equalsIgnoreCase(value)))
-                // if the value is not yes, true or 1 then don't add the
-                // option to the CommandLine
-                break;
-
-            _cmd.addOption(opt);
-        }
-    }
 
     /**
      * <p>Throws a {@link MissingOptionException} if all of the
