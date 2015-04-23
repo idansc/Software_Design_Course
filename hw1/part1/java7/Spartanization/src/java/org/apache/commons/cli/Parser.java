@@ -135,9 +135,8 @@ public abstract class Parser implements CommandLineParser {
         _options = options;
 
         // clear out the data in options in case it's been used before (CLI-71)
-        for (Iterator it = options.helpOptions().iterator(); it.hasNext();) {
-            Option opt = (Option) it.next();
-            opt.clearValues();
+        for (Iterator<Option> it = options.helpOptions().iterator(); it.hasNext();) {
+            it.next().clearValues();
         }
 
         _requiredOptions = options.getRequiredOptions();
