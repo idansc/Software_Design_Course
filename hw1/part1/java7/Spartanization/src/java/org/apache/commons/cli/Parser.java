@@ -201,7 +201,6 @@ public abstract class Parser implements CommandLineParser {
 
         if (properties != null)
 		{
-		
 		    for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
 		    {
 		        String option = e.nextElement().toString();
@@ -230,39 +229,26 @@ public abstract class Parser implements CommandLineParser {
 		        _cmd.addOption(opt);
 		    }
 		}
-        checkRequiredOptions();
+        // if there are required options that have not been
+		// processsed
+		if (_requiredOptions.size() > 0)
+		{
+		    Iterator iter = _requiredOptions.iterator();
+		    StringBuffer buff = new StringBuffer("Missing required option");
+		    buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
+		
+		
+		    // loop through the required options
+		    while (iter.hasNext())
+		        buff.append(iter.next());
+		
+		    throw new MissingOptionException(buff.toString());
+		}
 
         return _cmd;
     }
     
 
-
-    /**
-     * <p>Throws a {@link MissingOptionException} if all of the
-     * required options are no present.</p>
-     *
-     * @throws MissingOptionException if any of the required Options
-     * are not present.
-     */
-    private void checkRequiredOptions()
-        throws MissingOptionException
-    {
-        // if there are required options that have not been
-        // processsed
-        if (_requiredOptions.size() <= 0)
-        	return;
-
-        Iterator iter = _requiredOptions.iterator();
-        StringBuffer buff = new StringBuffer("Missing required option");
-        buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
-
-
-        // loop through the required options
-        while (iter.hasNext())
-            buff.append(iter.next());
-
-        throw new MissingOptionException(buff.toString());
-    }
 
     /**
      * <p>Process the argument values for the specified Option
