@@ -186,8 +186,6 @@ public abstract class Parser implements CommandLineParser {
 				    throw new UnrecognizedOptionException("Unrecognized option: " 
 				                                          + t);
 				
-
-				
 				// if the option is a required option remove the option from
 				// the requiredOptions list
 				_requiredOptions.remove(opt.getKey());
