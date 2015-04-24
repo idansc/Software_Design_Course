@@ -135,9 +135,10 @@ public abstract class Parser implements CommandLineParser {
         _options = options;
 
         // clear out the data in options in case it's been used before (CLI-71)
-        for (Iterator<Option> it = options.helpOptions().iterator(); it.hasNext();) {
-            it.next().clearValues();
+        for (Object opt : options.helpOptions()) {
+            ((Option) opt).clearValues();
         }
+
 
         _requiredOptions = options.getRequiredOptions();
         _cmd = new CommandLine();
@@ -169,44 +170,39 @@ public abstract class Parser implements CommandLineParser {
                 continue;
             }
 
+            if (stopAtNonOption && !options.hasOption(t))
+            {
+                _cmd.addArg(t);
+                break;
+            }
             // the value is an option
             if (t.startsWith("-"))
             {
-                if (stopAtNonOption && !options.hasOption(t))
-                {
-                    _cmd.addArg(t);
-                    break;
-                }
+				// get the option represented by arg
+            	//TODO::: CAN I CHECK ASSIGNEMENT?
+            	Option opt;
                 // if there is no option throw an UnrecognisedOptionException
-				if (!_options.hasOption(t))
+            	if((opt=_options.getOption(t)) == null)
 				    throw new UnrecognizedOptionException("Unrecognized option: " 
 				                                          + t);
 				
-				// get the option represented by arg
-				final Option opt = _options.getOption(t);
+
 				
 				// if the option is a required option remove the option from
 				// the requiredOptions list
-				if (opt.isRequired())
-				    _requiredOptions.remove(opt.getKey());
+				_requiredOptions.remove(opt.getKey());
 				
 				// if the option is in an OptionGroup make that option the selected
 				// option of the group
-				if (_options.getOptionGroup(opt) != null)
-				{
-				    OptionGroup group = _options.getOptionGroup(opt);
-				
-				    if (group.isRequired())
-				        _requiredOptions.remove(group);
-				
-				    group.setSelected(opt);
-				}
+				OptionGroup group;
+				if ((group=_options.getOptionGroup(opt)) != null)
+					group.setSelected(opt);
+				_requiredOptions.remove(group);
 				
 				// if the option takes an argument value
 				if (opt.hasArg()) {
 					// loop until an option is found
-					while (iterator.hasNext())
-					{
+					while (iterator.hasNext()){
 					    String str = (String) iterator.next();
 					
 					    // found an Option, not an argument
@@ -260,31 +256,17 @@ public abstract class Parser implements CommandLineParser {
         //process properties:
         if (properties != null)
 		{
-		    for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
+		    for (String option: properties.stringPropertyNames())
 		    {
-		        String option = e.nextElement().toString();
-		
 		        if (_cmd.hasOption(option))
 		        	continue;
-		
 		        Option opt = _options.getOption(option);
-		
-		        // get the value from the properties instance
 		        String value = properties.getProperty(option);
-		
-		        if (opt.hasArg())
-		        {
-		            if ((opt.getValues() == null)
-		                || (opt.getValues().length == 0))
-		                    opt.addValueForProcessing(value);
-		        }
-		        else if (!("yes".equalsIgnoreCase(value) 
-		                   || "true".equalsIgnoreCase(value)
-		                   || "1".equalsIgnoreCase(value)))
-		            // if the value is not yes, true or 1 then don't add the
-		            // option to the CommandLine
-		            break;
-		
+
+		        if (opt.hasArg() && (opt.getValues() == null))
+		        	opt.addValueForProcessing(value);
+		        else if (!(value.matches("[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|1")))
+		        	break;
 		        _cmd.addOption(opt);
 		    }
 		}
