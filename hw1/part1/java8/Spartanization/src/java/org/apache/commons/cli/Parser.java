@@ -266,22 +266,20 @@ public abstract class Parser implements CommandLineParser {
 		        _cmd.addOption(opt);
 		    }
 		}
-        // check required options:
-        // if there are required options that have not been
-		// processsed
-		if (_requiredOptions.size() > 0)
-		{
-		    Iterator iter = _requiredOptions.iterator();
-		    StringBuffer buff = new StringBuffer("Missing required option");
-		    buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
 		
-		    // loop through the required options
-		    while (iter.hasNext())
-		        buff.append(iter.next());
+        if (_requiredOptions.size() <= 0)
+			return _cmd;
 		
-		    throw new MissingOptionException(buff.toString());
-		}
-
-        return _cmd;
+        
+        // there are required options that have not been processsed
+	    
+	    StringBuffer buff = new StringBuffer("Missing required option");
+	    buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
+	
+	    // loop through the required options
+	    _requiredOptions.stream().forEach(x -> buff.append(x));
+	
+	    throw new MissingOptionException(buff.toString());
+        
     }
 }
