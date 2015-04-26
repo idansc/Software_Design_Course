@@ -248,23 +248,26 @@ public abstract class Parser implements CommandLineParser {
                 _cmd.addArg(str);
         }
 
-
+//TODO: forEachOrdered
+        
         //process properties:
         if (properties != null)
 		{
-		    for (String option: properties.stringPropertyNames())
-		    {
+        	//TODO: try to improve. TODO: anyMatch does not promisse termination!!!
+        	//for (String option : properties.stringPropertyNames()) {
+        	properties.stringPropertyNames().stream().anyMatch(option -> {
 		        if (_cmd.hasOption(option))
-		        	continue;
+		        	return false;
 		        Option opt = _options.getOption(option);
 		        String value = properties.getProperty(option);
 
 		        if (opt.hasArg() && (opt.getValues() == null))
 		        	opt.addValueForProcessing(value);
 		        else if (!(value.matches("[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|1")))
-		        	break;
+		        	return true;
 		        _cmd.addOption(opt);
-		    }
+		        return false;
+        	});
 		}
 		
         if (_requiredOptions.size() <= 0)
