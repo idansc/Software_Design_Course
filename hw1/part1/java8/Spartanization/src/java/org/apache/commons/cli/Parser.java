@@ -135,8 +135,7 @@ public abstract class Parser implements CommandLineParser {
         _options = options;
 
         // clear out the data in options in case it's been used before (CLI-71)
-        options.helpOptions().stream().forEach(x -> ((Option)x).clearValues());
-
+        options.helpOptions().stream().forEachOrdered(x -> ((Option)x).clearValues());
 
         _requiredOptions = options.getRequiredOptions();
         _cmd = new CommandLine();
@@ -248,12 +247,11 @@ public abstract class Parser implements CommandLineParser {
                 _cmd.addArg(str);
         }
 
-//TODO: forEachOrdered
         
         //process properties:
         if (properties != null)
 		{
-        	//TODO: try to improve. TODO: anyMatch does not promisse termination!!!
+        	//TODO: try to improve. 
         	//for (String option : properties.stringPropertyNames()) {
         	properties.stringPropertyNames().stream().anyMatch(option -> {
 		        if (_cmd.hasOption(option))
@@ -280,7 +278,7 @@ public abstract class Parser implements CommandLineParser {
 	    buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
 	
 	    // loop through the required options
-	    _requiredOptions.stream().forEach(x -> buff.append(x));
+	    _requiredOptions.stream().forEachOrdered(x -> buff.append(x));
 	
 	    throw new MissingOptionException(buff.toString());
         
