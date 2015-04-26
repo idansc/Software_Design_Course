@@ -32,7 +32,10 @@ import java.util.Properties;
  */
 public abstract class Parser implements CommandLineParser {
 
+	// We should have created a new exception class instead of using StringIndexOutOfBoundsException, but 
+	// we can't spare those tokens :(
 	StringIndexOutOfBoundsException dummyException = new StringIndexOutOfBoundsException();
+	
 	class UnchekdExceptionWrapper extends RuntimeException
 	{
 		ParseException innerExc;
