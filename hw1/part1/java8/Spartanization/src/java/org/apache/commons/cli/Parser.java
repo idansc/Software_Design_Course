@@ -33,13 +33,13 @@ import java.util.Properties;
 public abstract class Parser implements CommandLineParser {
 
     /** commandline instance */
-    private CommandLine cmd;
+    private CommandLine _cmd;
 
     /** current Options */
-    private Options options;
+    private Options _options;
 
     /** list of required options strings */
-    private List requiredOptions;
+    private List _requiredOptions;
 
     /**
      * <p>Subclasses must implement this method to reduce
@@ -132,25 +132,19 @@ public abstract class Parser implements CommandLineParser {
         throws ParseException
     {
         // initialise members
-        this.options = options;
+        _options = options;
 
         // clear out the data in options in case it's been used before (CLI-71)
-        for (Iterator it = options.helpOptions().iterator(); it.hasNext();) {
-            Option opt = (Option) it.next();
-            opt.clearValues();
-        }
+        options.helpOptions().stream().forEach(x -> ((Option)x).clearValues());
 
-        requiredOptions = options.getRequiredOptions();
-        cmd = new CommandLine();
 
-        boolean eatTheRest = false;
+        _requiredOptions = options.getRequiredOptions();
+        _cmd = new CommandLine();
 
         if (arguments == null)
-        {
             arguments = new String[0];
-        }
 
-        List tokenList = Arrays.asList(flatten(this.options, 
+        List tokenList = Arrays.asList(flatten(_options, 
                                                arguments, 
                                                stopAtNonOption));
 
@@ -163,255 +157,131 @@ public abstract class Parser implements CommandLineParser {
 
             // the value is the double-dash
             if ("--".equals(t))
-            {
-                eatTheRest = true;
-            }
+                break;
 
             // the value is a single dash
-            else if ("-".equals(t))
+            if ("-".equals(t))
             {
                 if (stopAtNonOption)
-                {
-                    eatTheRest = true;
-                }
-                else
-                {
-                    cmd.addArg(t);
-                }
+                    break;
+                _cmd.addArg(t);
+                continue;
             }
 
-            // the value is an option
-            else if (t.startsWith("-"))
+            if (stopAtNonOption && !options.hasOption(t))
             {
-                if (stopAtNonOption && !options.hasOption(t))
-                {
-                    eatTheRest = true;
-                    cmd.addArg(t);
-                }
-                else
-                {
-                    processOption(t, iterator);
-                }
+                _cmd.addArg(t);
+                break;
+            }
+            // the value is an option
+            if (t.startsWith("-"))
+            {
+				// get the option represented by arg
+            	//TODO::: CAN I CHECK ASSIGNEMENT?
+            	Option opt;
+                // if there is no option throw an UnrecognisedOptionException
+            	if((opt=_options.getOption(t)) == null)
+				    throw new UnrecognizedOptionException("Unrecognized option: " 
+				                                          + t);
+				
+				// if the option is a required option remove the option from
+				// the requiredOptions list
+				_requiredOptions.remove(opt.getKey());
+				
+				// if the option is in an OptionGroup make that option the selected
+				// option of the group
+				OptionGroup group;
+				if ((group=_options.getOptionGroup(opt)) != null)
+					group.setSelected(opt);
+				_requiredOptions.remove(group);
+				
+				// if the option takes an argument value
+				if (opt.hasArg()) {
+					// loop until an option is found
+					while (iterator.hasNext()){
+					    String str = (String) iterator.next();
+					
+					    // found an Option, not an argument
+					    if (_options.hasOption(str) && str.startsWith("-"))
+					    {
+					        iterator.previous();
+					        break;
+					    }
+					
+					    // found a value
+					    try
+					    {
+					        opt.addValueForProcessing( Util.stripLeadingAndTrailingQuotes(str) );
+					    }
+					    catch (RuntimeException exp)
+					    {
+					        iterator.previous();
+					        break;
+					    }
+					}
+					
+					if ((opt.getValues() == null) && !opt.hasOptionalArg())
+					    throw new MissingArgumentException("Missing argument for option:"
+					                                       + opt.getKey());
+				}
+				
+				
+				// set the option on the command line
+				_cmd.addOption(opt);
+            	continue;
             }
 
             // the value is an argument
-            else
-            {
-                cmd.addArg(t);
+            _cmd.addArg(t);
 
-                if (stopAtNonOption)
-                {
-                    eatTheRest = true;
-                }
-            }
-
-            // eat the remaining tokens
-            if (eatTheRest)
-            {
-                while (iterator.hasNext())
-                {
-                    String str = (String) iterator.next();
-
-                    // ensure only one double-dash is added
-                    if (!"--".equals(str))
-                    {
-                        cmd.addArg(str);
-                    }
-                }
-            }
-        }
-
-        processProperties(properties);
-        checkRequiredOptions();
-
-        return cmd;
-    }
-
-    /**
-     * <p>Sets the values of Options using the values in 
-     * <code>properties</code>.</p>
-     *
-     * @param properties The value properties to be processed.
-     */
-    private void processProperties(Properties properties)
-    {
-        if (properties == null)
-        {
-            return;
-        }
-
-        for (Enumeration e = properties.propertyNames(); e.hasMoreElements();)
-        {
-            String option = e.nextElement().toString();
-
-            if (!cmd.hasOption(option))
-            {
-                Option opt = options.getOption(option);
-
-                // get the value from the properties instance
-                String value = properties.getProperty(option);
-
-                if (opt.hasArg())
-                {
-                    if ((opt.getValues() == null)
-                        || (opt.getValues().length == 0))
-                    {
-                        try
-                        {
-                            opt.addValueForProcessing(value);
-                        }
-                        catch (RuntimeException exp)
-                        {
-                            // if we cannot add the value don't worry about it
-                        }
-                    }
-                }
-                else if (!("yes".equalsIgnoreCase(value) 
-                           || "true".equalsIgnoreCase(value)
-                           || "1".equalsIgnoreCase(value)))
-                {
-                    // if the value is not yes, true or 1 then don't add the
-                    // option to the CommandLine
-                    break;
-                }
-
-                cmd.addOption(opt);
-            }
-        }
-    }
-
-    /**
-     * <p>Throws a {@link MissingOptionException} if all of the
-     * required options are no present.</p>
-     *
-     * @throws MissingOptionException if any of the required Options
-     * are not present.
-     */
-    private void checkRequiredOptions()
-        throws MissingOptionException
-    {
-        // if there are required options that have not been
-        // processsed
-        if (requiredOptions.size() > 0)
-        {
-            Iterator iter = requiredOptions.iterator();
-            StringBuffer buff = new StringBuffer("Missing required option");
-            buff.append(requiredOptions.size() == 1 ? "" : "s");
-            buff.append(": ");
-
-
-            // loop through the required options
-            while (iter.hasNext())
-            {
-                buff.append(iter.next());
-            }
-
-            throw new MissingOptionException(buff.toString());
-        }
-    }
-
-    /**
-     * <p>Process the argument values for the specified Option
-     * <code>opt</code> using the values retrieved from the 
-     * specified iterator <code>iter</code>.
-     *
-     * @param opt The current Option
-     * @param iter The iterator over the flattened command line
-     * Options.
-     *
-     * @throws ParseException if an argument value is required
-     * and it is has not been found.
-     */
-    public void processArgs(Option opt, ListIterator iter)
-        throws ParseException
-    {
-        // loop until an option is found
-        while (iter.hasNext())
-        {
-            String str = (String) iter.next();
-
-            // found an Option, not an argument
-            if (options.hasOption(str) && str.startsWith("-"))
-            {
-                iter.previous();
-                break;
-            }
-
-            // found a value
-            try
-            {
-                opt.addValueForProcessing( Util.stripLeadingAndTrailingQuotes(str) );
-            }
-            catch (RuntimeException exp)
-            {
-                iter.previous();
-                break;
-            }
-        }
-
-        if ((opt.getValues() == null) && !opt.hasOptionalArg())
-        {
-            throw new MissingArgumentException("Missing argument for option:"
-                                               + opt.getKey());
-        }
-    }
-
-    /**
-     * <p>Process the Option specified by <code>arg</code>
-     * using the values retrieved from the specfied iterator
-     * <code>iter</code>.
-     *
-     * @param arg The String value representing an Option
-     * @param iter The iterator over the flattened command 
-     * line arguments.
-     *
-     * @throws ParseException if <code>arg</code> does not
-     * represent an Option
-     */
-    private void processOption(String arg, ListIterator iter)
-        throws ParseException
-    {
-        boolean hasOption = options.hasOption(arg);
-
-        // if there is no option throw an UnrecognisedOptionException
-        if (!hasOption)
-        {
-            throw new UnrecognizedOptionException("Unrecognized option: " 
-                                                  + arg);
+            if (stopAtNonOption)
+            	break;
         }
         
-        // get the option represented by arg
-        final Option opt = options.getOption(arg);
-
-        // if the option is a required option remove the option from
-        // the requiredOptions list
-        if (opt.isRequired())
+        // eat the remaining tokens
+        while (iterator.hasNext())
         {
-            requiredOptions.remove(opt.getKey());
-        }
+            String str = (String) iterator.next();
 
-        // if the option is in an OptionGroup make that option the selected
-        // option of the group
-        if (options.getOptionGroup(opt) != null)
-        {
-            OptionGroup group = options.getOptionGroup(opt);
-
-            if (group.isRequired())
-            {
-                requiredOptions.remove(group);
-            }
-
-            group.setSelected(opt);
-        }
-
-        // if the option takes an argument value
-        if (opt.hasArg())
-        {
-            processArgs(opt, iter);
+            // ensure only one double-dash is added
+            if (!"--".equals(str))
+                _cmd.addArg(str);
         }
 
 
-        // set the option on the command line
-        cmd.addOption(opt);
+        //process properties:
+        if (properties != null)
+		{
+		    for (String option: properties.stringPropertyNames())
+		    {
+		        if (_cmd.hasOption(option))
+		        	continue;
+		        Option opt = _options.getOption(option);
+		        String value = properties.getProperty(option);
+
+		        if (opt.hasArg() && (opt.getValues() == null))
+		        	opt.addValueForProcessing(value);
+		        else if (!(value.matches("[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|1")))
+		        	break;
+		        _cmd.addOption(opt);
+		    }
+		}
+        // check required options:
+        // if there are required options that have not been
+		// processsed
+		if (_requiredOptions.size() > 0)
+		{
+		    Iterator iter = _requiredOptions.iterator();
+		    StringBuffer buff = new StringBuffer("Missing required option");
+		    buff.append(_requiredOptions.size() == 1 ? ": " : "s: ");
+		
+		    // loop through the required options
+		    while (iter.hasNext())
+		        buff.append(iter.next());
+		
+		    throw new MissingOptionException(buff.toString());
+		}
+
+        return _cmd;
     }
 }
