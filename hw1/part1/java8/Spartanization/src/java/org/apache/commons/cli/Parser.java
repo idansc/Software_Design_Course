@@ -199,8 +199,8 @@ public abstract class Parser implements CommandLineParser {
 					// loop until an option is found
 					try 
 					{
-						iterator.forEachRemaining(x -> {
-						    String str = (String) x;
+						iterator.forEachRemaining(currStr -> {
+						    String str = (String) currStr;
 						
 						    // found an Option, not an argument
 						    if (_options.hasOption(str) && str.startsWith("-"))
@@ -241,14 +241,13 @@ public abstract class Parser implements CommandLineParser {
         }
         
         // eat the remaining tokens
-        while (iterator.hasNext())
-        {
-            String str = (String) iterator.next();
+		iterator.forEachRemaining(currStr -> {
 
+            String str = (String) currStr;
             // ensure only one double-dash is added
             if (!"--".equals(str))
                 _cmd.addArg(str);
-        }
+		});
 
         
         //process properties:
