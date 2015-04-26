@@ -197,27 +197,30 @@ public abstract class Parser implements CommandLineParser {
 				// if the option takes an argument value
 				if (opt.hasArg()) {
 					// loop until an option is found
-					while (iterator.hasNext()){
-					    String str = (String) iterator.next();
-					
-					    // found an Option, not an argument
-					    if (_options.hasOption(str) && str.startsWith("-"))
-					    {
-					        iterator.previous();
-					        break;
-					    }
-					
-					    // found a value
-					    try
-					    {
-					        opt.addValueForProcessing( Util.stripLeadingAndTrailingQuotes(str) );
-					    }
-					    catch (RuntimeException exp)
-					    {
-					        iterator.previous();
-					        break;
-					    }
-					}
+					try 
+					{
+						iterator.forEachRemaining(x -> {
+						    String str = (String) x;
+						
+						    // found an Option, not an argument
+						    if (_options.hasOption(str) && str.startsWith("-"))
+						    {
+						        iterator.previous();
+						        throw new Error();
+						    }
+						
+						    // found a value
+						    try
+						    {
+						        opt.addValueForProcessing( Util.stripLeadingAndTrailingQuotes(str) );
+						    }
+						    catch (RuntimeException exp)
+						    {
+						        iterator.previous();
+						        throw new Error();
+						    }
+						});
+					}catch (Error e) {}
 					
 					if ((opt.getValues() == null) && !opt.hasOptionalArg())
 					    throw new MissingArgumentException("Missing argument for option:"
