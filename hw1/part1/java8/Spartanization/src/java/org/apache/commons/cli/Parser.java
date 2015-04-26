@@ -1,3 +1,5 @@
+// TODO: maybe cut down tokens in all the 'catch (StringIndexOutOfBoundsException e) {}'
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,8 +19,6 @@
 package org.apache.commons.cli;
 
 import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
@@ -32,6 +32,13 @@ import java.util.Properties;
  */
 public abstract class Parser implements CommandLineParser {
 
+	StringIndexOutOfBoundsException dummyException = new StringIndexOutOfBoundsException();
+	class UnchekdExceptionWrapper extends RuntimeException
+	{
+		ParseException innerExc;
+		UnchekdExceptionWrapper(ParseException e) { innerExc = e; }
+	}
+	
     /** commandline instance */
     private CommandLine _cmd;
 
@@ -150,124 +157,127 @@ public abstract class Parser implements CommandLineParser {
         ListIterator iterator = tokenList.listIterator();
 
         // process each flattened token
-        while (iterator.hasNext())
-        {
-            String t = (String) iterator.next();
+		try {
+			iterator.forEachRemaining(currStr -> {
+				String t = (String) currStr;
 
-            // the value is the double-dash
-            if ("--".equals(t))
-                break;
+				// the value is the double-dash
+					if ("--".equals(t))
+						throw dummyException;
 
-            // the value is a single dash
-            if ("-".equals(t))
-            {
-                if (stopAtNonOption)
-                    break;
-                _cmd.addArg(t);
-                continue;
-            }
+					// the value is a single dash
+					if ("-".equals(t)) {
+						if (stopAtNonOption)
+							throw dummyException;
+						_cmd.addArg(t);
+						return;
+					}
 
-            if (stopAtNonOption && !options.hasOption(t))
-            {
-                _cmd.addArg(t);
-                break;
-            }
-            // the value is an option
-            if (t.startsWith("-"))
-            {
-				// get the option represented by arg
-            	//TODO::: CAN I CHECK ASSIGNEMENT?
-            	Option opt;
-                // if there is no option throw an UnrecognisedOptionException
-            	if((opt=_options.getOption(t)) == null)
-				    throw new UnrecognizedOptionException("Unrecognized option: " 
-				                                          + t);
-				
-				// if the option is a required option remove the option from
-				// the requiredOptions list
-				_requiredOptions.remove(opt.getKey());
-				
-				// if the option is in an OptionGroup make that option the selected
-				// option of the group
-				OptionGroup group;
-				if ((group=_options.getOptionGroup(opt)) != null)
-					group.setSelected(opt);
-				_requiredOptions.remove(group);
-				
-				// if the option takes an argument value
-				if (opt.hasArg()) {
-					// loop until an option is found
-					try 
-					{
-						iterator.forEachRemaining(currStr -> {
-						    String str = (String) currStr;
-						
-						    // found an Option, not an argument
-						    if (_options.hasOption(str) && str.startsWith("-"))
-						    {
-						        iterator.previous();
-						        throw new Error();
-						    }
-						
-						    // found a value
-						    try
-						    {
-						        opt.addValueForProcessing( Util.stripLeadingAndTrailingQuotes(str) );
-						    }
-						    catch (RuntimeException exp)
-						    {
-						        iterator.previous();
-						        throw new Error();
-						    }
-						});
-					}catch (Error e) {}
-					
-					if ((opt.getValues() == null) && !opt.hasOptionalArg())
-					    throw new MissingArgumentException("Missing argument for option:"
-					                                       + opt.getKey());
+					if (stopAtNonOption && !options.hasOption(t)) {
+						_cmd.addArg(t);
+						throw dummyException;
+					}
+					// the value is an option
+					if (t.startsWith("-")) {
+						// get the option represented by arg
+						// TODO::: CAN I CHECK ASSIGNEMENT?
+						Option opt;
+						// if there is no option throw an
+						// UnrecognisedOptionException
+						if ((opt = _options.getOption(t)) == null)
+							throw new UnchekdExceptionWrapper(new UnrecognizedOptionException(
+									"Unrecognized option: " + t));
+
+						// if the option is a required option remove the option
+						// from
+						// the requiredOptions list
+					_requiredOptions.remove(opt.getKey());
+
+					// if the option is in an OptionGroup make that option the
+					// selected
+					// option of the group
+					OptionGroup group;
+					if ((group = _options.getOptionGroup(opt)) != null)
+						try {
+							group.setSelected(opt);
+						} catch (ParseException e) { throw new UnchekdExceptionWrapper(e);}
+					_requiredOptions.remove(group);
+
+					// if the option takes an argument value
+					if (opt.hasArg()) {
+						// loop until an option is found
+						try {
+							iterator.forEachRemaining(tmpCurrStr -> {
+								String str = (String) tmpCurrStr;
+
+								// found an Option, not an argument
+								if (_options.hasOption(str)
+										&& str.startsWith("-")) {
+									iterator.previous();
+									throw dummyException;
+								}
+
+								// found a value
+								try {
+									opt.addValueForProcessing(Util
+											.stripLeadingAndTrailingQuotes(str));
+								} catch (RuntimeException exp) {
+									iterator.previous();
+									throw dummyException;
+								}
+							});
+						} catch (StringIndexOutOfBoundsException e) {
+						} 
+
+						if ((opt.getValues() == null) && !opt.hasOptionalArg())
+							throw new UnchekdExceptionWrapper( new MissingArgumentException(
+									"Missing argument for option:"
+											+ opt.getKey()));
+					}
+
+					// set the option on the command line
+					_cmd.addOption(opt);
+					return;
 				}
-				
-				
-				// set the option on the command line
-				_cmd.addOption(opt);
-            	continue;
-            }
 
-            // the value is an argument
-            _cmd.addArg(t);
+				// the value is an argument
+				_cmd.addArg(t);
 
-            if (stopAtNonOption)
-            	break;
-        }
-        
-        // eat the remaining tokens
+				if (stopAtNonOption)
+					throw dummyException;
+			});
+		} catch (StringIndexOutOfBoundsException e) {
+		} catch (UnchekdExceptionWrapper e)
+		{
+			throw e.innerExc;
+		}
+
+		// eat the remaining tokens
 		iterator.forEachRemaining(currStr -> {
 
-            String str = (String) currStr;
-            // ensure only one double-dash is added
-            if (!"--".equals(str))
-                _cmd.addArg(str);
+			String str = (String) currStr;
+			// ensure only one double-dash is added
+			if (!"--".equals(str))
+				_cmd.addArg(str);
 		});
 
-        
-        //process properties:
-        if (properties != null)
-		{
-        	//TODO: try to improve. 
-        	//for (String option : properties.stringPropertyNames()) {
-        	properties.stringPropertyNames().stream().anyMatch(option -> {
-		        if (_cmd.hasOption(option))
-		        	return false;
-		        Option opt = _options.getOption(option);
-		        String value = properties.getProperty(option);
+		// process properties:
+		if (properties != null) {
+			// TODO: try to improve.
+			// for (String option : properties.stringPropertyNames()) {
+			properties.stringPropertyNames().stream().anyMatch(option -> {
+				if (_cmd.hasOption(option))
+					return false;
+				Option opt = _options.getOption(option);
+				String value = properties.getProperty(option);
 
-		        if (opt.hasArg() && (opt.getValues() == null))
-		        	opt.addValueForProcessing(value);
-		        else if (!(value.matches("[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|1")))
-		        	return true;
-		        _cmd.addOption(opt);
-		        return false;
-        	});
+				if (opt.hasArg() && (opt.getValues() == null))
+					opt.addValueForProcessing(value);
+				else if (!(value.matches("[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|1")))
+					return true;
+				_cmd.addOption(opt);
+				return false;
+			});
 		}
 		
         if (_requiredOptions.size() <= 0)
