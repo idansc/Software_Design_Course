@@ -6,6 +6,8 @@ package il.ac.technion.cs.sd.app.mail;
  */
 public class ServerMailApplication {
 	
+	private String name;
+	
 	/**
 	 * Starts a new mail server. Servers with the same name retain all their information until
 	 * {@link ServerMailApplication#clean()} is called.
@@ -13,7 +15,7 @@ public class ServerMailApplication {
 	 * @param name The name of the server by which it is known.
 	 */
 	public ServerMailApplication(String name) {
-		throw new UnsupportedOperationException("Not implemented");
+		this.name = name;
 	}
 	
 	/**

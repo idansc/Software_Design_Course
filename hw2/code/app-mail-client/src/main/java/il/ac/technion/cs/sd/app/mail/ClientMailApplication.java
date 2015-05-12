@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.app.mail;
 
 import java.util.List;
+ 
 
 /**
  * The client side of the TMail application.
@@ -10,13 +11,17 @@ import java.util.List;
  */
 public class ClientMailApplication {
 	
+	private String serverAddress;
+	private String username;
+	
 	/**
 	 * Creates a new application, tied to a single user
 	 * @param serverAddress The address of the server to connect to for sending and requesting mail
 	 * @param username The user that will be sending and accepting the mail using this object
 	 */
 	public ClientMailApplication(String serverAddress, String username) {
-		throw new UnsupportedOperationException("Not implemented");
+		this.username = username;
+		this.serverAddress = serverAddress;
 	}
 	
 	/**
@@ -25,7 +30,8 @@ public class ClientMailApplication {
 	 * @param what The message to send
 	 */
 	public void sendMail(String whom, String what) {
-		throw new UnsupportedOperationException("Not implemented");
+		Mail m = new Mail(username, whom, what);
+		//TODO
 	}
 	
 	/**
