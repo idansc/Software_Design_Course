@@ -42,6 +42,7 @@ public class ClientMailApplication {
 	 */
 	public List<Mail> getCorrespondences(String whom, int howMany) {
 		throw new UnsupportedOperationException("Not implemented");
+		//TODO
 	}
 	
 	/**
