@@ -1,0 +1,175 @@
+2015-05-15 01:27:41,587 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using NULL lifecycle mapping for MavenProject: il.ac.technion.cs.sd:base:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/pom.xml.
+2015-05-15 01:27:41,797 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-client/pom.xml.
+2015-05-15 01:27:41,838 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-server/pom.xml.
+2015-05-15 01:27:41,865 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-client/pom.xml.
+2015-05-15 01:27:41,902 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-server/pom.xml.
+2015-05-15 01:27:41,932 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-tests:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-tests/pom.xml.
+2015-05-15 01:27:41,967 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-common/pom.xml.
+2015-05-15 01:27:41,989 [Worker-4] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-common/pom.xml.
+2015-05-15 01:27:43,066 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-common/src/main/java
+2015-05-15 01:27:43,066 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-common/src/main/resources
+2015-05-15 01:27:43,067 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-common/src/test/java
+2015-05-15 01:27:43,067 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-common/src/test/resources
+2015-05-15 01:27:43,114 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-common/src/main/java
+2015-05-15 01:27:43,114 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-common/src/main/resources
+2015-05-15 01:27:43,114 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-common/src/test/java
+2015-05-15 01:27:43,114 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-common/src/test/resources
+2015-05-15 01:27:43,139 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-client/src/main/java
+2015-05-15 01:27:43,139 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-client/src/main/resources
+2015-05-15 01:27:43,139 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-client/src/test/java
+2015-05-15 01:27:43,139 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-client/src/test/resources
+2015-05-15 01:27:43,179 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-server/src/main/java
+2015-05-15 01:27:43,180 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-server/src/main/resources
+2015-05-15 01:27:43,180 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /library-server/src/test/java
+2015-05-15 01:27:43,181 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /library-server/src/test/resources
+2015-05-15 01:27:43,221 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-client/src/main/java
+2015-05-15 01:27:43,222 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-client/src/main/resources
+2015-05-15 01:27:43,222 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-client/src/test/java
+2015-05-15 01:27:43,222 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-client/src/test/resources
+2015-05-15 01:27:43,268 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-server/src/main/java
+2015-05-15 01:27:43,269 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-server/src/main/resources
+2015-05-15 01:27:43,269 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-server/src/test/java
+2015-05-15 01:27:43,273 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-server/src/test/resources
+2015-05-15 01:27:43,313 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-tests/src/main/java
+2015-05-15 01:27:43,313 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-tests/src/main/resources
+2015-05-15 01:27:43,314 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding source folder /app-mail-tests/src/test/java
+2015-05-15 01:27:43,314 [Worker-4] INFO  o.e.m.j.i.AbstractJavaProjectConfigurator - Adding resource folder /app-mail-tests/src/test/resources
+2015-05-15 01:27:43,350 [Worker-4] INFO  o.e.m.c.i.p.ProjectConfigurationManager - Imported and configured 8 project(s) in 2 sec
+2015-05-15 01:27:43,682 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using NULL lifecycle mapping for MavenProject: il.ac.technion.cs.sd:base:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/pom.xml.
+2015-05-15 01:27:43,731 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-server/pom.xml.
+2015-05-15 01:27:43,804 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-common/pom.xml.
+2015-05-15 01:27:43,902 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-server/pom.xml.
+2015-05-15 01:27:44,066 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-client/pom.xml.
+2015-05-15 01:27:44,238 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-client/pom.xml.
+2015-05-15 01:27:44,319 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-common/pom.xml.
+2015-05-15 01:27:44,366 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-tests:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-tests/pom.xml.
+2015-05-15 01:27:44,743 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-client/pom.xml.
+2015-05-15 01:27:44,838 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-server/pom.xml.
+2015-05-15 01:27:44,898 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-client/pom.xml.
+2015-05-15 01:27:44,922 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-server/pom.xml.
+2015-05-15 01:27:44,986 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-tests:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-tests/pom.xml.
+2015-05-15 01:27:45,037 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,060 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,063 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,063 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,063 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-common/pom.xml.
+2015-05-15 01:27:45,097 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,097 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,098 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,099 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,127 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,127 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,127 [Worker-2] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-common/pom.xml.
+2015-05-15 01:27:45,128 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,128 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,175 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,176 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,177 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,183 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,214 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,216 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,220 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,222 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,251 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,252 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,252 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,253 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,271 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,272 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:45,273 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:45,273 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,679 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,680 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,684 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,685 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,709 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,709 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,710 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,710 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,725 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,726 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,726 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,727 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,745 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,745 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,746 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,746 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,760 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,761 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,762 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,762 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,775 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,776 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,777 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,777 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,791 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,791 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:27:46,792 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:27:46,792 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:33,289 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-common/pom.xml.
+2015-05-15 01:28:33,315 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-server/pom.xml.
+2015-05-15 01:28:33,335 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-client/pom.xml.
+2015-05-15 01:28:33,352 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-common:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-common/pom.xml.
+2015-05-15 01:28:33,364 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:app-mail-tests:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/app-mail-tests/pom.xml.
+2015-05-15 01:28:33,378 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-server:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-server/pom.xml.
+2015-05-15 01:28:33,388 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: il.ac.technion.cs.sd:library-client:0.0.1-SNAPSHOT @ /home/software-design/home/software-design/SHARED_WITH_IDAN/rep/hw2/code/TMail/library-client/pom.xml.
+2015-05-15 01:28:33,504 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:33,507 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:33,508 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:33,508 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:33,529 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:33,530 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:33,531 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:33,532 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,722 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,723 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,726 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,726 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,789 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,790 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,790 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,791 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,829 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,830 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,830 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,830 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,854 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,855 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:34,856 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:34,856 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:35,032 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:35,032 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:28:35,033 [Worker-0] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:28:35,033 [Worker-0] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:38:23,636 [Worker-8] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:38:23,637 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:38:23,641 [Worker-8] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:38:23,642 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:38:44,234 [Worker-9] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:38:44,234 [Worker-9] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:38:44,235 [Worker-9] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:38:44,235 [Worker-9] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:01,738 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:01,738 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:01,739 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:01,739 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:03,650 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:03,650 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:03,651 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:03,652 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:27,908 [Worker-8] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:27,908 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:27,909 [Worker-8] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:27,909 [Worker-8] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:36,333 [Worker-11] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:36,334 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:39:36,335 [Worker-11] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:39:36,336 [Worker-11] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:40:03,487 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:40:03,488 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:40:03,488 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:40:03,489 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:40:10,897 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:40:10,898 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2015-05-15 01:40:10,899 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+2015-05-15 01:40:10,899 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource

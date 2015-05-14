@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workingSetManager>
+<workingSet editPageId="org.eclipse.ui.resourceWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1431642460617_1" label="base" name="base">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/TMail" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/library-client" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/library-server" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/app-mail-client" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/app-mail-server" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/app-mail-tests" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/library-common" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/app-mail-common" type="4"/>
+</workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1431642377683_0" label="Window Working Set" name="Aggregate for window 1431642377683"/>
+</workingSetManager>
