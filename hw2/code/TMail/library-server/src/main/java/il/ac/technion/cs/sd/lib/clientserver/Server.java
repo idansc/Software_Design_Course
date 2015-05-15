@@ -13,7 +13,6 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 public class Server {
 	
 	private String _serverAddress;
-	private ServerTask _task;
 	
 	/* This is thread running the listening loop. 
 	 * It's null iff no listen loop is currently done, or stopListenLoop was
@@ -26,20 +25,20 @@ public class Server {
 	public class NoCurrentListenLoop extends RuntimeException {private static final long serialVersionUID = 1L;} 
 	public class ListenLoopAlreadyBeingDone extends RuntimeException {private static final long serialVersionUID = 1L;} 
 	
-	/* @param task The server task to be performed each time data is sent to the server. */
+	
 	public Server(String serverAddress, ServerTask task)
 	{
 		_serverAddress = serverAddress;
-		_task = task;
 	}
-	
 	
 	/* Starts a "listen loop" in which the server repeatedly listens for data
 	 * from clients, and for each data package sent - the given task is run. 
 	 * This is done until stopListenLoop is called.
 	 * This function is non-blocking (everything is done on another thread).
+	 * @param task The server task to be performed each time data is sent to the
+	 * server.
 	 **/
-	public void startListenLoop()
+	public void startListenLoop(ServerTask task)
 	{
 		if (listenThread != null )
 		{
@@ -55,7 +54,7 @@ public class Server {
 					Optional<byte[]> data = messenger.tryListen();
 					if (data.isPresent())
 					{
-						_task.run(this,data.get());
+						task.run(messenger,data.get());
 					}
 	
 					// If we cared about not wasting CPU time:
