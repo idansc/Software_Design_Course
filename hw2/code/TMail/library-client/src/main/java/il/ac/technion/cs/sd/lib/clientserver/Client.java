@@ -35,7 +35,7 @@ public class Client {
 		while (true)
 		{
 			MessageData md = MessageData.deserialize(m.listen());
-			if (md.messageType.equals(MessageData.TASK_ENDED_PACKET_TYPE))
+			if (md.getMessageType().equals(MessageData.TASK_ENDED_PACKET_TYPE))
 			{
 				return $;
 			}
