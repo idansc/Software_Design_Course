@@ -12,7 +12,28 @@ import com.google.gson.reflect.TypeToken;
 public class MessageData
 {
 
-
+	
+	public MessageData(String messageType,
+			ArrayList<String> data) {
+		this.fromAddress = null;
+		this.messageType = messageType;
+		this.data = data;
+	}
+	
+	public MessageData(String messageType) {
+		this.fromAddress = null;
+		this.messageType = messageType;
+		this.data = new ArrayList<String>();
+	}
+	
+	MessageData(String fromAddress,
+			String messageType,
+			ArrayList<String> data) {
+		this.fromAddress = fromAddress;
+		this.messageType = messageType;
+		this.data = data;
+	}
+	
 
 	public String getMessageType() {
 		return messageType;
@@ -47,23 +68,7 @@ public class MessageData
 	
 	// The data held by this message.
 	private ArrayList<String> data;
-	
-	
-	public MessageData(String messageType,
-			ArrayList<String> data) {
-		this.fromAddress = null;
-		this.messageType = messageType;
-		this.data = data;
-	}
-	
-	MessageData(String fromAddress,
-			String messageType,
-			ArrayList<String> data) {
-		this.fromAddress = fromAddress;
-		this.messageType = messageType;
-		this.data = data;
-	}
-	
+		
 	
 	/* A magic-string representing the messageType of a MessageData indicating
 	 * the server finished it's task.
