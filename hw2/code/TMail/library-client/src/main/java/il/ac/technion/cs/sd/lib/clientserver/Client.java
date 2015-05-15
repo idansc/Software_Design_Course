@@ -28,6 +28,7 @@ public class Client {
 		throws MessengerException
 	{
 		Messenger m = createMessenger();
+		data.setFromAddress(_clientAddress);
 		m.send(serverAddress, data.serialize());
 		
 		MessageData $ = null;
