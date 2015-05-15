@@ -36,8 +36,9 @@ public class Server {
 	 * This is done until stopListenLoop is called.
 	 * This function is non-blocking (everything is done on another thread).
 	 * @param task The server task to be performed each time data is sent to the
-	 * server. Once the task run is complete, a ServerTaskEndedMessage will be 
-	 * sent back to the client.
+	 * server. Once the task run is complete, a JSON MessageData will be 
+	 * sent back to the client with the messageType of 
+	 * MessageData.serverTaskEndedPacketType.
 	 **/
 	public void startListenLoop(ServerTask task)
 	{
@@ -55,13 +56,13 @@ public class Server {
 					Optional<byte[]> data = messenger.tryListen();
 					if (data.isPresent())
 					{
-						DataPacket packet = TODO; //TODO: desierelize 'data'/
+						MessageData md = TODO; //TODO: desierelize 'data'/
 								
-						task.run(messenger,packet);
+						task.run(messenger,md);
 						// TODO: get clientAddress from the  
 						// of the data. 
-						messenger.send(packet.fromAddress, 
-								TODO // TODO: serielize ServerTaskEndedMessage.
+						messenger.send(md.fromAddress, 
+								TODO // TODO: serielize end message.
 								);
 					}
 	
@@ -93,7 +94,8 @@ public class Server {
 	}
 	
 	
-	public void sendDataToClient(String clientAddress, byte[] data) throws MessengerException
+	public void sendDataToClient(String clientAddress, byte[] data) 
+			throws MessengerException
 	{
 		Messenger m = createMessenger();
 		m.send(clientAddress, data);
