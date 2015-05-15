@@ -8,7 +8,7 @@ import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 
-/* Represents a server that performs a given task whenever data is recived from 
+/* Represents a server that performs a given task whenever data is received from 
  * any client. */
 public class Server {
 	
@@ -25,7 +25,6 @@ public class Server {
 	
 	public class NoCurrentListenLoop extends RuntimeException {private static final long serialVersionUID = 1L;} 
 	public class ListenLoopAlreadyBeingDone extends RuntimeException {private static final long serialVersionUID = 1L;} 
-	
 	
 	/* @param task The server task to be performed each time data is sent to the server. */
 	public Server(String serverAddress, ServerTask task)
@@ -75,7 +74,7 @@ public class Server {
 		listenThread = null;
 	}
 	
-	
+	/* Stops the "listen loop" started with startListenLoop */
 	public void stopListenLoop()
 	{
 		if (listenThread == null )
