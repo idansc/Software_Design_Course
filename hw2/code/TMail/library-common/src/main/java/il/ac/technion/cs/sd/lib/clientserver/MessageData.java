@@ -39,28 +39,28 @@ public class MessageData
 		this.fromAddress = fromAddress;
 	}
 	
-	// Address of the host sending this data packet.
+	// Address of the host sending this data message.
 	private String fromAddress;
 	
-	// Represent a user-defined packet type.
+	// Represent a user-defined message type.
 	private String messageType;
 	
-	// The data held by this packet.
+	// The data held by this message.
 	private ArrayList<String> data;
 	
 	
-	public MessageData(String packetType,
+	public MessageData(String messageType,
 			ArrayList<String> data) {
 		this.fromAddress = null;
-		this.messageType = packetType;
+		this.messageType = messageType;
 		this.data = data;
 	}
 	
 	MessageData(String fromAddress,
-			String packetType,
+			String messageType,
 			ArrayList<String> data) {
 		this.fromAddress = fromAddress;
-		this.messageType = packetType;
+		this.messageType = messageType;
 		this.data = data;
 	}
 	
@@ -68,7 +68,7 @@ public class MessageData
 	/* A magic-string representing the messageType of a MessageData indicating
 	 * the server finished it's task.
 	 */
-	static final String TASK_ENDED_PACKET_TYPE 
+	static final String TASK_ENDED_MESSAGE_TYPE 
 		= "9PEdT1SJeR9waQajDF6k";
 	
 	// serialize this object into byte array (JSON in UTF-8).
