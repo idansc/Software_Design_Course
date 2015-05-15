@@ -15,39 +15,26 @@ public class Client {
 		clientAddress = _clientAddress;
 	}
 	
-	/* sends data to a server, without retrieving answer from server. */
-	public void sendToServerWithoutAnswer(String serverAddress, byte[] data) 
-		throws MessengerException
-	{
-		sendToServer(serverAddress, data, false);
-	}
 	
-	/* sends data to a server, and blocks until an answer from the server is
-	 * received.
-	 * @return The data sent back from the server.
+	/* sends data to a server, and blocks until the server's task finishes 
+	 * running.
+	 * @return The data sent back from the server (until the server's task 
+	 * finishes running). If more than one data packet is sent from the server -
+	 * the returned buffer is the concatenation of all data packets received. 
 	 **/
 	public byte[] sendToServerAndGetAnswer(String serverAddress, byte[] data) 
 		throws MessengerException
 	{
-		return sendToServer(serverAddress, data, true);
-	}
-	
-	
-	/* like sendToServerAndGetAnswer, but returns answer from server (blocks) 
-	 * iff getAnswer is true, otherwise - null is returned.
-	 */
-	public byte[] sendToServer(String serverAddress, byte[] data, 
-			boolean getAnswer) throws MessengerException
-	{
 		Messenger m = createMessenger();
 		m.send(serverAddress, data);
 		byte[] $ = null;
-		if (getAnswer)
-			$ = m.listen();
+		$ = m.listen();
+		TODO // do a listen loop, until ServerTaskEndedMessage is recived.
 		m.kill();
 		return $;
 	}
 	
+		
 	
 	private Messenger createMessenger() throws MessengerException {
 		return (new MessengerFactory()).start(_clientAddress);
