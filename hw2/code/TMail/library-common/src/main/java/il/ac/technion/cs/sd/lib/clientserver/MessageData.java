@@ -36,7 +36,7 @@ public class MessageData
 	public static final String TASK_ENDED_PACKET_TYPE 
 		= "9PEdT1SJeR9waQajDF6k";
 	
-	// serialize this object into byte array.
+	// serialize this object into byte array (JSON in UTF-8).
 	public byte[] serialize() 
 	{
 		Gson gson = new GsonBuilder().create();
@@ -47,7 +47,7 @@ public class MessageData
 		}
 	}
 	
-	// deserialize an MessageData object from a byte array.
+	// deserialize an MessageData object from a byte array (JSON in UTF-8).
 	public static MessageData deserialize(byte[] bytes)
 	{
 		String json;

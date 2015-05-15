@@ -97,15 +97,6 @@ public class Server {
 	}
 	
 	
-	public void sendDataToClient(String clientAddress, byte[] data) 
-			throws MessengerException
-	{
-		Messenger m = createMessenger();
-		m.send(clientAddress, data);
-		m.kill();
-	}
-	
-	
 	private Messenger createMessenger() throws MessengerException {
 		return (new MessengerFactory()).start(_serverAddress);
 	}
