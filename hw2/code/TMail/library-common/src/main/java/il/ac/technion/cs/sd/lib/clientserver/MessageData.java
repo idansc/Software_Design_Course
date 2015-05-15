@@ -12,17 +12,52 @@ import com.google.gson.reflect.TypeToken;
 public class MessageData
 {
 
+
+
+	public String getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
+
+	public ArrayList<String> getData() {
+		return data;
+	}
+
+	public void setData(ArrayList<String> data) {
+		this.data = data;
+	}
+
+
+	String getFromAddress() {
+		return fromAddress;
+	}
+
+	void setFromAddress(String fromAddress) {
+		this.fromAddress = fromAddress;
+	}
+	
 	// Address of the host sending this data packet.
-	public String fromAddress;
+	private String fromAddress;
 	
 	// Represent a user-defined packet type.
-	public String messageType;
+	private String messageType;
 	
 	// The data held by this packet.
-	public ArrayList<String> data;
+	private ArrayList<String> data;
 	
 	
-	public MessageData(String fromAddress, String packetType,
+	public MessageData(String packetType,
+			ArrayList<String> data) {
+		this.fromAddress = null;
+		this.messageType = packetType;
+		this.data = data;
+	}
+	
+	MessageData(String fromAddress,
+			String packetType,
 			ArrayList<String> data) {
 		this.fromAddress = fromAddress;
 		this.messageType = packetType;
@@ -33,11 +68,11 @@ public class MessageData
 	/* A magic-string representing the messageType of a MessageData indicating
 	 * the server finished it's task.
 	 */
-	public static final String TASK_ENDED_PACKET_TYPE 
+	static final String TASK_ENDED_PACKET_TYPE 
 		= "9PEdT1SJeR9waQajDF6k";
 	
 	// serialize this object into byte array (JSON in UTF-8).
-	public byte[] serialize() 
+	byte[] serialize() 
 	{
 		Gson gson = new GsonBuilder().create();
 		try {
@@ -48,7 +83,7 @@ public class MessageData
 	}
 	
 	// deserialize an MessageData object from a byte array (JSON in UTF-8).
-	public static MessageData deserialize(byte[] bytes)
+	static MessageData deserialize(byte[] bytes)
 	{
 		String json;
 		try {
