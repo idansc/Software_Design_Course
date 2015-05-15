@@ -56,14 +56,17 @@ public class Server {
 					Optional<byte[]> data = messenger.tryListen();
 					if (data.isPresent())
 					{
-						MessageData md = TODO; //TODO: desierelize 'data'/
+						MessageData md = MessageData.deserialize(data.get());
 								
 						task.run(messenger,md);
-						// TODO: get clientAddress from the  
-						// of the data. 
+
+						MessageData taskEndedMessage = new MessageData(
+								_serverAddress,
+								MessageData.TASK_ENDED_PACKET_TYPE,
+								null);
+						
 						messenger.send(md.fromAddress, 
-								TODO // TODO: serielize end message.
-								);
+								taskEndedMessage.serialize() );
 					}
 	
 					// If we cared about not wasting CPU time:
@@ -91,15 +94,6 @@ public class Server {
 		}
 		stopListenRequested = true;
 		listenThread = null;
-	}
-	
-	
-	public void sendDataToClient(String clientAddress, byte[] data) 
-			throws MessengerException
-	{
-		Messenger m = createMessenger();
-		m.send(clientAddress, data);
-		m.kill();
 	}
 	
 	
