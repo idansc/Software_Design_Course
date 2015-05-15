@@ -62,10 +62,10 @@ public class Server {
 
 						MessageData taskEndedMessage = new MessageData(
 								_serverAddress,
-								MessageData.TASK_ENDED_PACKET_TYPE,
+								MessageData.TASK_ENDED_MESSAGE_TYPE,
 								null);
 						
-						messenger.send(md.fromAddress, 
+						messenger.send(md.getFromAddress(), 
 								taskEndedMessage.serialize() );
 					}
 	

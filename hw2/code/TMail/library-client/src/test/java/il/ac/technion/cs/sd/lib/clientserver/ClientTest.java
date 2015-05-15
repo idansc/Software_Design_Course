@@ -2,6 +2,8 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -10,6 +12,9 @@ import org.junit.Test;
 
 public class ClientTest {
 
+	private MessageData md1;
+	private MessageData md2;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -20,6 +25,15 @@ public class ClientTest {
 
 	@Before
 	public void setUp() throws Exception {
+		ArrayList<String> strings1 = new ArrayList<String>();
+		strings1.add("aaa");
+		strings1.add("bbb");
+		strings1.add("ccc");
+		
+		
+		md1 = new MessageData("111", strings1);
+		
+		
 	}
 
 	@After
@@ -28,7 +42,10 @@ public class ClientTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		MessageData md1 = 
+		
+		Client c = new Client("address1");
+		
 	}
 
 }
