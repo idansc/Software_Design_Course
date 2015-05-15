@@ -36,7 +36,8 @@ public class Client {
 	/* like sendToServerAndGetAnswer, but returns answer from server (blocks) 
 	 * iff getAnswer is true, otherwise - null is returned.
 	 */
-	public byte[] sendToServer(String serverAddress, byte[] data, boolean getAnswer) throws MessengerException
+	public byte[] sendToServer(String serverAddress, byte[] data, 
+			boolean getAnswer) throws MessengerException
 	{
 		Messenger m = createMessenger();
 		m.send(serverAddress, data);
