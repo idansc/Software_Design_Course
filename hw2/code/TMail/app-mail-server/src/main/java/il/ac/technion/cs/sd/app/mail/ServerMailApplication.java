@@ -22,7 +22,7 @@ public class ServerMailApplication {
 	 * @return the server's address; this address will be used by clients connecting to the server
 	 */
 	public String getAddress() {
-		throw new UnsupportedOperationException("Not implemented");
+		return _name;
 	}
 	
 	/**

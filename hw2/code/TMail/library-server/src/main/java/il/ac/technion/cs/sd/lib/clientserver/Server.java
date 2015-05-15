@@ -1,4 +1,4 @@
-package il.ac.technion.cs.sd.server;
+package il.ac.technion.cs.sd.lib.clientserver;
 
 public class Server {
 	
