@@ -10,13 +10,17 @@ import java.util.List;
  */
 public class ClientMailApplication {
 	
+	private String _serverAddress;
+	private String _username;
+	
 	/**
 	 * Creates a new application, tied to a single user
 	 * @param serverAddress The address of the server to connect to for sending and requesting mail
 	 * @param username The user that will be sending and accepting the mail using this object
 	 */
 	public ClientMailApplication(String serverAddress, String username) {
-		throw new UnsupportedOperationException("Not implemented");
+		_serverAddress = serverAddress;
+		_username = username;
 	}
 	
 	/**
@@ -25,7 +29,8 @@ public class ClientMailApplication {
 	 * @param what The message to send
 	 */
 	public void sendMail(String whom, String what) {
-		throw new UnsupportedOperationException("Not implemented");
+		Mail m = new Mail(_username,whom,what);
+		//TODO
 	}
 	
 	/**
