@@ -1,18 +1,22 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import il.ac.technion.cs.sd.msg.Messenger;
+
 public class Server {
 	
-	private TaskFactory _taskFactory;
-		
-	public Server(TaskFactory taskFactory)
+	private ServerTask _task;
+	
+	/* @param task The server task to be performed each time data is sent to the server. */
+	public Server(ServerTask task)
 	{
-		_taskFactory = taskFactory;
+		_task = task;
 	}
 	
 	
-	void Listen()
+	public void listen()
 	{
-		Mesanger messanger();
+		Messenger messanger = new Messenger();
+		
 		String json = messanger.listen();
 		
 		Task task = _taskFactory.create(json);
