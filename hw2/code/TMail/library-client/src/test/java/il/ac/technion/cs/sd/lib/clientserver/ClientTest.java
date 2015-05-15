@@ -1,6 +1,8 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import static org.junit.Assert.*;
+import il.ac.technion.cs.sd.msg.Messenger;
+import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,9 @@ public class ClientTest {
 
 	private MessageData md1;
 	private MessageData md2;
+	private Messenger messenger1;
+	private Messenger messenger2;
+	
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -30,10 +35,13 @@ public class ClientTest {
 		strings1.add("bbb");
 		strings1.add("ccc");
 		
+		ArrayList<String> strings2 = new ArrayList<String>();
 		
-		md1 = new MessageData("111", strings1);
 		
+		md1 = new MessageData("messageType1", strings1);
+		md2 = new MessageData("messageType2", strings2);
 		
+		messenger1 = MessengerFactory
 	}
 
 	@After
