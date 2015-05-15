@@ -36,9 +36,8 @@ public class Server {
 	 * This is done until stopListenLoop is called.
 	 * This function is non-blocking (everything is done on another thread).
 	 * @param task The server task to be performed each time data is sent to the
-	 * server. Once the task run is complete, a 
-	 * ClientServerCommon.SERVER_TASK_ENDED_MESSAGE will be sent back to the 
-	 * client.
+	 * server. Once the task run is complete, a ServerTaskEndedMessage will be 
+	 * sent back to the client.
 	 **/
 	public void startListenLoop(ServerTask task)
 	{
@@ -56,10 +55,14 @@ public class Server {
 					Optional<byte[]> data = messenger.tryListen();
 					if (data.isPresent())
 					{
-						task.run(messenger,data.get());
-						// TODO: get clientAddress somehow.
-						messenger.send(clientAddress, 
-								ClientServerCommon.SERVER_TASK_ENDED_MESSAGE);
+						DataPacket packet = TODO; //TODO: desierelize 'data'/
+								
+						task.run(messenger,packet);
+						// TODO: get clientAddress from the  
+						// of the data. 
+						messenger.send(packet.fromAddress, 
+								TODO // TODO: serielize ServerTaskEndedMessage.
+								);
 					}
 	
 					// If we cared about not wasting CPU time:

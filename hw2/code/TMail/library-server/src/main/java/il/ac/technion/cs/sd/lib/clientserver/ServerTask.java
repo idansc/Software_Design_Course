@@ -10,5 +10,5 @@ public interface ServerTask {
 	/* @param serverMessenger The Messenger from which we should send data 
 	 * back to the client (if relevant).
 	 * @param data The data that the client sent to the server. */
-	void run(Messenger serverMessenger, byte[] data);
+	void run(Messenger serverMessenger, DataPacket data);
 }
