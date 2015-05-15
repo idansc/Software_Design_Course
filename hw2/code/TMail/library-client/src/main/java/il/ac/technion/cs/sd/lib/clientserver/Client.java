@@ -1,5 +1,7 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import java.io.ByteArrayOutputStream;
+
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
@@ -19,19 +21,32 @@ public class Client {
 	/* sends data to a server, and blocks until the server's task finishes 
 	 * running.
 	 * @return The data sent back from the server (until the server's task 
-	 * finishes running). If more than one data packet is sent from the server -
-	 * the returned buffer is the concatenation of all data packets received. 
+	 * finishes running). If multiple data packets are sent from the server -
+	 * the returned buffer is the concatenation of all data packets received.
 	 **/
-	public byte[] sendToServerAndGetAnswer(String serverAddress, byte[] data) 
+	public byte[] sendToServerAndGetAnswer(String serverAddress, MessageData data) 
 		throws MessengerException
 	{
 		Messenger m = createMessenger();
-		m.send(serverAddress, data);
-		byte[] $ = null;
-		$ = m.listen();
+		m.send(serverAddress, data.serialize());
+		
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		
+		while (true)
+		{
+			MessageData md = MessageData.deserialize(m.listen());
+			if (md.messageType.equals(MessageData.TASK_ENDED_PACKET_TYPE))
+			{
+				return outputStream.toByteArray();
+			}
+			
+		}
+		
+		$ = ;
 		TODO // do a listen loop, until ServerTaskEndedMessage is recived.
 		m.kill();
-		return $;
+		
+		
 	}
 	
 		
