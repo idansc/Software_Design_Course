@@ -82,8 +82,7 @@ public class Server {
 				messenger.kill();
 			} catch (MessengerException exc)
 			{
-				//TODO
-				/* no indication is passed on.
+				/*TODO:  no indication is passed on.
 				 * that's not good. Should pass the exception
 				 * to main thread via some dedicated Server field.
 				 */
