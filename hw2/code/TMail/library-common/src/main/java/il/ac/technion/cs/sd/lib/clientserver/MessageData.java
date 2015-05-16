@@ -3,6 +3,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,11 +44,11 @@ public class MessageData
 		this.messageType = messageType;
 	}
 
-	public ArrayList<String> getData() {
+	public List<String> getData() {
 		return data;
 	}
 
-	public void setData(ArrayList<String> data) {
+	public void setData(List<String> data) {
 		this.data = data;
 	}
 
@@ -56,7 +57,7 @@ public class MessageData
 		return fromAddress;
 	}
 
-	void setFromAddress(String fromAddress) {
+	public void setFromAddress(String fromAddress) {
 		this.fromAddress = fromAddress;
 	}
 	
@@ -67,7 +68,7 @@ public class MessageData
 	private String messageType;
 	
 	// The data held by this message.
-	private ArrayList<String> data;
+	private List<String> data;
 		
 	
 	// serialize this object into byte array (JSON in UTF-8).

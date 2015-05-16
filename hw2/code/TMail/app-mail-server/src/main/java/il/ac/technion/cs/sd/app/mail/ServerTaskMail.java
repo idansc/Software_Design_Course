@@ -11,11 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,7 +29,6 @@ import com.google.gson.stream.JsonWriter;
 
 import il.ac.technion.cs.sd.lib.clientserver.MessageData;
 import il.ac.technion.cs.sd.lib.clientserver.ServerTask;
-import il.ac.technion.cs.sd.msg.Messenger;
 
 /**
  * @author idansc
@@ -39,7 +36,7 @@ import il.ac.technion.cs.sd.msg.Messenger;
  */
 class ServerTaskMail implements ServerTask {
 	
-	
+	private String serverAddress;
 	// key = name of 
 	private Map<String,List<Mail>> allMailsSentByPerson = new HashMap<>();
 	private Map<String,List<Mail>> allMailsReceivedByPerson = new HashMap<>();
@@ -53,15 +50,12 @@ class ServerTaskMail implements ServerTask {
 	
 	public ServerTaskMail(String serverAddress) throws IOException
 	{
+		this.serverAddress = serverAddress;
 		mailsFileFilename = getClass().getResource(serverAddress + ".txt").toString();
 		ReadAndLoadToServerAllMailsFromFile(mailsFileFilename);
 	}
 	
 
-	enum FileType {
-		IN_FILE,
-		OUT_FILE
-	}
 	/* (non-Javadoc)
 	 * @see il.ac.technion.cs.sd.lib.clientserver.ServerTask#run(il.ac.technion.cs.sd.msg.Messenger, il.ac.technion.cs.sd.lib.clientserver.MessageData)
 	 */
@@ -69,9 +63,9 @@ class ServerTaskMail implements ServerTask {
 	public MessageData run(MessageData data) {
 		
 		MessageData $ = new MessageData("");
-		
+		$.setFromAddress(serverAddress);
 		switch (TaskType.valueOf(data.getMessageType())) {
-		case SEND_MAIL_TASK:
+		case SEND_MAIL_TASK: {
 			Iterator<String> it = data.getData().iterator();
 			String from = data.getFromAddress();
 			String whom = it.next();
@@ -84,12 +78,74 @@ class ServerTaskMail implements ServerTask {
 			} catch (IOException e) {
 				//TODO: unreported failure.
 			}
-			return $;
-
+			break;
+		}
+		case GET_CORRESPONDENCES_TASK: {
+			String from = data.getFromAddress();
+			Iterator<String> it = data.getData().iterator();
+			String whom = it.next();
+			int howMany = Integer.parseInt(it.next());
+			
+			List<Mail> mailList =  allMailsBetweenPeople.get(new Pair<String,String>(from,whom));
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			break;
+		}
+		case GET_SENT_MAILS_TASK: {
+			String from = data.getFromAddress();					
+			int howMany = Integer.parseInt(data.getData().get(0));
+			
+			List<Mail> mailList =  allMailsSentByPerson.get(from);
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			break;
+		}
+		case GET_INCOMING_MAIL_TASK: {
+			String from = data.getFromAddress();					
+			int howMany = Integer.parseInt(data.getData().get(0));
+			
+			List<Mail> mailList =  allMailsReceivedByPerson.get(from);
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			break;
+		}
+		case GET_ALL_MAIL_TASK: {
+			String from = data.getFromAddress();					
+			int howMany = Integer.parseInt(data.getData().get(0));
+			
+			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			break;
+		}
+		case GET_NEW_MAIL_TASK:
+		{
+			throw new UnsupportedOperationException("Not implemented");
+		}
+		case GET_CONTACTS_TASK: {
+			String from = data.getFromAddress();					
+			
+			Set<String> mailSet =  contactsOfPerson.get(from);
+			List<String> mailList = Arrays.asList(mailSet.toArray(new String[mailSet.size()]));
+			Collections.sort(mailList);
+			$.setData(mailList);			
+			break;
+		}
 		default:
 			break;
 		}
+		return $;
 
+	}
+
+
+	/**
+	 * @param mailList
+	 */
+	private List<String> fromMailListToStringList(List<Mail> mailList) {
+		List<String> $ = new ArrayList<String>();
+		for(Mail m : mailList){
+			$.add(m.from); 
+			$.add(m.to);
+			$.add(m.content);
+		}
+		return $;
 	}
 	
 	
