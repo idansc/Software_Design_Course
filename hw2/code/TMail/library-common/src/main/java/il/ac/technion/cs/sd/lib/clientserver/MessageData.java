@@ -70,12 +70,6 @@ public class MessageData
 	private ArrayList<String> data;
 		
 	
-	/* A magic-string representing the messageType of a MessageData indicating
-	 * the server finished it's task.
-	 */
-	static final String TASK_ENDED_MESSAGE_TYPE 
-		= "9PEdT1SJeR9waQajDF6k";
-	
 	// serialize this object into byte array (JSON in UTF-8).
 	byte[] serialize() 
 	{
