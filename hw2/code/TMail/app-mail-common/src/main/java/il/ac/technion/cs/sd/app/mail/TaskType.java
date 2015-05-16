@@ -1,0 +1,11 @@
+package il.ac.technion.cs.sd.app.mail;
+
+public enum TaskType {
+	SEND_MAIL_TASK,
+	GET_CORRESPONDENCES_TASK,
+	GET_SENT_MAILS_TASK,
+	GET_INCOMING_MAIL_TASK,
+	GET_ALL_MAIL_TASK,
+	GET_NEW_MAIL_TASK,
+	GET_CONTACTS_TASK
+}

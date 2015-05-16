@@ -1,5 +1,12 @@
 package il.ac.technion.cs.sd.app.mail;
 
+import il.ac.technion.cs.sd.lib.clientserver.Client;
+import il.ac.technion.cs.sd.lib.clientserver.MessageData;
+import il.ac.technion.cs.sd.msg.MessengerException;
+import il.ac.technion.cs.sd.app.mail.TaskType;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,8 +17,8 @@ import java.util.List;
  */
 public class ClientMailApplication {
 	
+	private Client _client;	
 	private String _serverAddress;
-	private String _username;
 	
 	/**
 	 * Creates a new application, tied to a single user
@@ -19,18 +26,24 @@ public class ClientMailApplication {
 	 * @param username The user that will be sending and accepting the mail using this object
 	 */
 	public ClientMailApplication(String serverAddress, String username) {
+		_client = new Client(username);
 		_serverAddress = serverAddress;
-		_username = username;
 	}
 	
 	/**
 	 * Sends a mail to another user
 	 * @param whom The recipient of the mail
 	 * @param what The message to send
+	 * @throws MessengerException 
 	 */
-	public void sendMail(String whom, String what) {
-		Mail m = new Mail(_username,whom,what);
-		//TODO
+	public void sendMail(String whom, String what) throws MessengerException {
+		MessageData md = new MessageData(TaskType.SEND_MAIL_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(whom);
+		data.add(what);
+		md.setData(data);
+		_client.sendToServerAndGetAnswer(_serverAddress,md);
+		
 	}
 	
 	/**
@@ -39,8 +52,24 @@ public class ClientMailApplication {
 	 * @param howMany how many mails to retrieve; mails are ordered by time of arrival to server
 	 * @return A list, ordered of all mails matching the criteria, ordered by time of arrival, of size n <i>at most</i>  
 	 */
-	public List<Mail> getCorrespondences(String whom, int howMany) {
-		throw new UnsupportedOperationException("Not implemented");
+	public List<Mail> getCorrespondences(String whom, int howMany){
+		MessageData md = new MessageData(TaskType.GET_CORRESPONDENCES_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(whom);
+		data.add(Integer.toString(howMany));
+		md.setData(data);
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		List<Mail> $ = new ArrayList<Mail>();
+		Iterator<String> iter = result.getData().iterator();
+		while(--howMany!=0&&iter.hasNext()){
+			$.add(new Mail(iter.next(),iter.next(),iter.next()));
+		}
+		return $;
 	}
 	
 	/**
@@ -48,8 +77,23 @@ public class ClientMailApplication {
 	 * @param howMany how many mails to retrieve; mails are ordered by time of arrival to server
 	 * @return A list, ordered of all mails matching the criteria, ordered by time of arrival, of size n <i>at most</i>  
 	 */
-	public List<Mail> getSentMails(int howMany) {
-		throw new UnsupportedOperationException("Not implemented");
+	public List<Mail> getSentMails(int howMany){
+		MessageData md = new MessageData(TaskType.GET_SENT_MAILS_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(Integer.toString(howMany));
+		md.setData(data);
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		List<Mail> $ = new ArrayList<Mail>();
+		Iterator<String> iter = result.getData().iterator();
+		while(--howMany!=0&&iter.hasNext()){
+			$.add(new Mail(iter.next(),iter.next(),iter.next()));
+		}
+		return $;
 	}
 	
 	/**
@@ -58,7 +102,23 @@ public class ClientMailApplication {
 	 * @return A list, ordered of all mails matching the criteria, ordered by time of arrival, of size n <i>at most</i>  
 	 */
 	public List<Mail> getIncomingMail(int howMany) {
-		throw new UnsupportedOperationException("Not implemented");
+		//TODO:: Code resemblance..
+		MessageData md = new MessageData(TaskType.GET_INCOMING_MAIL_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(Integer.toString(howMany));
+		md.setData(data);
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		List<Mail> $ = new ArrayList<Mail>();
+		Iterator<String> iter = result.getData().iterator();
+		while(--howMany!=0&&iter.hasNext()){
+			$.add(new Mail(iter.next(),iter.next(),iter.next()));
+		}
+		return $;
 	}
 	
 	/**
@@ -67,7 +127,23 @@ public class ClientMailApplication {
 	 * @return A list, ordered of all mails matching the criteria, ordered by time of arrival, of size n <i>at most</i>  
 	 */
 	public List<Mail> getAllMail(int howMany) {
-		throw new UnsupportedOperationException("Not implemented");
+		//TODO:: Code resemblance..
+		MessageData md = new MessageData(TaskType.GET_ALL_MAIL_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(Integer.toString(howMany));
+		md.setData(data);
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		List<Mail> $ = new ArrayList<Mail>();
+		Iterator<String> iter = result.getData().iterator();
+		while(--howMany!=0&&iter.hasNext()){
+			$.add(new Mail(iter.next(),iter.next(),iter.next()));
+		}
+		return $;
 	}
 	
 	/**
@@ -75,14 +151,37 @@ public class ClientMailApplication {
 	 * @return A list, ordered of all mails matching the criteria, ordered by time of arrival  
 	 */
 	public List<Mail> getNewMail() {
-		throw new UnsupportedOperationException("Not implemented");
+		//TODO:: Code resemblance..
+		MessageData md = new MessageData(TaskType.GET_NEW_MAIL_TASK.toString());
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		List<Mail> $ = new ArrayList<Mail>();
+		Iterator<String> iter = result.getData().iterator();
+		while(iter.hasNext()){
+			$.add(new Mail(iter.next(),iter.next(),iter.next()));
+		}
+		return $;
 	}
 	
 	/**
 	 * @return A list, ordered alphabetically, of all other users that sent or received mail from the current user  
 	 */
 	public List<String> getContacts(int howMany) {
-		throw new UnsupportedOperationException("Not implemented");
+		MessageData md = new MessageData(TaskType.GET_ALL_MAIL_TASK.toString());
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(Integer.toString(howMany));
+		md.setData(data);
+		MessageData result;
+		try {
+			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
+		} catch (MessengerException e) {
+			throw new RuntimeException();
+		}
+		return result.getData().subList(0, howMany-1);
 	}
 	
 	/**
