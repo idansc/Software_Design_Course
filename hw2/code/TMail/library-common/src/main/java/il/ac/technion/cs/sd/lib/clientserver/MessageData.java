@@ -60,7 +60,7 @@ public class MessageData
 		this.fromAddress = fromAddress;
 	}
 	
-	// Address of the host sending this data message.
+	/* Address of the host sending this data message. */
 	private String fromAddress;
 	
 	// Represent a user-defined message type.

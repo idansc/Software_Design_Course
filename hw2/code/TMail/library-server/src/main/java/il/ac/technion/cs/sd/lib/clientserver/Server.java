@@ -67,7 +67,7 @@ public class Server {
 						}
 
 			
-						MessageData answer = task.run(_serverAddress, md);;
+						MessageData answer = task.run(md);;
 						answer.setFromAddress(_serverAddress);
 						messenger.send(md.getFromAddress(), answer.serialize());
 					}

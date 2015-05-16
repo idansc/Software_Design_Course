@@ -31,8 +31,8 @@ public class ServerTest {
 	private Messenger messenger1;
 	private Messenger messenger2;
 	
-	private ServerTask task1;
-	private ServerTask task2;
+	private ServerTask task_1_2;
+	private ServerTask task_2_1;
 	
 	boolean errorOnOtherThread = false;
 	
@@ -61,34 +61,26 @@ public class ServerTest {
 		
 		server1_name = UUID.randomUUID().toString();
 		
-		// sends back to the client two answers identical to the data received.
-		task1 = new ServerTask() {
-			public void run(String serverAddress, MessageData data) {
-				try {
-					serverMessenger.send(data.getFromAddress(), data.serialize());
-					serverMessenger.send(data.getFromAddress(), data.serialize());
-				} catch (MessengerException e) {
+		// expects to receive mk1. Sends back to the client md2.
+		task_1_2 = new ServerTask() {
+			public MessageData run(MessageData data) {
+				if (! messagesAreEqualIgnoringFromAddress(md1,data))
 					errorOnOtherThread = true;
-				}
+				return md2;
 			}
 		};
 		
-		
-		// sends back to the client an answer identical to the data received.
-		task2 = new ServerTask() {
-			public void run(Messenger serverMessenger, MessageData data) {
-				try {
-					serverMessenger.send(data.getFromAddress(), data.serialize());
-				} catch (MessengerException e) {
+		// expects to receive mk2. Sends back to the client md1.
+		task_2_1 = new ServerTask() {
+			public MessageData run(MessageData data) {
+				if (! md2.getData().equals(data.getData()))
 					errorOnOtherThread = true;
-				}
+				return md1;
 			}
 		};
+		
 		
 		server1 = new Server(server1_name);
-		
-
-
 	}
 
 	@After
@@ -101,13 +93,11 @@ public class ServerTest {
 	@Test (timeout=3000)
 	public void answerSingleClient() throws MessengerException, InterruptedException {
 		
-		startListenLoopAndYield(server1, task1);
+		startListenLoopAndYield(server1, task_1_2);
 		
 		messenger1.send(server1_name, md1.serialize());
 		
-		readMessageAndAssert(messenger1, md1);
-		readMessageAndAssert(messenger1, md1);
-		readEndTaskMessage(messenger1);
+		readMessageAndAssert(messenger1, md2);
 		
 		server1.stopListenLoop();		
 	}
@@ -116,16 +106,16 @@ public class ServerTest {
 	@Test (timeout=3000)
 	public void answerMultipleClients() throws MessengerException, InterruptedException {
 		
-		startListenLoopAndYield(server1, task2);
+		startListenLoopAndYield(server1, task_2_1);
 		
-		messenger1.send(server1_name, md1.serialize());
+		md2.setFromAddress(messenger1_name);
+		messenger1.send(server1_name, md2.serialize());
+		
+		md2.setFromAddress(messenger2_name);
 		messenger2.send(server1_name, md2.serialize());
 		
 		readMessageAndAssert(messenger1, md1);
-		readEndTaskMessage(messenger1);
-		
-		readMessageAndAssert(messenger2, md2);
-		readEndTaskMessage(messenger2);
+		readMessageAndAssert(messenger2, md1);
 		
 		server1.stopListenLoop();		
 	}
@@ -136,12 +126,11 @@ public class ServerTest {
 		
 		for (int i=0; i<3; i++)
 		{
-			startListenLoopAndYield(server1, task2);
-			
-			messenger1.send(server1_name, md1.serialize());
+			startListenLoopAndYield(server1, task_2_1);
+			md2.setFromAddress(messenger1_name);
+			messenger1.send(server1_name, md2.serialize());
 			
 			readMessageAndAssert(messenger1, md1);
-			readEndTaskMessage(messenger1);
 			
 			server1.stopListenLoop();
 		}
@@ -149,8 +138,8 @@ public class ServerTest {
 	
 	@Test (expected=ListenLoopAlreadyBeingDone.class, timeout=1000)
 	public void startMultipleOverlappingListenLoops() throws MessengerException, InterruptedException {
-		startListenLoopAndYield(server1, task1);
-		startListenLoopAndYield(server1, task2);
+		startListenLoopAndYield(server1, task_1_2);
+		startListenLoopAndYield(server1, task_2_1);
 	}
 
 	
@@ -165,14 +154,14 @@ public class ServerTest {
 			throws MessengerException {
 		
 		MessageData md = MessageData.deserialize(messenger.listen());
-		assertEquals(md,expectedMessage);
+		assertTrue(messagesAreEqualIgnoringFromAddress(md,expectedMessage));
 	}
 	
-	private void readEndTaskMessage(Messenger messenger) 
-			throws MessengerException {
-		
-		MessageData md = MessageData.deserialize(messenger.listen());
-		assertEquals(md.getMessageType(),MessageData.TASK_ENDED_MESSAGE_TYPE);
+	private boolean messagesAreEqualIgnoringFromAddress (
+			MessageData m1, MessageData m2)
+	{
+		return (m1.getMessageType().equals(m2.getMessageType())) &&
+				(m1.getData().equals(m2.getData()));
 	}
 
 	private void startListenLoopAndYield(Server server, ServerTask task) 
