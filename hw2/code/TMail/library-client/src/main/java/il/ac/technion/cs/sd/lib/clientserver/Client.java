@@ -13,7 +13,7 @@ public class Client {
 	
 	public Client (String clientAddress)
 	{
-		clientAddress = _clientAddress;
+		_clientAddress = clientAddress;
 	}
 	
 	
