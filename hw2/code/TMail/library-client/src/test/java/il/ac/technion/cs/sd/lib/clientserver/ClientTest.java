@@ -29,8 +29,6 @@ public class ClientTest {
 	ArrayList<String> stringList3;
 	
 	private MessageData md1;
-	private MessageData md2;
-	private MessageData md_taskEnded;
 	
 	
 	boolean errorOnAnotherThread = false;
@@ -50,8 +48,6 @@ public class ClientTest {
 		
 		
 		md1 = new MessageData("messageType1", stringList1);
-		md2 = new MessageData("messageType2", stringList2);
-		md2 = new MessageData("messageType3", stringList3);
 
 		messenger1_name = UUID.randomUUID().toString();
 		messenger2_name = UUID.randomUUID().toString();

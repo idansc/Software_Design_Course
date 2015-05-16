@@ -3,23 +3,11 @@ package il.ac.technion.cs.sd.app.mail;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import il.ac.technion.cs.sd.lib.clientserver.Server;
 
@@ -29,9 +17,8 @@ import il.ac.technion.cs.sd.lib.clientserver.Server;
  */
 public class ServerMailApplication {
 	private Server _server;
-	ServerTaskMail _task;
-	
-	
+	private ServerTaskMail _task;
+	private PersistentConfig _persistentConfig;
 	
 	/**
 	 * Starts a new mail server. Servers with the same name retain all their information until
@@ -41,6 +28,32 @@ public class ServerMailApplication {
 	 */
 	public ServerMailApplication(String name) {
 		_server = new Server(name);
+		
+		
+		// setting _persistentConfig to default (s.t. it would use the default
+		// text file. 
+		_persistentConfig = new PersistentConfig() {
+			@Override
+			public InputStream getPersistentMailInputStream() throws FileNotFoundException {
+				File file = new File(getDafualtPesistentFilename());
+				return new FileInputStream(file);
+			}
+			@Override
+			public OutputStream getPersistentMailOverwriteOutputStream() throws FileNotFoundException {
+				File file = new File(getDafualtPesistentFilename());
+				return new FileOutputStream(file,false);
+			}
+		};
+	}
+	
+	private String getDafualtPesistentFilename()
+	{
+		return getClass().getResource(_server.getserverAddress() + ".txt").toString();
+	}
+	
+	public void setPersistentConfig (PersistentConfig persistentConfig)
+	{
+		_persistentConfig = persistentConfig;
 	}
 	
 	/**
@@ -57,7 +70,13 @@ public class ServerMailApplication {
 	 * calls to {@link ServerMailApplication#start()}.
 	 */
 	public void start() {
-		_task = new ServerTaskMail()
+		
+		try {
+			_task = new ServerTaskMail(_persistentConfig);
+		} catch (IOException e) {
+			throw new IOExceptionRuntime();
+		}
+		
 		_server.startListenLoop(_task);
 	}
 	

@@ -20,11 +20,11 @@ public class ClientMailApplicationTest {
 
 	@Test
 	public void sendMail() {
-		Client clientMock = Mockito.mock(Client.class);
-		Mockito.when(clientMock.sendToServerAndGetAnswer("server1", any())
-		ClientMailApplication clientMail = 
-				new ClientMailApplication("server1","user1");
-		
+//		Client clientMock = Mockito.mock(Client.class);
+//		Mockito.when(clientMock.sendToServerAndGetAnswer("server1", any())
+//		ClientMailApplication clientMail = 
+//				new ClientMailApplication("server1","user1");
+//TODO		
 		
 		
 	}

@@ -24,7 +24,8 @@ class Pair<F,S> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pair other = (Pair) obj;
+		@SuppressWarnings("unchecked")
+		Pair<F,S> other = (Pair<F,S>) obj;
 		if (first == null) {
 			if (other.first != null)
 				return false;
