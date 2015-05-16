@@ -64,28 +64,25 @@ public class Server {
 							throw new RuntimeException(
 									"Invalid 'fromAddress' field");
 							// TODO: no indication of failure is given.
+						}
+
+			
+						MessageData answer = task.run(_serverAddress, md);;
+						messenger.send(md.getFromAddress(), answer.serialize());
+					}
+
+					// If we cared about not wasting CPU time:
+					// Thread.sleep(10);
+				}
+				messenger.kill();
+			} catch (MessengerException exc) {
+				/*
+				 * TODO: no indication is passed on. that's not good. Should pass
+				 * the exception to main thread via some dedicated Server field.
+				 */
 			}
 
-			task.run(messenger, md);
-
-			MessageData taskEndedMessage = new MessageData(_serverAddress,
-					MessageData.TASK_ENDED_MESSAGE_TYPE, null);
-
-			messenger.send(md.getFromAddress(), taskEndedMessage.serialize());
-		}
-
-		// If we cared about not wasting CPU time:
-		// Thread.sleep(10);
-			}
-			messenger.kill();
-		} catch (MessengerException exc) {
-			/*
-			 * TODO: no indication is passed on. that's not good. Should pass
-			 * the exception to main thread via some dedicated Server field.
-			 */
-		}
-
-	}	);
+		});
 
 		listenThread.start();
 	}
