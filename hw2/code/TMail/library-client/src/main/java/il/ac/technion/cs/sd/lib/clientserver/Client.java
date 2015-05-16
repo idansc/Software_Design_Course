@@ -17,11 +17,14 @@ public class Client {
 	}
 	
 	
+	public class MultipleAnswersReceived extends RuntimeException {private static final long serialVersionUID = 1L;}
+	
 	/* sends data to a server, and blocks until the server's task finishes 
 	 * running.
 	 * @return The single MessageData data sent back from the server (or null if
 	 * no data was returned). The server is expected to send back a MessageData
 	 * in JSON format.
+	 * @throws MultipleAnswersReceived - if multiple answers are received.
 	 **/
 	public MessageData sendToServerAndGetAnswer(
 			String serverAddress, MessageData data) 
@@ -42,7 +45,7 @@ public class Client {
 			
 			if ($ != null)
 			{
-				throw new RuntimeException("Multiple messages sent back from server!");
+				throw new MultipleAnswersReceived();
 			}
 			$ = md;
 		}
