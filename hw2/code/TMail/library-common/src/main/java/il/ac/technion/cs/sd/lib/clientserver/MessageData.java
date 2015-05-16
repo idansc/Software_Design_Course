@@ -52,7 +52,7 @@ public class MessageData
 	}
 
 
-	String getFromAddress() {
+	public String getFromAddress() {
 		return fromAddress;
 	}
 

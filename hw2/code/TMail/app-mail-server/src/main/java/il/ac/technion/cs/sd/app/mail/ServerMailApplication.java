@@ -1,12 +1,24 @@
 package il.ac.technion.cs.sd.app.mail;
 
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+import il.ac.technion.cs.sd.lib.clientserver.Server;
+
 /**
  * The server side of the TMail application. <br>
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerMailApplication {
-	
-	private String _name;
+	private Server _server;
+	List<Mail> mailList;
 	
 	/**
 	 * Starts a new mail server. Servers with the same name retain all their information until
@@ -15,14 +27,14 @@ public class ServerMailApplication {
 	 * @param name The name of the server by which it is known.
 	 */
 	public ServerMailApplication(String name) {
-		_name = name;
+		_server = new Server(name);
 	}
 	
 	/**
 	 * @return the server's address; this address will be used by clients connecting to the server
 	 */
 	public String getAddress() {
-		return _name;
+		return _server.getserverAddress();
 	}
 	
 	/**
@@ -32,7 +44,14 @@ public class ServerMailApplication {
 	 * calls to {@link ServerMailApplication#start()}.
 	 */
 	public void start() {
-		throw new UnsupportedOperationException("Not implemented");
+//TODO
+		try {
+			List<String> serverData = Files.readAllLines(Paths.get(getAddress() + ".txt"),
+					Charset.defaultCharset());
+		} catch (IOException e) {
+			throw new RuntimeException();
+		}
+	    
 	}
 	
 	/**

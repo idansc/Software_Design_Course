@@ -59,11 +59,7 @@ public class ClientMailApplication {
 		data.add(Integer.toString(howMany));
 		md.setData(data);
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
 		while(--howMany!=0&&iter.hasNext()){
@@ -83,11 +79,7 @@ public class ClientMailApplication {
 		data.add(Integer.toString(howMany));
 		md.setData(data);
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
 		while(--howMany!=0&&iter.hasNext()){
@@ -108,11 +100,7 @@ public class ClientMailApplication {
 		data.add(Integer.toString(howMany));
 		md.setData(data);
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
 		while(--howMany!=0&&iter.hasNext()){
@@ -133,11 +121,7 @@ public class ClientMailApplication {
 		data.add(Integer.toString(howMany));
 		md.setData(data);
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
 		while(--howMany!=0&&iter.hasNext()){
@@ -154,11 +138,7 @@ public class ClientMailApplication {
 		//TODO:: Code resemblance..
 		MessageData md = new MessageData(TaskType.GET_NEW_MAIL_TASK.toString());
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
 		while(iter.hasNext()){
@@ -176,11 +156,7 @@ public class ClientMailApplication {
 		data.add(Integer.toString(howMany));
 		md.setData(data);
 		MessageData result;
-		try {
-			result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		} catch (MessengerException e) {
-			throw new RuntimeException();
-		}
+		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		return result.getData().subList(0, howMany-1);
 	}
 	
