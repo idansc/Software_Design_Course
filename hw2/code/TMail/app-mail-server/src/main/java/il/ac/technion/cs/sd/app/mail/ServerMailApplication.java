@@ -108,15 +108,12 @@ public class ServerMailApplication {
 		
 	}
 	
-	/* existing content of outputFile will be lost! */
-	private void writeAllMailsToFile(List<Mail> mails, String outputFile) throws IOException
+	/* mail will be appended to outputFile */
+	private void appendMailToFile(Mail mail, String outputFile) throws IOException
 	{
 		File file = new File(outputFile);
-		OutputStream stream = new FileOutputStream(file);
-		for (Mail mail : mails)
-		{
-			writeMailToStream(mail,stream);
-		}
+		OutputStream stream = new FileOutputStream(file, true);
+		writeMailToStream(mail,stream);
 		stream.flush();
 		stream.close();
 		
