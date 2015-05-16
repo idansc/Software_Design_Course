@@ -148,7 +148,8 @@ public class ClientMailApplication {
 	}
 	
 	/**
-	 * @return A list, ordered alphabetically, of all other users that sent or received mail from the current user  
+	 * @return A list, ordered alphabetically, of all other users that sent or received mail from the current user
+	 * NOTE BY TA: WE CAN IGNORE 'howMany'  
 	 */
 	public List<String> getContacts(int howMany) {
 		MessageData md = new MessageData(TaskType.GET_ALL_MAIL_TASK.toString());

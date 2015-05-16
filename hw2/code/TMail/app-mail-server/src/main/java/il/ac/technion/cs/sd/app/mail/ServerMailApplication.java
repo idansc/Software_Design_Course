@@ -31,6 +31,7 @@ public class ServerMailApplication {
 	private Server _server;
 	List<Mail> mailList;
 	
+	
 	/**
 	 * Starts a new mail server. Servers with the same name retain all their information until
 	 * {@link ServerMailApplication#clean()} is called.
@@ -82,51 +83,5 @@ public class ServerMailApplication {
 	}
 	
 	
-	private ArrayList<Mail> readAllMailsFromFile(String filename) throws IOException
-	{
-		File file = new File(filename);
-		return readAllMailsFromStream(new FileInputStream(file));
-	}
-	
-	private ArrayList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
-	{
-		Gson gson = new GsonBuilder().create();
-		JsonReader reader = new JsonReader(new InputStreamReader(stream, "UTF-8"));
-		
-		
-		ArrayList<Mail> $ = new ArrayList<Mail>();
-		reader.beginArray();
-		while (reader.hasNext()) {
-            Mail mail = gson.fromJson(reader, Mail.class);
-            $.add(mail);
-        }
-		
-		reader.endArray();
-        reader.close();
-		
-		return $;
-		
-	}
-	
-	/* mail will be appended to outputFile */
-	private void appendMailToFile(Mail mail, String outputFile) throws IOException
-	{
-		File file = new File(outputFile);
-		OutputStream stream = new FileOutputStream(file, true);
-		writeMailToStream(mail,stream);
-		stream.flush();
-		stream.close();
-		
-	}
-	
-	private void writeMailToStream(Mail mail, OutputStream stream) throws IOException
-	{
-		Gson gson = new GsonBuilder().create();
-		JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, "UTF-8"));
-		writer.beginArray();
-		gson.toJson(mail, Mail.class, writer);
-		writer.endArray();
-        writer.close();
-		
-	}
+
 }

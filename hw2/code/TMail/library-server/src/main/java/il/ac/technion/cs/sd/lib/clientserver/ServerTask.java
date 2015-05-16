@@ -8,5 +8,5 @@ public interface ServerTask {
 	/* @param serverAddress The address of server processing this task.
 	 * @param data The data that the client sent to the server. 
 	 * @return the answer to be sent back to the client. */
-	MessageData run(String serverAddress, MessageData data);
+	MessageData run(MessageData data);
 }
