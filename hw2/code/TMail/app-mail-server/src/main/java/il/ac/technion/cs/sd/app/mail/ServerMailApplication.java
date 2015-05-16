@@ -1,13 +1,25 @@
 package il.ac.technion.cs.sd.app.mail;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import il.ac.technion.cs.sd.lib.clientserver.Server;
 
@@ -67,5 +79,57 @@ public class ServerMailApplication {
 	 */
 	public void clean() {
 		throw new UnsupportedOperationException("Not implemented");
+	}
+	
+	
+	private ArrayList<Mail> readAllMailsFromFile(String filename) throws IOException
+	{
+		File file = new File(filename);
+		return readAllMailsFromStream(new FileInputStream(file));
+	}
+	
+	private ArrayList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
+	{
+		Gson gson = new GsonBuilder().create();
+		JsonReader reader = new JsonReader(new InputStreamReader(stream, "UTF-8"));
+		
+		
+		ArrayList<Mail> $ = new ArrayList<Mail>();
+		reader.beginArray();
+		while (reader.hasNext()) {
+            Mail mail = gson.fromJson(reader, Mail.class);
+            $.add(mail);
+        }
+		
+		reader.endArray();
+        reader.close();
+		
+		return $;
+		
+	}
+	
+	/* existing content of outputFile will be lost! */
+	private void writeAllMailsToFile(List<Mail> mails, String outputFile) throws IOException
+	{
+		File file = new File(outputFile);
+		OutputStream stream = new FileOutputStream(file);
+		for (Mail mail : mails)
+		{
+			writeMailToStream(mail,stream);
+		}
+		stream.flush();
+		stream.close();
+		
+	}
+	
+	private void writeMailToStream(Mail mail, OutputStream stream) throws IOException
+	{
+		Gson gson = new GsonBuilder().create();
+		JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, "UTF-8"));
+		writer.beginArray();
+		gson.toJson(mail, Mail.class, writer);
+		writer.endArray();
+        writer.close();
+		
 	}
 }

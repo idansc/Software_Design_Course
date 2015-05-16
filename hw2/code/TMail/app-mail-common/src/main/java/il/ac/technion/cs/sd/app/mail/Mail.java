@@ -5,6 +5,8 @@ public class Mail {
 	public final String to;
 	public final String content;
 
+	boolean alreadyRead = false;  
+	
 	public Mail(String from, String to, String content) {
 		super();
 		this.from = from;

@@ -1,7 +1,5 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
-import il.ac.technion.cs.sd.msg.Messenger;
-
 /* Represents a task a server performs repeatedly - each time new data is sent 
  * from any client.*/
 @FunctionalInterface

@@ -63,7 +63,7 @@ public class ServerTest {
 		
 		// sends back to the client two answers identical to the data received.
 		task1 = new ServerTask() {
-			public void run(Messenger serverMessenger, MessageData data) {
+			public void run(String serverAddress, MessageData data) {
 				try {
 					serverMessenger.send(data.getFromAddress(), data.serialize());
 					serverMessenger.send(data.getFromAddress(), data.serialize());
