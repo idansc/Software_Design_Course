@@ -17,7 +17,6 @@ public class Client {
 	}
 	
 	
-	public class MultipleAnswersReceived extends RuntimeException {private static final long serialVersionUID = 1L;}
 	
 	/* sends data to a server, and blocks until the server's task finishes 
 	 * running.
@@ -25,29 +24,37 @@ public class Client {
 	 * no data was returned). The server is expected to send back a MessageData
 	 * in JSON format.
 	 * @throws MultipleAnswersReceived - if multiple answers are received.
+	 * @throws ConnectionError
 	 **/
 	public MessageData sendToServerAndGetAnswer(
 			String serverAddress, MessageData data) 
-		throws MessengerException
 	{
-		Messenger m = createMessenger();
-		data.setFromAddress(_clientAddress);
-		m.send(serverAddress, data.serialize());
-		
-		MessageData $ = null;
-		while (true)
-		{
-			MessageData md = MessageData.deserialize(m.listen());
-			if (md.getMessageType().equals(MessageData.TASK_ENDED_MESSAGE_TYPE))
-			{
-				return $;
-			}
+		try {
+			Messenger m;
+			m = createMessenger();
 			
-			if ($ != null)
+			data.setFromAddress(_clientAddress);
+			m.send(serverAddress, data.serialize());
+			
+			MessageData $ = null;
+			while (true)
 			{
-				throw new MultipleAnswersReceived();
+				MessageData md = MessageData.deserialize(m.listen());
+				if (md.getMessageType().equals(MessageData.TASK_ENDED_MESSAGE_TYPE))
+				{
+					m.kill();
+					return $;
+				}
+				
+				if ($ != null)
+				{
+					m.kill();
+					throw new MultipleAnswersReceived();
+				}
+				$ = md;
 			}
-			$ = md;
+		} catch (MessengerException e) {
+			throw new ConnectionError();
 		}
 	}
 	
@@ -55,4 +62,10 @@ public class Client {
 	private Messenger createMessenger() throws MessengerException {
 		return (new MessengerFactory()).start(_clientAddress);
 	}
+	
+	
+	public class MultipleAnswersReceived extends RuntimeException {private static final long serialVersionUID = 1L;}
+	
+	public class ConnectionError extends RuntimeException {private static final long serialVersionUID = 1L;}
+
 }

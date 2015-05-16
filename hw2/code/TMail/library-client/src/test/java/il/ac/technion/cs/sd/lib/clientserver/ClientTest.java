@@ -67,7 +67,8 @@ public class ClientTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDownAndValidate() throws Exception {
+		assertFalse(errorOnAnotherThread);
 		messenger1.kill();
 		messenger2.kill();
 	}
@@ -89,7 +90,6 @@ public class ClientTest {
 				client1.sendToServerAndGetAnswer(messenger1_name, md1);
 		
 		thread.stop();
-		assertFalse(errorOnAnotherThread);
 		
 		
 		assertNull(answer);
@@ -115,7 +115,6 @@ public class ClientTest {
 				client1.sendToServerAndGetAnswer(messenger1_name, md2);
 		
 		thread.stop();
-		assertFalse(errorOnAnotherThread);
 		
 		assertEquals(actualAnswer, answer);
 	}
@@ -141,7 +140,6 @@ public class ClientTest {
 				client1.sendToServerAndGetAnswer(messenger1_name, md2);
 		
 		thread.stop();
-		assertFalse(errorOnAnotherThread);
 		
 		assertEquals(actualAnswer, answer);
 	}

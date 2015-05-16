@@ -22,11 +22,9 @@ public class Server {
 	private boolean stopListenRequested = false;
 	
 	
-	public class NoCurrentListenLoop extends RuntimeException {private static final long serialVersionUID = 1L;} 
-	public class ListenLoopAlreadyBeingDone extends RuntimeException {private static final long serialVersionUID = 1L;} 
 	
 	
-	public Server(String serverAddress, ServerTask task)
+	public Server(String serverAddress)
 	{
 		_serverAddress = serverAddress;
 	}
@@ -39,6 +37,8 @@ public class Server {
 	 * server. Once the task run is complete, a JSON MessageData will be 
 	 * sent back to the client with the messageType of 
 	 * MessageData.serverTaskEndedPacketType.
+	 * Note: data sent to the server must contain a valid fromAdress field.
+	 * @throws ListenLoopAlreadyBeingDone
 	 **/
 	public void startListenLoop(ServerTask task)
 	{
@@ -56,8 +56,15 @@ public class Server {
 					Optional<byte[]> data = messenger.tryListen();
 					if (data.isPresent())
 					{
+						
 						MessageData md = MessageData.deserialize(data.get());
-								
+						if (md.getFromAddress() == null)
+						{
+							throw new RuntimeException(
+									"Invalid 'fromAddress' field");
+							//TODO: no indication of failure is given.
+						}
+						
 						task.run(messenger,md);
 
 						MessageData taskEndedMessage = new MessageData(
@@ -75,17 +82,20 @@ public class Server {
 				messenger.kill();
 			} catch (MessengerException exc)
 			{
-				// hmmm, no indication is passed on, oh well :(
+				//TODO
+				/* no indication is passed on.
+				 * that's not good. Should pass the exception
+				 * to main thread via some dedicated Server field.
+				 */
 			}
 				
 		});
 		
-	
-		
-		listenThread = null;
+		listenThread.start();
 	}
 	
-	/* Stops the "listen loop" started with startListenLoop */
+	/* Stops the "listen loop" started with startListenLoop.
+	 * @throws NoCurrentListenLoop*/
 	public void stopListenLoop()
 	{
 		if (listenThread == null )
@@ -100,4 +110,9 @@ public class Server {
 	private Messenger createMessenger() throws MessengerException {
 		return (new MessengerFactory()).start(_serverAddress);
 	}
+	
+	
+	public class NoCurrentListenLoop extends RuntimeException {private static final long serialVersionUID = 1L;} 
+	public class ListenLoopAlreadyBeingDone extends RuntimeException {private static final long serialVersionUID = 1L;} 
+
 }
