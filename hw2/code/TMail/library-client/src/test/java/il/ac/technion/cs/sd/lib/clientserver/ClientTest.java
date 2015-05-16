@@ -1,7 +1,6 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import static org.junit.Assert.*;
-import il.ac.technion.cs.sd.lib.clientserver.Client.MultipleAnswersReceived;
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
@@ -53,7 +52,6 @@ public class ClientTest {
 		md1 = new MessageData("messageType1", stringList1);
 		md2 = new MessageData("messageType2", stringList2);
 		md2 = new MessageData("messageType3", stringList3);
-		md_taskEnded = new MessageData(MessageData.TASK_ENDED_MESSAGE_TYPE);
 
 		messenger1_name = UUID.randomUUID().toString();
 		messenger2_name = UUID.randomUUID().toString();
@@ -74,27 +72,6 @@ public class ClientTest {
 	}
 
 	
-	@SuppressWarnings("deprecation")
-	@Test(timeout=3000)
-	public void sendWithEmptyAnswer() throws MessengerException, InterruptedException {
-		
-		
-		Thread thread = new Thread(() -> {
-			listenForExpectedMessage(messenger1, md1);
-			sendBackMessage(messenger1, client1_name, md_taskEnded);
-		});
-		
-		startThreadAndYield(thread);
-		
-		MessageData answer = 
-				client1.sendToServerAndGetAnswer(messenger1_name, md1);
-		
-		thread.stop();
-		
-		
-		assertNull(answer);
-	}
-
 	
 	@SuppressWarnings("deprecation")
 	@Test(timeout=3000)
@@ -104,46 +81,19 @@ public class ClientTest {
 				messenger1_name, "123", stringList1);
 		
 		Thread thread = new Thread(() -> {
-			listenForExpectedMessage(messenger1, md2);
+			listenForExpectedMessage(messenger1, md1);
 			sendBackMessage(messenger1, client1_name, answer);
-			sendBackMessage(messenger1, client1_name, md_taskEnded);
 		});
 		
 		startThreadAndYield(thread);
 		
 		MessageData actualAnswer = 
-				client1.sendToServerAndGetAnswer(messenger1_name, md2);
+				client1.sendToServerAndGetAnswer(messenger1_name, md1);
 		
 		thread.stop();
 		
-		assertEquals(actualAnswer, answer);
+		assertTrue(messagesAreEqualIgnoringFromAddress(actualAnswer, answer));
 	}
-	
-	
-	@SuppressWarnings("deprecation")
-	@Test(expected=MultipleAnswersReceived.class, timeout=3000) 
-	public void clientGetsMultipleAnswers() throws InterruptedException, MessengerException 
-	{
-		final MessageData answer = new MessageData(
-				messenger1_name, "123", stringList1);
-		
-		Thread thread = new Thread(() -> {
-			listenForExpectedMessage(messenger1, md2);
-			sendBackMessage(messenger1, client1_name, answer);
-			sendBackMessage(messenger1, client1_name, answer);
-			sendBackMessage(messenger1, client1_name, md_taskEnded);
-		});
-		
-		startThreadAndYield(thread);
-		
-		MessageData actualAnswer = 
-				client1.sendToServerAndGetAnswer(messenger1_name, md2);
-		
-		thread.stop();
-		
-		assertEquals(actualAnswer, answer);
-	}
-
 	
 	
 	// on failure sets errorOnAnotherThread to true and throw exception.
@@ -184,6 +134,15 @@ public class ClientTest {
 		thread.start();
 		Thread.yield();
 		Thread.sleep(100);
+	}
+	
+	
+	// duplication. Should move this to library common test project.
+	private boolean messagesAreEqualIgnoringFromAddress (
+			MessageData m1, MessageData m2)
+	{
+		return (m1.getMessageType().equals(m2.getMessageType())) &&
+				(m1.getData().equals(m2.getData()));
 	}
 	
 }
