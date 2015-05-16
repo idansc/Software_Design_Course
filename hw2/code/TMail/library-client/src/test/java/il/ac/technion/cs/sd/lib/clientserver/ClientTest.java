@@ -9,8 +9,6 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -27,9 +25,7 @@ public class ClientTest {
 	private Messenger messenger2;
 	
 	private String client1_name;
-	private String client2_name;
 	private Client client1;
-	private Client client2;
 	
 	ArrayList<String> stringList1;
 	ArrayList<String> stringList2;
@@ -37,20 +33,11 @@ public class ClientTest {
 	
 	private MessageData md1;
 	private MessageData md2;
-	private MessageData md3;
 	private MessageData md_taskEnded;
-	
 	
 	
 	boolean errorOnAnotherThread = false;
 	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {
@@ -76,9 +63,7 @@ public class ClientTest {
 		messenger2 = new MessengerFactory().start(messenger2_name);
 		
 		client1_name = UUID.randomUUID().toString();
-		client2_name = UUID.randomUUID().toString();
 		client1 = new Client(client1_name);
-		client2 = new Client(client1_name);
 		
 		
 	}
