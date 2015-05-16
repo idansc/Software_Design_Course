@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -239,6 +240,8 @@ class ServerTaskMail implements ServerTask {
 		
 	}
 	
+	
+	
 	/* mail will be appended to outputFile */
 	private void appendMailToFile(Mail mail, String outputFile) throws IOException
 	{
@@ -261,5 +264,17 @@ class ServerTaskMail implements ServerTask {
 		
 	}
 	
+	public void updateFile() {
+		File $ = new File(mailsFileFilename);
+		$.delete();
+		for ( List<Mail> listMail : allMailsSentByPerson.values()) 
+			for(Mail mail : listMail)
+				try {
+					appendMailToFile(mail, mailsFileFilename);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	}
 
 }
