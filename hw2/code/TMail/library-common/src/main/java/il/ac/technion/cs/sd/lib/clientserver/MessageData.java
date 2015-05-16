@@ -53,11 +53,12 @@ public class MessageData
 	}
 
 
+	//TODO: change to default access modifier
 	public String getFromAddress() {
 		return fromAddress;
 	}
 
-	public void setFromAddress(String fromAddress) {
+	void setFromAddress(String fromAddress) {
 		this.fromAddress = fromAddress;
 	}
 	

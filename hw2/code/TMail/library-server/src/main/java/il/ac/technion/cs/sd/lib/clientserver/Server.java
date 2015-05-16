@@ -18,6 +18,7 @@ public class Server {
 	 * is going to stop.
 	 */
 	private Thread listenThread = null;
+	private Messenger _messenger = null;
 
 	private boolean stopListenRequested = false;
 
@@ -54,9 +55,9 @@ public class Server {
 
 		listenThread = new Thread(() -> {
 			try {
-				Messenger messenger = createMessenger();
+				_messenger = createMessenger();
 				while (!stopListenRequested) {
-					Optional<byte[]> data = messenger.tryListen();
+					Optional<byte[]> data = _messenger.tryListen();
 					if (data.isPresent()) {
 
 						MessageData md = MessageData.deserialize(data.get());
@@ -69,13 +70,14 @@ public class Server {
 			
 						MessageData answer = task.run(md);;
 						answer.setFromAddress(_serverAddress);
-						messenger.send(md.getFromAddress(), answer.serialize());
+						_messenger.send(md.getFromAddress(), answer.serialize());
 					}
 
 					// If we cared about not wasting CPU time:
 					// Thread.sleep(10);
 				}
-				messenger.kill();
+				_messenger.kill();
+				_messenger = null;
 			} catch (MessengerException exc) {
 				/*
 				 * TODO: no indication is passed on. that's not good. Should pass
@@ -89,16 +91,21 @@ public class Server {
 	}
 
 	/*
-	 * Stops the "listen loop" started with startListenLoop.
-	 * 
+	 * Stops the "listen loop" started with startListenLoop, and blocks until
+	 * the listen loop thread actually terminates.
 	 * @throws NoCurrentListenLoop
 	 */
-	public void stopListenLoop() {
+	public void stopListenLoop() throws InterruptedException {
 		if (listenThread == null) {
 			throw new NoCurrentListenLoop();
 		}
 		stopListenRequested = true;
 		listenThread = null;
+		Thread.yield();
+		while (_messenger != null)
+		{
+			Thread.sleep(5);
+		}
 	}
 
 	private Messenger createMessenger() throws MessengerException {

@@ -29,7 +29,8 @@ import il.ac.technion.cs.sd.lib.clientserver.Server;
  */
 public class ServerMailApplication {
 	private Server _server;
-	List<Mail> mailList;
+	ServerTaskMail _task;
+	
 	
 	
 	/**
@@ -56,14 +57,8 @@ public class ServerMailApplication {
 	 * calls to {@link ServerMailApplication#start()}.
 	 */
 	public void start() {
-//TODO
-		try {
-			List<String> serverData = Files.readAllLines(Paths.get(getAddress() + ".txt"),
-					Charset.defaultCharset());
-		} catch (IOException e) {
-			throw new RuntimeException();
-		}
-	    
+		_task = new ServerTaskMail()
+		_server.startListenLoop(_task);
 	}
 	
 	/**
@@ -71,7 +66,16 @@ public class ServerMailApplication {
 	 * any system resources (e.g., messengers).
 	 */
 	public void stop() {
-		throw new UnsupportedOperationException("Not implemented");
+		try {
+			_server.stopListenLoop();
+			_task.savePersistentData();
+			
+		} catch (IOException e) {
+			throw new IOExceptionRuntime();
+		}
+		catch (InterruptedException e) {
+			throw new InterruptedExceptionRuntime();
+		}
 	}
 	
 	/**
@@ -81,6 +85,11 @@ public class ServerMailApplication {
 	public void clean() {
 		throw new UnsupportedOperationException("Not implemented");
 	}
+	
+	
+	public class InterruptedExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
+	public class IOExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
+	
 	
 	
 

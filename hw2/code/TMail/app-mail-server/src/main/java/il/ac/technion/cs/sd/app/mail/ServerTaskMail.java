@@ -3,9 +3,6 @@
  */
 package il.ac.technion.cs.sd.app.mail;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +17,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -37,8 +33,10 @@ import il.ac.technion.cs.sd.lib.clientserver.ServerTask;
  */
 class ServerTaskMail implements ServerTask {
 	
-	private String serverAddress;
+	private PersistentConfig _persistentConfig;
+	
 	// key = name of 
+	private List<Mail> allMail = new LinkedList<Mail>();
 	private Map<String,List<Mail>> allMailsSentByPerson = new HashMap<>();
 	private Map<String,List<Mail>> allMailsReceivedByPerson = new HashMap<>();
 	private Map<String,List<Mail>> allMailsSentAndReceivedByPerson = new HashMap<>();
@@ -46,14 +44,35 @@ class ServerTaskMail implements ServerTask {
 	private Map<Pair<String,String>,List<Mail>> allMailsBetweenPeople = new HashMap<>();
 	private Map<String,List<Mail>> allNewMailSentToPerson = new HashMap<>();
 	private Map<String,Set<String>> contactsOfPerson = new HashMap<>();
+		
 	
-	private String mailsFileFilename;
-	
-	public ServerTaskMail(String serverAddress) throws IOException
+	// During this constructor 
+	public ServerTaskMail(PersistentConfig persistentConfig) 
+			throws IOException
 	{
-		this.serverAddress = serverAddress;
-		mailsFileFilename = getClass().getResource(serverAddress + ".txt").toString();
-		ReadAndLoadToServerAllMailsFromFile(mailsFileFilename);
+		_persistentConfig = persistentConfig;
+	}
+	
+	public void loadPersistentData() throws IOException
+	{
+		InputStream in = _persistentConfig.getPersistentMailInputStream();
+		
+		ArrayList<Mail> allMails = readAllMailsFromStream(in);
+		for (Mail mail : allMails)
+		{
+			insertMailIntoStructures(mail);
+		}
+	}
+	
+	public void savePersistentData() throws IOException
+	{
+		OutputStream out = 
+				_persistentConfig.getPersistentMailOverwriteOutputStream();
+		
+		for (Mail mail : allMail)
+		{
+			writeMailToStream(mail, out);
+		}	
 	}
 	
 
@@ -64,7 +83,6 @@ class ServerTaskMail implements ServerTask {
 	public MessageData run(MessageData data) {
 		
 		MessageData $ = new MessageData("");
-		$.setFromAddress(serverAddress);
 		switch (TaskType.valueOf(data.getMessageType())) {
 		case SEND_MAIL_TASK: {
 			Iterator<String> it = data.getData().iterator();
@@ -74,11 +92,6 @@ class ServerTaskMail implements ServerTask {
 			
 			Mail mail = new Mail(from,whom,what);
 			insertMailIntoStructures(mail);
-			try {
-				appendMailToFile(mail, mailsFileFilename);
-			} catch (IOException e) {
-				//TODO: unreported failure.
-			}
 			break;
 		}
 		case GET_CORRESPONDENCES_TASK: {
@@ -150,18 +163,10 @@ class ServerTaskMail implements ServerTask {
 	}
 	
 	
-	
-	private void ReadAndLoadToServerAllMailsFromFile(String filename) throws IOException
-	{
-		ArrayList<Mail> allMails = readAllMailsFromFile(filename);
-		for (Mail mail : allMails)
-		{
-			insertMailIntoStructures(mail);
-		}
-	}
-	
 	private void insertMailIntoStructures(Mail mail)
 	{
+		
+		allMail.add(mail);
 
 		insertNewMailToMap(allMailsSentByPerson,mail.from,mail);
 		
@@ -174,7 +179,6 @@ class ServerTaskMail implements ServerTask {
 		Pair<String,String> pair1 = new Pair<>(mail.from,mail.to);
 		Pair<String,String> pair2 = new Pair<>(mail.to,mail.from);
 		insertNewMailToMap(allMailsBetweenPeople, pair1, mail);
-		
 		if (mail.to != mail.from)
 			insertNewMailToMap(allMailsBetweenPeople, pair2, mail);
 			
@@ -183,9 +187,7 @@ class ServerTaskMail implements ServerTask {
 			insertNewMailToMap(allNewMailSentToPerson,mail.to,mail);
 		}
 		
-		
 		insertNewStringToSetInMap(contactsOfPerson, mail.from, mail.to);
-		
 		insertNewStringToSetInMap(contactsOfPerson, mail.to, mail.from);
 	
 	}
@@ -214,11 +216,6 @@ class ServerTaskMail implements ServerTask {
 		mailsList.add(mail);
 	}
 	
-	private ArrayList<Mail> readAllMailsFromFile(String filename) throws IOException
-	{
-		File file = new File(filename);
-		return readAllMailsFromStream(new FileInputStream(file));
-	}
 	
 	private ArrayList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
 	{
@@ -242,17 +239,6 @@ class ServerTaskMail implements ServerTask {
 	
 	
 	
-	/* mail will be appended to outputFile */
-	private void appendMailToFile(Mail mail, String outputFile) throws IOException
-	{
-		File file = new File(outputFile);
-		OutputStream stream = new FileOutputStream(file, true);
-		writeMailToStream(mail,stream);
-		stream.flush();
-		stream.close();
-		
-	}
-	
 	private void writeMailToStream(Mail mail, OutputStream stream) throws IOException
 	{
 		Gson gson = new GsonBuilder().create();
@@ -263,18 +249,8 @@ class ServerTaskMail implements ServerTask {
         writer.close();
 		
 	}
-	
-	public void updateFile() {
-		File $ = new File(mailsFileFilename);
-		$.delete();
-		for ( List<Mail> listMail : allMailsSentByPerson.values()) 
-			for(Mail mail : listMail)
-				try {
-					appendMailToFile(mail, mailsFileFilename);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	}
 
+
+	
+	
 }
