@@ -17,17 +17,25 @@ import java.util.List;
  */
 public class ClientMailApplication {
 	
+	private String _username;
 	private Client _client;	
 	private String _serverAddress;
-	
+		
 	/**
 	 * Creates a new application, tied to a single user
 	 * @param serverAddress The address of the server to connect to for sending and requesting mail
 	 * @param username The user that will be sending and accepting the mail using this object
 	 */
 	public ClientMailApplication(String serverAddress, String username) {
+		_username = username;
 		_client = new Client(username);
 		_serverAddress = serverAddress;
+	}
+	
+	
+	public String getUsername()
+	{
+		return _username;
 	}
 	
 	/**
@@ -62,7 +70,7 @@ public class ClientMailApplication {
 		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
-		while(--howMany!=0&&iter.hasNext()){
+		while(iter.hasNext()){
 			$.add(new Mail(iter.next(),iter.next(),iter.next()));
 		}
 		return $;
@@ -82,7 +90,7 @@ public class ClientMailApplication {
 		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
-		while(--howMany!=0&&iter.hasNext()){
+		while(iter.hasNext()){
 			$.add(new Mail(iter.next(),iter.next(),iter.next()));
 		}
 		return $;
@@ -103,7 +111,7 @@ public class ClientMailApplication {
 		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
-		while(--howMany!=0&&iter.hasNext()){
+		while(iter.hasNext()){
 			$.add(new Mail(iter.next(),iter.next(),iter.next()));
 		}
 		return $;
@@ -124,7 +132,7 @@ public class ClientMailApplication {
 		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
 		List<Mail> $ = new ArrayList<Mail>();
 		Iterator<String> iter = result.getData().iterator();
-		while(--howMany!=0&&iter.hasNext()){
+		while(iter.hasNext()){
 			$.add(new Mail(iter.next(),iter.next(),iter.next()));
 		}
 		return $;
