@@ -1,4 +1,5 @@
 package il.ac.technion.cs.sd.app.mail;
+import org.apache.commons.io.FileUtils;
 
 
 import java.io.File;
@@ -36,20 +37,26 @@ public class ServerMailApplication {
 		return new PersistentConfig() {
 			@Override
 			public InputStream getPersistentMailInputStream() throws FileNotFoundException {
-				File file = new File(getDafualtPesistentFilename());
+				File file = new File(getServerPesistentFilename());
 				return new FileInputStream(file);
 			}
 			@Override
 			public OutputStream getPersistentMailOverwriteOutputStream() throws FileNotFoundException {
-				File file = new File(getDafualtPesistentFilename());
+				File file = new File(getServerPesistentFilename());
 				return new FileOutputStream(file,false);
 			}
 		};
 	}
 	
-	private String getDafualtPesistentFilename()
+	private static File getPesistentDirOfAllServers()
 	{
-		return getClass().getResource(_server.getserverAddress() + ".txt").toString();
+		return new File("./TMP___ServersData");
+	}
+	
+	private String getServerPesistentFilename()
+	{
+		String baseName = _server.getserverAddress() + ".txt";
+		return new File(getPesistentDirOfAllServers(), baseName).toString();
 	}
 	
 	public void setPersistentConfig (PersistentConfig persistentConfig)
@@ -112,6 +119,16 @@ public class ServerMailApplication {
 	public class IOExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
 	
 	
-	
-
+	/* Removes current content of servers data directory (if currently exists)
+	 * and makes sure the directory exists.
+	 */
+	public static void CleanAndInitPersistentDataDirOfAllServers() throws IOException
+	{
+		File persistentDataDir = getPesistentDirOfAllServers();
+		if (persistentDataDir.exists())
+		{
+			FileUtils.deleteDirectory(persistentDataDir);
+		}
+		persistentDataDir.mkdirs();
+	}
 }
