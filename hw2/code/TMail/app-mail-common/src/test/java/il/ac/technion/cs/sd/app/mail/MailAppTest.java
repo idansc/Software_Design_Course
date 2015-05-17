@@ -29,24 +29,14 @@ public class MailAppTest {
 	
 	@Before
 	public void setUp() throws Exception {
-	
-		List<Mail> mailList = new ArrayList<Mail>();
-		mailList.add(new Mail("Idan","Gal","Assignment 2 delay"));
-		mailList.add(new Mail("Gal","Idan","Assignment 2 delayed"));
-		mailList.add(new Mail("Ofer","Idan","We have more time"));
-		mailList.add(new Mail("Ofer","Idan","I completed the lib"));
-		mailList.add(new Mail("Gal","OFer","WOW such Assignment solution"));
-		
-		
 	} 
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	
 	@Test
 	public void test() {
 		fail("Not yet implemented");
