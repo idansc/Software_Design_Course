@@ -134,7 +134,11 @@ public class ServerMailApplication {
 	 */
 	public void clean() {
 		// TODO: clean only this server!!!
-		cleanAndInitPersistentDataDirOfAllServers();
+		try {
+			clearAndInitPersistentDataFile();
+		} catch (IOException e) {
+			throw new IOExceptionRuntime();
+		}
 	}
 	
 	/* Removes current content of servers data directory (if currently exists)

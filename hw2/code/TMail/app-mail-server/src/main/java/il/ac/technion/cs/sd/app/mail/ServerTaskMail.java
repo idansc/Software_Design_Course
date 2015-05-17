@@ -172,7 +172,9 @@ class ServerTaskMail implements ServerTask {
 			String from = data.getFromAddress();
 			DoublyLinkedList<Mail> mailList = ReturnValidDL(allNewMailSentToPerson.get(from));
 			$.setData(fromMailListToStringList(mailList));
-			markMailsAsRead(mailList, from);
+			LinkedList<Mail> tmp = new LinkedList<Mail>();
+			mailList.forEach(x -> tmp.add(x));
+			markMailsAsRead(tmp, from);
 			break;
 		}
 		case GET_CONTACTS_TASK: {
@@ -328,9 +330,12 @@ class ServerTaskMail implements ServerTask {
 		if (!m.to.equals(receiver))
 			return;
 		
+		
 		m.alreadyRead = true;
 		allNewMailSentToPerson.get(m.to).removeNode(m.newMailNode);
 		m.newMailNode = null;
+		
+		
 	}
 
 

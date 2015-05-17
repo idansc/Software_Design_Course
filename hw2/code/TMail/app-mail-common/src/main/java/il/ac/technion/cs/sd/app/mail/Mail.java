@@ -66,7 +66,7 @@ public class Mail {
 	@Override
 	public String toString()
 	{
-		return "(" + to + "," + from + "," + content + ")";
+		return "(" + from + "," + to + "," + content + ")";
 	}
 	
 }

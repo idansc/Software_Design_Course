@@ -198,20 +198,74 @@ public class TMailIntegrationTest {
 		
 		doSomeChat();
 		
-		res = clientGal.getAllMail(5);
+		res = clientGal.getAllMail(6);
 
 		assertEquals(res, Arrays.asList(
 				new Mail("Gal", "Tom", "hey"),
 				new Mail("Tom", "Gal", "hi"),
 				new Mail("Ofer", "Gal", ":)"),
-				
-				
+				new Mail("Gal", "Ofer", "jk"),
+				new Mail("Ofer", "Gal", ":("),
+				new Mail("Gal", "Ofer", "Bad job")
 			));
 		
+		
+		res = clientGal.getAllMail(3);
+
+		assertEquals(res, Arrays.asList(
+				new Mail("Gal", "Tom", "hey"),
+				new Mail("Tom", "Gal", "hi"),
+				new Mail("Ofer", "Gal", ":)")
+			));
+	}
+	
+	
+	@Test
+	public void testGetNewMail1() throws Exception
+	{
+		
+		List<Mail> res;
+		res = clientOfer.getNewMail();
+		assertEquals(res, Arrays.asList(new Mail[0]));
+		
+		doSomeChat();
+		
+		
+		res = clientGal.getNewMail();
+		assertEquals(res, Arrays.asList(
+			new Mail("Tom", "Gal", "hi"),
+			new Mail("Ofer", "Gal", ":)"),
+			new Mail("Ofer", "Gal", ":(")
+			));
+				
+		res = clientGal.getNewMail();
+		assertEquals(res, Arrays.asList(new Mail[0]));
 		
 	}
 	
 	
 	
 	
+	
+	
+	@Test
+	public void shouldHaveNoContact()
+	{
+		List<String> contacts = clientIdan.getContacts(0);
+		assertEquals(contacts, Arrays.asList(new String[0])); 
+	}
+	@Test
+	public void shouldHaveHimselfAsContact() throws MessengerException
+	{
+		clientIdan.sendMail("Idan", "whoRU");
+		List<String> contacts = clientIdan.getContacts(2);
+		assertEquals(contacts, Arrays.asList("Idan"));
+	}
+	@Test
+	public void contactsShouldBeSorted() throws Exception
+	{
+		doSomeChat();
+		List<String> contacts = clientIdan.getContacts(2);
+		assertEquals(contacts, Arrays.asList("Ofer","Tom"));
+	}
 }
