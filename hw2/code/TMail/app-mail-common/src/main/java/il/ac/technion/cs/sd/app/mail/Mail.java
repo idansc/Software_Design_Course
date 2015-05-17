@@ -1,5 +1,7 @@
 package il.ac.technion.cs.sd.app.mail;
 
+import java.util.ListIterator;
+
 
 public class Mail {
 	public final String from;
@@ -12,7 +14,7 @@ public class Mail {
 	boolean alreadyRead = false;
 	// An iterator to the element in allNewMailSentToPerson's value, representing
 	// this object, or null (if non such exists).
-	//TODO ListIterator<Mail> newMailIterator = null; 
+	ListIterator<Mail> newMailIt = null; 
 	
 	
 	

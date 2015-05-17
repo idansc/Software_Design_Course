@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ class ServerTaskMail implements ServerTask {
 	
 	private PersistentConfig _persistentConfig;
 	
-	// key = name of 
+	// All the lists in the following data structures are ordered from new to old.
 	private List<Mail> allMail = new LinkedList<Mail>();
 	private Map<String,List<Mail>> allMailsSentByPerson = new HashMap<>();
 	private Map<String,List<Mail>> allMailsReceivedByPerson = new HashMap<>();
@@ -125,7 +126,7 @@ class ServerTaskMail implements ServerTask {
 			
 			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
 			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
-			//TODO: bug
+			//TODO: bug. Use: descendingIterator
 			break;
 		}
 		case GET_NEW_MAIL_TASK:
@@ -134,11 +135,10 @@ class ServerTaskMail implements ServerTask {
 		}
 		case GET_CONTACTS_TASK: {
 			String from = data.getFromAddress();					
-			
-			Set<String> mailSet =  contactsOfPerson.get(from);
-			List<String> mailList = Arrays.asList(mailSet.toArray(new String[mailSet.size()]));
-			Collections.sort(mailList);
-			$.setData(mailList);			
+			List<String> contactsList = new LinkedList<>();
+			contactsList.addAll(contactsOfPerson.get(from));
+			Collections.sort(contactsList);
+			$.setData(contactsList);			
 			break;
 		}
 		default:
@@ -189,11 +189,31 @@ class ServerTaskMail implements ServerTask {
 		if (!mail.alreadyRead)
 		{
 			insertNewMailToMap(allNewMailSentToPerson,mail.to,mail);
+			revalidateAllNewMailIterators(allNewMailSentToPerson.get(mail.to));
 		}
 		
 		insertNewStringToSetInMap(contactsOfPerson, mail.from, mail.to);
 		insertNewStringToSetInMap(contactsOfPerson, mail.to, mail.from);
 	
+		
+	}
+
+	private void revalidateAllNewMailIterators(LinkedList<Mail> newMailsList) {
+		
+		ListIterator<Mail> it = newMailsList.descendingIterator();
+		
+		while (it.hasNext())
+		{
+			Mail mail = it.next();
+			assert(!mail.alreadyRead);
+			mail.newMailDecendingIterator = 
+			
+		}
+		for (Mail mail : mails)
+		{
+			mail.
+		}
+		
 	}
 
 	private void insertNewStringToSetInMap(
