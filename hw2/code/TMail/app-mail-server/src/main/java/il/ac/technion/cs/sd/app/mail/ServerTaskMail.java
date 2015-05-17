@@ -62,17 +62,23 @@ class ServerTaskMail implements ServerTask {
 		{
 			insertMailIntoStructures(mail);
 		}
+		
+		in.close();
 	}
 	
 	public void savePersistentData() throws IOException
 	{
 		OutputStream out = 
 				_persistentConfig.getPersistentMailOverwriteOutputStream();
-		
+		JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+		Gson gson = new GsonBuilder().create();
+		writer.beginArray();
 		for (Mail mail : allMail)
 		{
-			writeMailToStream(mail, out);
+			gson.toJson(mail, Mail.class, writer);
 		}	
+		writer.endArray();
+		writer.close();
 	}
 	
 
@@ -98,7 +104,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(it.next());
 			
 			List<Mail> mailList =  allMailsBetweenPeople.get(new Pair<String,String>(from,whom));
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
+			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -107,7 +113,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
+			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -116,7 +122,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
+			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -125,7 +131,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
+			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -150,6 +156,12 @@ class ServerTaskMail implements ServerTask {
 		}
 		return $;
 
+	}
+
+	private void setDataToListPrefix(MessageData $, int prefixLength,
+			List<Mail> mailList) {
+		List<Mail> prefix = mailList.subList(0, Math.min(prefixLength,mailList.size()));
+		$.setData(fromMailListToStringList(prefix));
 	}
 
 
@@ -260,17 +272,6 @@ class ServerTaskMail implements ServerTask {
 		
 	}
 	
-	
-	
-	private void writeMailToStream(Mail mail, OutputStream stream) throws IOException
-	{
-		Gson gson = new GsonBuilder().create();
-		JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, "UTF-8"));
-		writer.beginArray();
-		gson.toJson(mail, Mail.class, writer);
-		writer.endArray();
-        writer.close();
-	}
 	
 	
 	// marks the mails in the list as read but, but only those that were sent 

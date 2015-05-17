@@ -166,6 +166,6 @@ public class ClientMailApplication {
 	 * This is mainly used to clean resource use in test cleanup code.
 	 */
 	public void stop() {
-		throw new UnsupportedOperationException("Not implemented");
+		// nothing needs to be done.
 	}
 }
