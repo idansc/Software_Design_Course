@@ -8,14 +8,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,16 +31,18 @@ import il.ac.technion.cs.sd.lib.clientserver.ServerTask;
  */
 class ServerTaskMail implements ServerTask {
 	
+	// The data read/written by the streams of _persistentConfig are the content
+	// written/read from allMail.
 	private PersistentConfig _persistentConfig;
 	
 	// All the lists in the following data structures are ordered from new to old.
-	private List<Mail> allMail = new LinkedList<Mail>();
-	private Map<String,List<Mail>> allMailsSentByPerson = new HashMap<>();
-	private Map<String,List<Mail>> allMailsReceivedByPerson = new HashMap<>();
-	private Map<String,List<Mail>> allMailsSentAndReceivedByPerson = new HashMap<>();
+	private LinkedList<Mail> allMail = new LinkedList<Mail>();
+	private Map<String,LinkedList<Mail>> allMailsSentByPerson = new HashMap<>();
+	private Map<String,LinkedList<Mail>> allMailsReceivedByPerson = new HashMap<>();
+	private Map<String,LinkedList<Mail>> allMailsSentAndReceivedByPerson = new HashMap<>();
 	// allMailsBetweenPeople[person1,person2] == allMailsBetweenPeople[person2,person1]
-	private Map<Pair<String,String>,List<Mail>> allMailsBetweenPeople = new HashMap<>();
-	private Map<String,List<Mail>> allNewMailSentToPerson = new HashMap<>();
+	private Map<Pair<String,String>,LinkedList<Mail>> allMailsBetweenPeople = new HashMap<>();
+	private Map<String,DoublyLinkedList<Mail>> allNewMailSentToPerson = new HashMap<>();
 	private Map<String,Set<String>> contactsOfPerson = new HashMap<>();
 		
 	
@@ -76,9 +76,6 @@ class ServerTaskMail implements ServerTask {
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see il.ac.technion.cs.sd.lib.clientserver.ServerTask#run(il.ac.technion.cs.sd.msg.Messenger, il.ac.technion.cs.sd.lib.clientserver.MessageData)
-	 */
 	@Override
 	public MessageData run(MessageData data) {
 		
@@ -101,7 +98,8 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(it.next());
 			
 			List<Mail> mailList =  allMailsBetweenPeople.get(new Pair<String,String>(from,whom));
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			markMailsAsRead(mailList, from);
 			break;
 		}
 		case GET_SENT_MAILS_TASK: {
@@ -109,7 +107,8 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			markMailsAsRead(mailList, from);
 			break;
 		}
 		case GET_INCOMING_MAIL_TASK: {
@@ -117,7 +116,8 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			markMailsAsRead(mailList, from);
 			break;
 		}
 		case GET_ALL_MAIL_TASK: {
@@ -126,12 +126,15 @@ class ServerTaskMail implements ServerTask {
 			
 			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
 			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
-			//TODO: bug. Use: descendingIterator
+			markMailsAsRead(mailList, from);
 			break;
 		}
 		case GET_NEW_MAIL_TASK:
 		{
-			throw new UnsupportedOperationException("Not implemented");
+			String from = data.getFromAddress();
+			DoublyLinkedList<Mail> mailList = allNewMailSentToPerson.get(from);
+			$.setData(fromMailListToStringList(mailList));
+			markMailsAsRead(mailList, from);
 		}
 		case GET_CONTACTS_TASK: {
 			String from = data.getFromAddress();					
@@ -152,7 +155,7 @@ class ServerTaskMail implements ServerTask {
 	/**
 	 * @param mailList
 	 */
-	private List<String> fromMailListToStringList(List<Mail> mailList) {
+	private List<String> fromMailListToStringList(Iterable<Mail> mailList) {
 		
 		List<String> $ = new LinkedList<String>();
 		for(Mail m : mailList){
@@ -161,62 +164,43 @@ class ServerTaskMail implements ServerTask {
 			$.add(m.content);
 		}
 		return $;
-		
-		
-		
 	}
 	
 	
 	private void insertMailIntoStructures(Mail mail)
 	{
 		
-		allMail.add(mail);
+		allMail.addFirst(mail);
 
-		insertNewMailToMap(allMailsSentByPerson,mail.from,mail);
+		insertMailIntoLinkedListInMap(allMailsSentByPerson,mail.from,mail);
 		
-		insertNewMailToMap(allMailsReceivedByPerson,mail.to,mail);
+		insertMailIntoLinkedListInMap(allMailsReceivedByPerson,mail.to,mail);
 
-		insertNewMailToMap(allMailsSentAndReceivedByPerson,mail.to,mail);
+		insertMailIntoLinkedListInMap(allMailsSentAndReceivedByPerson,mail.to,mail);
 		if (mail.to != mail.from)
-			insertNewMailToMap(allMailsSentAndReceivedByPerson,mail.from,mail);
+			insertMailIntoLinkedListInMap(allMailsSentAndReceivedByPerson,mail.from,mail);
 		
 		Pair<String,String> pair1 = new Pair<>(mail.from,mail.to);
 		Pair<String,String> pair2 = new Pair<>(mail.to,mail.from);
-		insertNewMailToMap(allMailsBetweenPeople, pair1, mail);
+		insertMailIntoLinkedListInMap(allMailsBetweenPeople, pair1, mail);
 		if (mail.to != mail.from)
-			insertNewMailToMap(allMailsBetweenPeople, pair2, mail);
+			insertMailIntoLinkedListInMap(allMailsBetweenPeople, pair2, mail);
 			
 		if (!mail.alreadyRead)
 		{
-			insertNewMailToMap(allNewMailSentToPerson,mail.to,mail);
-			revalidateAllNewMailIterators(allNewMailSentToPerson.get(mail.to));
+			assert (mail.newMailNode == null);
+			mail.newMailNode = 
+				insertMailIntoDoublyLinkedListInMap(
+						allNewMailSentToPerson,mail.to,mail); 
 		}
 		
-		insertNewStringToSetInMap(contactsOfPerson, mail.from, mail.to);
-		insertNewStringToSetInMap(contactsOfPerson, mail.to, mail.from);
-	
-		
+		insertStringToSetInMap(contactsOfPerson, mail.from, mail.to);
+		insertStringToSetInMap(contactsOfPerson, mail.to, mail.from);
+
 	}
 
-	private void revalidateAllNewMailIterators(LinkedList<Mail> newMailsList) {
-		
-		ListIterator<Mail> it = newMailsList.descendingIterator();
-		
-		while (it.hasNext())
-		{
-			Mail mail = it.next();
-			assert(!mail.alreadyRead);
-			mail.newMailDecendingIterator = 
-			
-		}
-		for (Mail mail : mails)
-		{
-			mail.
-		}
-		
-	}
 
-	private void insertNewStringToSetInMap(
+	private void insertStringToSetInMap(
 			Map<String,Set<String>> map, String key, String newStr) {
 		Set<String> contacts = map.get(key);
 		if (contacts == null)
@@ -227,17 +211,31 @@ class ServerTaskMail implements ServerTask {
 		contacts.add(newStr);
 	}
 	
-	
-	private <T> void insertNewMailToMap (
-			Map<T,List<Mail>> map, T key, Mail mail)
+	// Insert to the beginning of the list, which is value matching 'key' in map.
+	private <T> void insertMailIntoLinkedListInMap (
+			Map<T,LinkedList<Mail>> map, T key, Mail mail)
 	{
-		List<Mail> mailsList = map.get(key);
+		LinkedList<Mail> mailsList = map.get(key);
 		if (mailsList == null)
 		{
 			mailsList = new LinkedList<Mail>();
 			map.put(key, mailsList);
 		}
-		mailsList.add(mail);
+		mailsList.addFirst(mail);
+	}
+	
+	// Insert to the beginning of the list, which is value matching 'key' in map.
+	// returns the node of the new added element in the list.
+	private <T> DoublyLinkedList<Mail>.Node insertMailIntoDoublyLinkedListInMap (
+			Map<T,DoublyLinkedList<Mail>> map, T key, Mail mail)
+	{ 
+		DoublyLinkedList<Mail> mailsList = map.get(key);
+		if (mailsList == null)
+		{
+			mailsList = new DoublyLinkedList<Mail>();
+			map.put(key, mailsList);
+		}
+		return mailsList.addFirst(mail);
 	}
 	
 	
@@ -271,7 +269,34 @@ class ServerTaskMail implements ServerTask {
 		gson.toJson(mail, Mail.class, writer);
 		writer.endArray();
         writer.close();
+	}
+	
+	
+	// marks the mails in the list as read but, but only those that were sent 
+	// to receiver.
+	private void markMailsAsRead(Iterable<Mail> mails, String receiver)
+	{
+		for (Mail m : mails)
+		{
+			markMailAsRead(m,receiver);
+		}
+	}
+	
+	// marks m as read but only if it was sent to receiver.
+	private void markMailAsRead(Mail m, String receiver)
+	{
+		if (m.alreadyRead)
+		{
+			assert(m.newMailNode == null);
+			return;
+		}
 		
+		if (!m.to.equals(receiver))
+			return;
+		
+		m.alreadyRead = true;
+		allNewMailSentToPerson.get(m.to).removeNode(m.newMailNode);
+		m.newMailNode = null;
 	}
 
 

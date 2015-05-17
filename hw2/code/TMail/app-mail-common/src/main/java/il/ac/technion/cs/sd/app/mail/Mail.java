@@ -12,9 +12,9 @@ public class Mail {
 	// TODO: hide the following in a child class of Mail that's private 
 	//to the ServerTaskMail module.
 	boolean alreadyRead = false;
-	// An iterator to the element in allNewMailSentToPerson's value, representing
-	// this object, or null (if non such exists).
-	ListIterator<Mail> newMailIt = null; 
+	// The node representing this object in a list in 
+	// allNewMailSentToPerson, or null (if non exists).
+	DoublyLinkedList<Mail>.Node newMailNode = null; 
 	
 	
 	
