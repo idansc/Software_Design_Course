@@ -112,6 +112,10 @@ public class TMailIntegrationTest {
 		AssertCorrespondences(clientOfer, clientIdan, 5, 
 				new Mail("Ofer", "Idan", "cya"), new Mail("Idan", "Ofer", "bye"),
 				new Mail("Ofer", "Idan", "good"), new Mail("Idan", "Ofer", "sup"));
+		
+		
+		AssertCorrespondences(clientTom, clientIdan, 5, 
+				new Mail("Idan", "Tom", "whoRU"));
 	}
 	
 	
@@ -127,6 +131,87 @@ public class TMailIntegrationTest {
 		assertEquals(b_to_a, expectedList);
 	}
 	
+	
+	@Test
+	public void testGetSentMails() throws Exception
+	{
+		
+		List<Mail> res;
+		
+		res = clientOfer.getSentMails(5);
+		assertEquals(res, Arrays.asList(new Mail[0]));
+		
+		doSomeChat();
+		
+		res = clientGal.getSentMails(5);
+		assertEquals(res, Arrays.asList(
+			new Mail("Gal", "Tom", "hey"),
+			new Mail("Gal", "Ofer", "jk"),
+			new Mail("Gal", "Ofer", "Bad job")
+			));
 
+		res = clientGal.getSentMails(2);
+		assertEquals(res, Arrays.asList(
+			new Mail("Gal", "Tom", "hey"),
+			new Mail("Gal", "Ofer", "jk")
+			));
+	}
+
+	
+	@Test
+	public void testgetIncomingMail() throws Exception
+	{
+		List<Mail> res;
+		
+		res = clientOfer.getIncomingMail(5);
+		assertEquals(res, Arrays.asList(new Mail[0]));
+		
+		doSomeChat();
+		
+		
+		res = clientGal.getIncomingMail(5);
+
+		assertEquals(res, Arrays.asList(
+			new Mail("Tom", "Gal", "hi"),
+			new Mail("Ofer", "Gal", ":)"),
+			new Mail("Ofer", "Gal", ":(")
+			));
+		
+		
+		res = clientGal.getIncomingMail(2);
+		assertEquals(res, Arrays.asList(
+			new Mail("Tom", "Gal", "hi"),
+			new Mail("Ofer", "Gal", ":)")
+			));
+		
+	}
+	
+	
+	@Test
+	public void testGetAllMail() throws Exception
+	{
+		
+		List<Mail> res;
+		
+		res = clientOfer.getAllMail(5);
+		assertEquals(res, Arrays.asList(new Mail[0]));
+		
+		doSomeChat();
+		
+		res = clientGal.getAllMail(5);
+
+		assertEquals(res, Arrays.asList(
+				new Mail("Gal", "Tom", "hey"),
+				new Mail("Tom", "Gal", "hi"),
+				new Mail("Ofer", "Gal", ":)"),
+				
+				
+			));
+		
+		
+	}
+	
+	
+	
 	
 }
