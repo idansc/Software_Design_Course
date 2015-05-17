@@ -27,6 +27,7 @@ public class TMailTest {
 		serverThread.start();
 		Thread.yield(); // STRONG hints to the OS to start the server thread, though nothing can be *truly* deterministic
 		Thread.sleep(100);
+		Thread.sleep(4000);//TODO
 	}
 	
 	@SuppressWarnings("deprecation") // "I know what I'm doing"

@@ -27,12 +27,13 @@ public class ServerMailApplication {
 	 * @param name The name of the server by which it is known.
 	 */
 	public ServerMailApplication(String name) {
-		_server = new Server(name);
-		
-		
-		// setting _persistentConfig to default (s.t. it would use the default
-		// text file. 
-		_persistentConfig = new PersistentConfig() {
+		_server = new Server(name); 
+		_persistentConfig = getDefaultPersistentConfig();
+	}
+	
+	// default PersistentConfig: default text file is used.
+	private PersistentConfig getDefaultPersistentConfig() {
+		return new PersistentConfig() {
 			@Override
 			public InputStream getPersistentMailInputStream() throws FileNotFoundException {
 				File file = new File(getDafualtPesistentFilename());
@@ -77,8 +78,7 @@ public class ServerMailApplication {
 		} catch (IOException e) {
 			throw new IOExceptionRuntime();
 		}
-		
-		
+
 		_server.startListenLoop(_task);
 	}
 	
