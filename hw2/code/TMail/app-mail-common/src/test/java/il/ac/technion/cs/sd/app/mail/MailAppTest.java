@@ -31,7 +31,7 @@ public class MailAppTest {
 		mailList.add(new Mail("Ofer","Idan","We have more time"));
 		mailList.add(new Mail("Ofer","Idan","I completed the lib"));
 		mailList.add(new Mail("Gal","OFer","WOW such Assignment solution"));
-	}
+	} 
 
 	/**
 	 * @throws java.lang.Exception
