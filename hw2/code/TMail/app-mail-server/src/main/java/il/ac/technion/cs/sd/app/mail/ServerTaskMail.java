@@ -135,6 +135,7 @@ class ServerTaskMail implements ServerTask {
 			DoublyLinkedList<Mail> mailList = allNewMailSentToPerson.get(from);
 			$.setData(fromMailListToStringList(mailList));
 			markMailsAsRead(mailList, from);
+			break;
 		}
 		case GET_CONTACTS_TASK: {
 			String from = data.getFromAddress();					
@@ -145,7 +146,7 @@ class ServerTaskMail implements ServerTask {
 			break;
 		}
 		default:
-			break;
+			throw new RuntimeException("Task types unknown!");
 		}
 		return $;
 
