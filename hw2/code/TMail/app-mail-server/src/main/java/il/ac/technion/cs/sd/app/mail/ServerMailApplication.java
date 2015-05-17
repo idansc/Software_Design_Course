@@ -133,7 +133,6 @@ public class ServerMailApplication {
 	 * run on a new, clean server. you may assume the server is stopped before this method is called.
 	 */
 	public void clean() {
-		// TODO: clean only this server!!!
 		try {
 			clearAndInitPersistentDataFile();
 		} catch (IOException e) {

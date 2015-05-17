@@ -27,7 +27,6 @@ public class TMailIntegrationTest {
 	@Before 
 	public void setup() throws InterruptedException {
 		 
-		// TODO: after all tests pass - try commenting out the following (and initially deleting the data directory).
 		server1.clean();
 		
 		assertEquals(server1.getAddress(), "server1");
@@ -56,20 +55,38 @@ public class TMailIntegrationTest {
 
 	private void doSomeChat() throws Exception
 	{
+		server1.stop();
+		server1.start();
+		
 		clientGal.sendMail("Ofer", "Bad job");
 		clientOfer.sendMail("Gal", ":(");
+		
+		server1.stop();
+		server1.start();
+		
 		clientGal.sendMail("Ofer", "jk");
 		clientOfer.sendMail("Gal", ":)");
 		
 		clientIdan.sendMail("Ofer", "sup");
 		clientOfer.sendMail("Idan", "good");
 		clientIdan.sendMail("Ofer", "bye");
+		
+		
+		server1.stop();
+		server1.start();
+		
+		
 		clientOfer.sendMail("Idan", "cya");
 		
 		clientTom.sendMail("Gal", "hi");
 		clientGal.sendMail("Tom", "hey");
+		server1.stop();
+		server1.start();
 		
 		clientIdan.sendMail("Tom", "whoRU");
+		
+		server1.stop();
+		server1.start();
 	}
 	
 	
@@ -150,6 +167,9 @@ public class TMailIntegrationTest {
 			new Mail("Gal", "Ofer", "Bad job")
 			));
 
+		server1.stop();
+		server1.start();
+		
 		res = clientGal.getSentMails(2);
 		assertEquals(res, Arrays.asList(
 			new Mail("Gal", "Tom", "hey"),
@@ -177,6 +197,8 @@ public class TMailIntegrationTest {
 			new Mail("Ofer", "Gal", ":(")
 			));
 		
+		server1.stop();
+		server1.start();
 		
 		res = clientGal.getIncomingMail(2);
 		assertEquals(res, Arrays.asList(
@@ -209,6 +231,8 @@ public class TMailIntegrationTest {
 				new Mail("Gal", "Ofer", "Bad job")
 			));
 		
+		server1.stop();
+		server1.start();
 		
 		res = clientGal.getAllMail(3);
 
@@ -231,6 +255,9 @@ public class TMailIntegrationTest {
 		doSomeChat();
 		
 		
+		server1.stop();
+		server1.start();
+		
 		res = clientGal.getNewMail();
 		assertEquals(res, Arrays.asList(
 			new Mail("Tom", "Gal", "hi"),
@@ -242,9 +269,6 @@ public class TMailIntegrationTest {
 		assertEquals(res, Arrays.asList(new Mail[0]));
 		
 	}
-	
-	
-	
 	
 	
 	
@@ -267,5 +291,19 @@ public class TMailIntegrationTest {
 		doSomeChat();
 		List<String> contacts = clientIdan.getContacts(2);
 		assertEquals(contacts, Arrays.asList("Ofer","Tom"));
+		
+		server1.stop();
+		server1.start();
+		
+		clientTom.sendMail("Ofer", "hi");
+		
+		
+		contacts = clientTom.getContacts(3);
+		assertEquals(contacts, Arrays.asList("Gal", "Idan", "Ofer"));
+		
+		contacts = clientTom.getContacts(2);
+		assertEquals(contacts, Arrays.asList("Gal", "Idan", "Ofer"));
+		
+		
 	}
 }

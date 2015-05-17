@@ -64,17 +64,21 @@ class ServerTaskMail implements ServerTask {
 		}
 		
 		in.close();
+		
 	}
 	
 	public void savePersistentData() throws IOException
-	{
+	{		
 		OutputStream out = 
 				_persistentConfig.getPersistentMailOverwriteOutputStream();
 		JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
 		Gson gson = new GsonBuilder().create();
 		writer.beginArray();
-		for (Mail mail : allMail)
+		
+		Iterator<Mail> it = allMail.descendingIterator();
+		while (it.hasNext())
 		{
+			Mail mail = it.next(); 
 			DoublyLinkedList<Mail>.Node tmp = mail.newMailNode;
 			mail.newMailNode = null;
 			
@@ -339,6 +343,11 @@ class ServerTaskMail implements ServerTask {
 	}
 
 
+	@Override
+	public String toString()
+	{
+		return allMail.toString();
+	}
 	
 	
 }
