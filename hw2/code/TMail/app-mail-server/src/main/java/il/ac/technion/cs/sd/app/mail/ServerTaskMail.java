@@ -124,7 +124,8 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));			
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			//TODO: bug
 			break;
 		}
 		case GET_NEW_MAIL_TASK:
