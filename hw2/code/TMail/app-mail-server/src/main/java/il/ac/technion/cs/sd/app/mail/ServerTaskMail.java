@@ -75,13 +75,20 @@ class ServerTaskMail implements ServerTask {
 		writer.beginArray();
 		for (Mail mail : allMail)
 		{
+			DoublyLinkedList<Mail>.Node tmp = mail.newMailNode;
+			mail.newMailNode = null;
+			
 			gson.toJson(mail, Mail.class, writer);
+			
+			mail.newMailNode = tmp;
 		}	
 		writer.endArray();
 		writer.close();
 	}
 	
 
+	private LinkedList<String> 
+	
 	@Override
 	public MessageData run(MessageData data) {
 		

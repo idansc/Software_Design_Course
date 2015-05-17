@@ -38,9 +38,15 @@ public class TMailIntegrationTest {
 		clientTom = addClient(server1, "Tom");
 		
 		server1.start();
-		Thread.sleep(100);//TODO;
 	}
 
+	@After 
+	public void teardown() {
+		server1.stop();
+		clients.forEach(x -> x.stop());
+	}
+	
+	
 	private ClientMailApplication addClient(ServerMailApplication server, String clientName) {
 		ClientMailApplication $ = new ClientMailApplication(server.getAddress(), clientName);
 		clients.add($);
@@ -67,14 +73,7 @@ public class TMailIntegrationTest {
 	}
 	
 	
-	@After 
-	public void teardown() {
-		server1.stop();
-		server1.clean();
-		
-		clients.forEach(x -> x.stop());
-	}
-	
+
 	@Test 
 	public void basicTest() throws Exception{
 		clientGal.sendMail("Ofer", "Hi");
@@ -86,15 +85,37 @@ public class TMailIntegrationTest {
 				new Mail("Gal", "Ofer", "Hi")));
 	}
 	
-
 	
 	@Test
-	public void getCorrespondences() throws Exception
+	public void testGetCorrespondences() throws Exception
 	{
+		
+		AssertCorrespondences(clientOfer, clientIdan, 1, new Mail[0]); //TODO
+		
 		doSomeChat();
 		
+		
+		
+		
 		AssertCorrespondences(clientOfer, clientIdan, 1, new Mail("Ofer", "Idan", "cya"));
+		
+		AssertCorrespondences(clientOfer, clientIdan, 2, 
+				new Mail("Ofer", "Idan", "cya"), new Mail("Idan", "Ofer", "bye"));
+		
+		AssertCorrespondences(clientOfer, clientIdan, 3, 
+				new Mail("Ofer", "Idan", "cya"), new Mail("Idan", "Ofer", "bye"),
+				new Mail("Ofer", "Idan", "good"));
+		
+		
+		AssertCorrespondences(clientOfer, clientIdan, 4, 
+				new Mail("Ofer", "Idan", "cya"), new Mail("Idan", "Ofer", "bye"),
+				new Mail("Ofer", "Idan", "good"), new Mail("Idan", "Ofer", "sup"));
+		
+		AssertCorrespondences(clientOfer, clientIdan, 5, 
+				new Mail("Ofer", "Idan", "cya"), new Mail("Idan", "Ofer", "bye"),
+				new Mail("Ofer", "Idan", "good"), new Mail("Idan", "Ofer", "sup"));
 	}
+	
 	
 	private void AssertCorrespondences(ClientMailApplication a, ClientMailApplication b,
 			int howMany, Mail ... expected)
@@ -103,10 +124,6 @@ public class TMailIntegrationTest {
 		
 		List<Mail> a_to_b = a.getCorrespondences(b.getUsername(), howMany);
 		List<Mail> b_to_a = b.getCorrespondences(a.getUsername(), howMany);
-		
-		//TODO
-		System.out.println(a_to_b);
-		System.out.println(expectedList);
 		
 		assertEquals(a_to_b, expectedList);
 		assertEquals(b_to_a, expectedList);

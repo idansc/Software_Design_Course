@@ -19,6 +19,7 @@ public class Server {
 	 */
 	private Thread listenThread = null;
 	private Messenger _messenger = null;
+	private boolean currentlyListening = false;
 
 	private boolean stopListenRequested = false;
 
@@ -37,7 +38,8 @@ public class Server {
 	 * Starts a "listen loop" in which the server repeatedly listens for data
 	 * from clients, and for each data package sent - the given task is run.
 	 * This is done until stopListenLoop is called. This function is
-	 * non-blocking (everything is done on another thread).
+	 * non-blocking (everything is done on another thread). It blocks only 
+	 * until listening begins.
 	 * 
 	 * @param task The server task to be performed each time data is sent to the
 	 * server. Once the task run is complete, a JSON MessageData will be sent
@@ -47,7 +49,7 @@ public class Server {
 	 * 
 	 * @throws ListenLoopAlreadyBeingDone
 	 */
-	public void startListenLoop(ServerTask task) {
+	public void startListenLoop(ServerTask task) throws InterruptedException {
 		if (listenThread != null) {
 			throw new ListenLoopAlreadyBeingDone();
 		}
@@ -56,6 +58,7 @@ public class Server {
 		listenThread = new Thread(() -> {
 			try {
 				_messenger = createMessenger();
+				currentlyListening = true;
 				while (!stopListenRequested) {
 					Optional<byte[]> data = _messenger.tryListen();
 					if (data.isPresent()) {
@@ -76,6 +79,7 @@ public class Server {
 					// If we cared about not wasting CPU time:
 					// Thread.sleep(10);
 				}
+				currentlyListening = false;
 				_messenger.kill();
 				_messenger = null;
 			} catch (MessengerException exc) {
@@ -88,6 +92,10 @@ public class Server {
 		});
 
 		listenThread.start();
+		while (!currentlyListening)
+		{
+			Thread.sleep(1);
+		}
 	}
 
 	/*
@@ -104,7 +112,7 @@ public class Server {
 		Thread.yield();
 		while (_messenger != null)
 		{
-			Thread.sleep(5);
+			Thread.sleep(1);
 		}
 	}
 

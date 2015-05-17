@@ -45,7 +45,7 @@ public class ServerMailApplication {
 			}
 			assert(file.exists());
 			return new FileInputStream(file);
-		}
+		} 
 		
 		@Override
 		public OutputStream getPersistentMailOverwriteOutputStream() throws FileNotFoundException {
@@ -101,11 +101,14 @@ public class ServerMailApplication {
 		try {
 			_task = new ServerTaskMail(_persistentConfig);
 			_task.loadPersistentData();
+			_server.startListenLoop(_task); 
 		} catch (IOException e) {
 			throw new IOExceptionRuntime();
+		} catch (InterruptedException e) {
+			throw new InterruptedExceptionRuntime();
 		}
 
-		_server.startListenLoop(_task);
+		
 	}
 	
 	/**
@@ -130,6 +133,7 @@ public class ServerMailApplication {
 	 * run on a new, clean server. you may assume the server is stopped before this method is called.
 	 */
 	public void clean() {
+		// TODO: clean only this server!!!
 		cleanAndInitPersistentDataDirOfAllServers();
 	}
 	
