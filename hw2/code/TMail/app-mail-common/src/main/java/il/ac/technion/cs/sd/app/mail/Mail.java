@@ -1,11 +1,21 @@
 package il.ac.technion.cs.sd.app.mail;
 
+import java.util.ListIterator;
+
 public class Mail {
 	public final String from;
 	public final String to;
 	public final String content;
 
-	boolean alreadyRead = false;  
+	
+	// TODO: hide the following two in a child class of Mail that's private 
+	//to the ServerTaskMail module.
+	boolean alreadyRead = false;
+	// An iterator to the element in allNewMailSentToPerson's value, representing
+	// this object, or null (if non such exists).
+	ListIterator<Mail> newMailIterator = null; 
+	
+	
 	
 	public Mail(String from, String to, String content) {
 		super();

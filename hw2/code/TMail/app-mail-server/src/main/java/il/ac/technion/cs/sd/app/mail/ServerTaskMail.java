@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ class ServerTaskMail implements ServerTask {
 	{
 		InputStream in = _persistentConfig.getPersistentMailInputStream();
 		
-		ArrayList<Mail> allMails = readAllMailsFromStream(in);
+		List<Mail> allMails = readAllMailsFromStream(in);
 		for (Mail mail : allMails)
 		{
 			insertMailIntoStructures(mail);
@@ -153,13 +152,17 @@ class ServerTaskMail implements ServerTask {
 	 * @param mailList
 	 */
 	private List<String> fromMailListToStringList(List<Mail> mailList) {
-		List<String> $ = new ArrayList<String>();
+		
+		List<String> $ = new LinkedList<String>();
 		for(Mail m : mailList){
 			$.add(m.from); 
 			$.add(m.to);
 			$.add(m.content);
 		}
 		return $;
+		
+		
+		
 	}
 	
 	
@@ -217,13 +220,13 @@ class ServerTaskMail implements ServerTask {
 	}
 	
 	
-	private ArrayList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
+	private LinkedList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
 	{
 		Gson gson = new GsonBuilder().create();
 		JsonReader reader = new JsonReader(new InputStreamReader(stream, "UTF-8"));
 		
 		
-		ArrayList<Mail> $ = new ArrayList<Mail>();
+		LinkedList<Mail> $ = new LinkedList<Mail>();
 		reader.beginArray();
 		while (reader.hasNext()) {
             Mail mail = gson.fromJson(reader, Mail.class);

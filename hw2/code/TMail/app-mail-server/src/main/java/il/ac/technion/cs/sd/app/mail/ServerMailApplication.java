@@ -73,9 +73,11 @@ public class ServerMailApplication {
 		
 		try {
 			_task = new ServerTaskMail(_persistentConfig);
+			_task.loadPersistentData();
 		} catch (IOException e) {
 			throw new IOExceptionRuntime();
 		}
+		
 		
 		_server.startListenLoop(_task);
 	}
