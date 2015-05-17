@@ -152,13 +152,13 @@ public class ClientMailApplication {
 	 * NOTE BY TA: WE CAN IGNORE 'howMany'  
 	 */
 	public List<String> getContacts(int howMany) {
-		MessageData md = new MessageData(TaskType.GET_ALL_MAIL_TASK.toString());
+		MessageData md = new MessageData(TaskType.GET_CONTACTS_TASK.toString());
 		ArrayList<String> data = new ArrayList<String>();
-		data.add(Integer.toString(howMany));
+		data.add(Integer.toString(howMany));//ignored
 		md.setData(data);
 		MessageData result;
 		result = _client.sendToServerAndGetAnswer(_serverAddress,md);
-		return result.getData().subList(0, howMany-1);
+		return result.getData();
 	}
 	
 	/**

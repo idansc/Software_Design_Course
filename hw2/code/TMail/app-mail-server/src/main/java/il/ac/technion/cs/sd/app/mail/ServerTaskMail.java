@@ -98,7 +98,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(it.next());
 			
 			List<Mail> mailList =  allMailsBetweenPeople.get(new Pair<String,String>(from,whom));
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -107,7 +107,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -116,7 +116,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
 			markMailsAsRead(mailList, from);
 			break;
 		}
@@ -125,7 +125,7 @@ class ServerTaskMail implements ServerTask {
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
 			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
-			$.setData(fromMailListToStringList(mailList.subList(0, howMany-1)));
+			$.setData(fromMailListToStringList(mailList.subList(0, howMany)));
 			markMailsAsRead(mailList, from);
 			break;
 		}

@@ -130,28 +130,30 @@ public class ServerMailApplication {
 	 * run on a new, clean server. you may assume the server is stopped before this method is called.
 	 */
 	public void clean() {
-		try {
-			CleanAndInitPersistentDataDirOfAllServers();
-		} catch (IOException e) {
-			throw new IOExceptionRuntime();
-		}
+		cleanAndInitPersistentDataDirOfAllServers();
 	}
-	
-	
-	public class InterruptedExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
-	public class IOExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
-	
 	
 	/* Removes current content of servers data directory (if currently exists)
 	 * and makes sure the directory exists.
 	 */
-	public static void CleanAndInitPersistentDataDirOfAllServers() throws IOException
+	public static void cleanAndInitPersistentDataDirOfAllServers()
 	{
 		File persistentDataDir = getPesistentDirOfAllServers();
 		if (persistentDataDir.exists())
 		{
-			FileUtils.deleteDirectory(persistentDataDir);
+			try {
+				FileUtils.deleteDirectory(persistentDataDir);
+			} catch (IOException e) {
+				throw new IOExceptionRuntime();
+			}
 		}
 		persistentDataDir.mkdirs();
 	}
+	
+	
+	public static class InterruptedExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
+	public static class IOExceptionRuntime extends RuntimeException {private static final long serialVersionUID = 1L;}
+	
+	
+
 }

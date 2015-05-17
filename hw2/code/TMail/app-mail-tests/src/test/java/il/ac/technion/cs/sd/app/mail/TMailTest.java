@@ -23,6 +23,7 @@ public class TMailTest {
 	
 	@Before 
 	public void setup() throws InterruptedException {
+		server.cleanAndInitPersistentDataDirOfAllServers();
 		serverThread = new Thread(() -> server.start());
 		serverThread.start();
 		Thread.yield(); // STRONG hints to the OS to start the server thread, though nothing can be *truly* deterministic
