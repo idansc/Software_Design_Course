@@ -19,27 +19,33 @@ import org.junit.Test;
  */
 public class MailAppTest {
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+	//TODO private class BufferPercictantConfig 
+	
+	private List<Mail> mailList;
+	
+	ClientMailApplication _client1;
+	ServerMailApplication _server1;
+	
+	
 	@Before
 	public void setUp() throws Exception {
 		List<String> usernames = Arrays.asList("Idan","Ofer","Gal");
-		List<Mail> mailList = new ArrayList<Mail>();
+		mailList = new ArrayList<Mail>();
 		mailList.add(new Mail("Idan","Gal","Assignment 2 delay"));
 		mailList.add(new Mail("Gal","Idan","Assignment 2 delayed"));
 		mailList.add(new Mail("Ofer","Idan","We have more time"));
 		mailList.add(new Mail("Ofer","Idan","I completed the lib"));
 		mailList.add(new Mail("Gal","OFer","WOW such Assignment solution"));
+		
+		_client1 = new 
 	} 
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	
 	@Test
 	public void test() {
 		fail("Not yet implemented");
