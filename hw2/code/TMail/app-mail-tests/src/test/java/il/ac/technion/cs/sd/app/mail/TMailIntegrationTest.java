@@ -90,11 +90,9 @@ public class TMailIntegrationTest {
 	public void testGetCorrespondences() throws Exception
 	{
 		
-		AssertCorrespondences(clientOfer, clientIdan, 1, new Mail[0]); //TODO
+		AssertCorrespondences(clientOfer, clientIdan, 1, new Mail[0]); 
 		
 		doSomeChat();
-		
-		
 		
 		
 		AssertCorrespondences(clientOfer, clientIdan, 1, new Mail("Ofer", "Idan", "cya"));

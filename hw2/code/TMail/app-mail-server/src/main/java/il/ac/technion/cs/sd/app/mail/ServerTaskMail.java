@@ -87,7 +87,32 @@ class ServerTaskMail implements ServerTask {
 	}
 	
 
-	private LinkedList<String> 
+	private <T> LinkedList<T> ReturnValidList(LinkedList<T> l)
+	{
+		if (l == null)
+		{
+			return new LinkedList<T>();
+		}
+		return l;
+	}
+	
+	private <T> Set<T> ReturnValidSet(Set<T> s)
+	{
+		if (s == null)
+		{
+			return new HashSet<T>();
+		}
+		return s;
+	}
+	
+	private <T> DoublyLinkedList<T> ReturnValidDL(DoublyLinkedList<T> l)
+	{
+		if (l == null)
+		{
+			return new DoublyLinkedList<T>();
+		}
+		return l;
+	}
 	
 	@Override
 	public MessageData run(MessageData data) {
@@ -110,7 +135,7 @@ class ServerTaskMail implements ServerTask {
 			String whom = it.next();
 			int howMany = Integer.parseInt(it.next());
 			
-			List<Mail> mailList =  allMailsBetweenPeople.get(new Pair<String,String>(from,whom));
+			List<Mail> mailList =  ReturnValidList(allMailsBetweenPeople.get(new Pair<String,String>(from,whom)));
 			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
@@ -119,7 +144,7 @@ class ServerTaskMail implements ServerTask {
 			String from = data.getFromAddress();					
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
-			List<Mail> mailList =  allMailsSentByPerson.get(from);
+			List<Mail> mailList =  ReturnValidList(allMailsSentByPerson.get(from));
 			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
@@ -128,7 +153,7 @@ class ServerTaskMail implements ServerTask {
 			String from = data.getFromAddress();					
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
-			List<Mail> mailList =  allMailsReceivedByPerson.get(from);
+			List<Mail> mailList =  ReturnValidList(allMailsReceivedByPerson.get(from));
 			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
@@ -137,7 +162,7 @@ class ServerTaskMail implements ServerTask {
 			String from = data.getFromAddress();					
 			int howMany = Integer.parseInt(data.getData().get(0));
 			
-			List<Mail> mailList =  allMailsSentAndReceivedByPerson.get(from);
+			List<Mail> mailList =  ReturnValidList(allMailsSentAndReceivedByPerson.get(from));
 			setDataToListPrefix($, howMany, mailList);
 			markMailsAsRead(mailList, from);
 			break;
@@ -145,7 +170,7 @@ class ServerTaskMail implements ServerTask {
 		case GET_NEW_MAIL_TASK:
 		{
 			String from = data.getFromAddress();
-			DoublyLinkedList<Mail> mailList = allNewMailSentToPerson.get(from);
+			DoublyLinkedList<Mail> mailList = ReturnValidDL(allNewMailSentToPerson.get(from));
 			$.setData(fromMailListToStringList(mailList));
 			markMailsAsRead(mailList, from);
 			break;
@@ -153,7 +178,7 @@ class ServerTaskMail implements ServerTask {
 		case GET_CONTACTS_TASK: {
 			String from = data.getFromAddress();					
 			List<String> contactsList = new LinkedList<>();
-			contactsList.addAll(contactsOfPerson.get(from));
+			contactsList.addAll(ReturnValidSet(contactsOfPerson.get(from)));
 			Collections.sort(contactsList);
 			$.setData(contactsList);			
 			break;
