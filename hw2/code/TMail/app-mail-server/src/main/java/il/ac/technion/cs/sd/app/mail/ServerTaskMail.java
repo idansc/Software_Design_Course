@@ -57,6 +57,9 @@ class ServerTaskMail implements ServerTask {
 	{
 		InputStream in = _persistentConfig.getPersistentMailInputStream();
 		
+		if (in == null)
+			return;
+		
 		List<Mail> allMails = readAllMailsFromStream(in);
 		for (Mail mail : allMails)
 		{
@@ -71,6 +74,10 @@ class ServerTaskMail implements ServerTask {
 	{		
 		OutputStream out = 
 				_persistentConfig.getPersistentMailOverwriteOutputStream();
+		
+		if (out == null)
+			return;
+		
 		JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
 		Gson gson = new GsonBuilder().create();
 		writer.beginArray();
@@ -292,6 +299,9 @@ class ServerTaskMail implements ServerTask {
 	
 	private LinkedList<Mail> readAllMailsFromStream(InputStream stream) throws IOException
 	{
+		if (stream == null)
+			return new LinkedList<Mail>();
+		
 		Gson gson = new GsonBuilder().create();
 		JsonReader reader = new JsonReader(new InputStreamReader(stream, "UTF-8"));
 		

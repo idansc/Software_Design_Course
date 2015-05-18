@@ -34,6 +34,11 @@ public class ServerMailApplication {
 		_persistentConfig = new DefaultPersistentConfig();
 	}
 	
+	void setServer(Server s)
+	{
+		_server = s;
+	}
+	
 	// default PersistentConfig: default text file is used.
 	private class DefaultPersistentConfig implements PersistentConfig {
 		@Override
@@ -95,6 +100,7 @@ public class ServerMailApplication {
 	 * to start a new server instance in same, or another process. You may assume that two server instances with the
 	 * same name won't be in parallel. Similarly, {@link ServerMailApplication#stop()} will be called before subsequent
 	 * calls to {@link ServerMailApplication#start()}.
+	 * @throws ListenLoopAlreadyBeingDone
 	 */
 	public void start() {
 		
@@ -114,11 +120,13 @@ public class ServerMailApplication {
 	/**
 	 * Stops the server. A stopped server can't accept mail, but doesn't delete any data. A stopped server does not use
 	 * any system resources (e.g., messengers).
+	 * @throws NoCurrentListenLoop.
 	 */
 	public void stop() {
 		try {
 			_server.stopListenLoop();
-			_task.savePersistentData();
+			if (_task != null)
+				_task.savePersistentData();
 			
 		} catch (IOException e) {
 			throw new IOExceptionRuntime();

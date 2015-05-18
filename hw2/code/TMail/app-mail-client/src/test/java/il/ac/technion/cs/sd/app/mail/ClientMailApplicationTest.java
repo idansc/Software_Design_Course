@@ -1,8 +1,5 @@
 package il.ac.technion.cs.sd.app.mail;
 
-import static org.junit.Assert.*;
-
-import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
 
 import il.ac.technion.cs.sd.lib.clientserver.Client;

@@ -3,7 +3,6 @@ package il.ac.technion.cs.sd.app.mail;
 import static org.junit.Assert.*;
 import il.ac.technion.cs.sd.msg.MessengerException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +26,6 @@ public class TMailIntegrationTest {
 	@Before 
 	public void setup() throws InterruptedException {
 		 
-		server1.clean();
 		
 		assertEquals(server1.getAddress(), "server1");
 		 	
@@ -42,6 +40,7 @@ public class TMailIntegrationTest {
 	@After 
 	public void teardown() {
 		server1.stop();
+		server1.clean();
 		clients.forEach(x -> x.stop());
 	}
 	
