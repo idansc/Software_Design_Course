@@ -32,6 +32,10 @@ public class ClientMailApplication {
 		_serverAddress = serverAddress;
 	}
 	
+	void setClient(Client client)
+	{
+		_client = client;
+	}
 	
 	public String getUsername()
 	{

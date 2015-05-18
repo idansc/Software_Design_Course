@@ -1,6 +1,5 @@
 package il.ac.technion.cs.sd.app.mail;
 
-import java.util.ListIterator;
 
 
 public class Mail {
