@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;il.ac.technion.cs.sd.app.mail.ServerTaskMailTest.java&apos; to &apos;ServerMailApplicationTest.java&apos;&#x0A;- Original project: &apos;app-mail-server&apos;&#x0A;- Original element: &apos;il.ac.technion.cs.sd.app.mail.ServerTaskMailTest.java&apos;&#x0A;- Renamed element: &apos;il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest.java&apos;" description="Rename compilation unit &apos;ServerTaskMailTest.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/test\/java&lt;il.ac.technion.cs.sd.app.mail{ServerTaskMailTest.java" name="ServerMailApplicationTest.java" references="false" stamp="1431907552360" version="1.0"/>
+</session>

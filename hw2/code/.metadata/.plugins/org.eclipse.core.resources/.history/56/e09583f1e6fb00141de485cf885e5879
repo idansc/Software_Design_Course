@@ -1,0 +1,8 @@
+package il.ac.technion.cs.sd.app.mail;
+
+class Pair<F,S> {
+	public F first;
+	public S second;
+	
+
+}

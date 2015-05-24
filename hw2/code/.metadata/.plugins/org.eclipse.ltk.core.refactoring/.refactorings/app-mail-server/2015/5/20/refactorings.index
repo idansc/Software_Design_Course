@@ -1,0 +1,4 @@
+1431794996182	Extract method 'insertNewStringToSetInMap'
+1431817167351	Rename field 'serverAddress'
+1431818559683	Rename field 'persistentMailInputStream'
+1431818564191	Rename field 'persistentMailOutputStream'

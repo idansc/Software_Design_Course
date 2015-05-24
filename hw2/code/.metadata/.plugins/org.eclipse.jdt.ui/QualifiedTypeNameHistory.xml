@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.Optional"/>
+<fullyQualifiedTypeName name="org.apache.commons.lang3.math.NumberUtils"/>
+<fullyQualifiedTypeName name="java.lang.reflect.Type"/>
+<fullyQualifiedTypeName name="com.google.gson.reflect.TypeToken"/>
+<fullyQualifiedTypeName name="java.io.ByteArrayOutputStream"/>
+<fullyQualifiedTypeName name="java.lang.RuntimeException"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.msg.Messenger"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.msg.MessengerFactory"/>
+<fullyQualifiedTypeName name="java.util.UUID"/>
+<fullyQualifiedTypeName name="junit.framework.Assert"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.lib.clientserver.Client.MultipleAnswersReceived"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.lib.clientserver.MessageData"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.lib.clientserver.Client"/>
+<fullyQualifiedTypeName name="org.mockito.Mockito"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.msg.MessengerException"/>
+<fullyQualifiedTypeName name="java.io.OutputStream"/>
+<fullyQualifiedTypeName name="il.ac.technion.cs.sd.app.mail.ServerMailApplication.IOExceptionRuntime"/>
+<fullyQualifiedTypeName name="java.util.ListIterator"/>
+</qualifiedTypeNameHistroy>

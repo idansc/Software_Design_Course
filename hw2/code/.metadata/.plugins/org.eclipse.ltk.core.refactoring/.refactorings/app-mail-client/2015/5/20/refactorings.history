@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;il.ac.technion.cs.sd.app&apos; to &apos;il.ac.technion.cs.sd.app.mail&apos;&#x0A;- Original project: &apos;app-mail-client&apos;&#x0A;- Original element: &apos;app-mail-client/src/test/java/il.ac.technion.cs.sd.app&apos;&#x0A;- Renamed element: &apos;app-mail-client/src/test/java/il.ac.technion.cs.sd.app.mail&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;il.ac.technion.cs.sd.app&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/test\/java&lt;il.ac.technion.cs.sd.app" name="il.ac.technion.cs.sd.app.mail" qualified="false" references="true" stamp="1431778114228" textual="false" version="1.0"/>
+</session>

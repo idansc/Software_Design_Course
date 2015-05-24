@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="TMailIntegrationTest" project="app-mail-tests" tests="9" started="9" failures="0" errors="0" ignored="0">
+  <testsuite name="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.676">
+    <testcase name="shouldHaveHimselfAsContact" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.116"/>
+    <testcase name="basicTest" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.033"/>
+    <testcase name="testGetCorrespondences" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.17"/>
+    <testcase name="testGetNewMail1" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.07"/>
+    <testcase name="testGetAllMail" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.089"/>
+    <testcase name="testgetIncomingMail" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.071"/>
+    <testcase name="contactsShouldBeSorted" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.057"/>
+    <testcase name="shouldHaveNoContact" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.005"/>
+    <testcase name="testGetSentMails" classname="il.ac.technion.cs.sd.app.mail.TMailIntegrationTest" time="0.065"/>
+  </testsuite>
+</testrun>

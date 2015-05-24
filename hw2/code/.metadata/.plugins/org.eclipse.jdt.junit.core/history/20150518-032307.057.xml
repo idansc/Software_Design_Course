@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="ServerMailApplicationTest" project="app-mail-server" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.097">
+    <testcase name="starWhenAlreadyStarted" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.096"/>
+    <testcase name="stopWhenAlteadyStopped" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.001"/>
+  </testsuite>
+</testrun>

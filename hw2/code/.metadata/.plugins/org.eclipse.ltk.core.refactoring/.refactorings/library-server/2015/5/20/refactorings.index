@@ -1,0 +1,8 @@
+1431650074997	Rename package 'il.ac.technion.cs.sd.server'
+1431650344758	Rename package 'il.ac.technion.cs.sd.clientserver'
+1431651778307	Delete element
+1431651853425	Rename type 'Task'
+1431656152688	Extract method 'createMessenger'
+1431742096850	Rename type 'Server'
+1431747098155	Extract method 'startListenLoopAndYield'
+1431747982556	Extract method 'readMessageAndAssert'

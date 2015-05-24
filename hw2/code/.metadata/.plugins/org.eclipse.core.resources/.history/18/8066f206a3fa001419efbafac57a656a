@@ -1,0 +1,9 @@
+package il.ac.technion.cs.sd.lib.clientserver;
+
+@FunctionalInterface
+public interface ServerTask {
+	
+	/* @param clientAddress The address of the host sending the request.
+	 * @param data The data sent to the server on which the task should act upon. */
+	void run(Server, String clientAddress, byte[] data);
+}

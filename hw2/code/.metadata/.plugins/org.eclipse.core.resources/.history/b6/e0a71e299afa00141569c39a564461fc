@@ -1,0 +1,5 @@
+package il.ac.technion.cs.sd.clientserver;
+
+public interface Task {
+	void run();
+}
