@@ -111,6 +111,7 @@ public class MessengerTest {
 		Messenger m2 = startAndAddToList();
 		m1.send(m2.getAddress(), "");
 		incomingMessages.clear();
+		//TODO: Ofer thinks there's bug here. race condition.
 		m2.kill();
 		m2 = startAndAddToList();
 		assertTrue(incomingMessages.isEmpty());
