@@ -4,7 +4,7 @@ import java.util.function.BiConsumer;
 
 public class Client {
 
-	Client(String address)
+	public Client(String address)
 	{
 		//TODO
 	}
