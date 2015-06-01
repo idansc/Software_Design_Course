@@ -10,17 +10,17 @@ public class Client {
 	}
 	
 	// String - fromAddress. //TODO
-	<T> void start(BiConsumer<T, String> callback)
+	public <T> void start(BiConsumer<T, String> callback)
 	{
 		 //TODO
 	}
 	
-	void stop()
+	public void stop()
 	{
 		//TODO
 	}
 	
-	<T> void send(String serverAddress, T data) {
+	public <T> void send(String serverAddress, T data) {
 		//TODO
 	}
 	

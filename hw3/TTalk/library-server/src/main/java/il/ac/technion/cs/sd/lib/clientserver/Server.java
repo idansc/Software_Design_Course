@@ -20,12 +20,12 @@ public class Server {
 	 * Starts the server listen loop. While listening, the server process incoming requests  
 	 * @param consumer - the callback function incoming requests from the clients.
 	 */
-	<T> void start(BiConsumer<T,String> callback, Class<T> type) {
+	public <T> void start(BiConsumer<T,String> callback, Class<T> type) {
 		
 		//TODO
 	}
 	
-	void stop()
+	public void stop()
 	{
 		//TODO
 	}
@@ -35,12 +35,12 @@ public class Server {
 	 * @param filename
 	 * @param objects
 	 */
-	<T> void saveObjectsToFile(String filename, List<T> objects)
+	public <T> void saveObjectsToFile(String filename, List<T> objects)
 	{
 		//TODO
 	}
 	
-	<T> List<T> readObjectsFromFile(String filename, Class<T> type)
+	public <T> List<T> readObjectsFromFile(String filename, Class<T> type)
 	{
 		return null;
 		//TODO
