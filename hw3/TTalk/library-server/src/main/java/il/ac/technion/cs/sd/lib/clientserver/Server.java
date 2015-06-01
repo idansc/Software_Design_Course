@@ -17,8 +17,9 @@ public class Server {
 
 	/**
 	 *  
-	 * Starts the server listen loop. While listening, the server process incoming requests  
-	 * @param consumer - the callback function incoming requests from the clients.
+	 * Starts the server listen loop. While listening, the server process incoming requests from
+	 * @param <T> 
+	 * @param consumer The callback function incoming requests from the clients.
 	 */
 	public <T> void start(BiConsumer<T,String> callback, Class<T> type) {
 		

@@ -10,7 +10,7 @@ public class Client {
 	}
 	
 	// String - fromAddress. //TODO
-	public <T> void start(BiConsumer<T, String> callback)
+	public <T> void start(BiConsumer<T, String> callback, Class<T> type)
 	{
 		 //TODO
 	}
@@ -24,5 +24,11 @@ public class Client {
 		//TODO
 	}
 	
+	public <RequestType, AnswerType> AnswerType sendAndBlock(
+			String serverAddress, RequestType data, Class<AnswerType> answerType)
+	{
+		//TODO
+		return null;
+	}
 	
 }
