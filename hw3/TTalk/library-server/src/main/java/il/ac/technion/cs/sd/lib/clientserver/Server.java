@@ -4,13 +4,24 @@ import java.util.function.BiConsumer;
 
 public class Server {
 
-	Server(String address)
-	{
-		//TODO
-	}
+	private String _address;
 	
-	// String - fromAddress.  //TODO
-	<T> void start(BiConsumer<T,String> consumer, Class<T> type) {
+	/*
+	 * @param address - the address of the new server.
+	 */
+	public Server(String address)
+	{
+		_address = address;
+	}
+
+
+	/**
+	 *  
+	 * Starts the server listen loop. While listening, the server process incoming requests  
+	 * @param consumer - the callback function incoming requests from the clients.
+	 */
+	<T> void start(BiConsumer<T,String> callback, Class<T> type) {
+		
 		//TODO
 	}
 	
@@ -19,7 +30,11 @@ public class Server {
 		//TODO
 	}
 	
-	
+	/**
+	 * 
+	 * @param filename
+	 * @param objects
+	 */
 	<T> void saveObjectsToFile(String filename, List<T> objects)
 	{
 		//TODO
