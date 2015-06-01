@@ -17,11 +17,14 @@ public class Server {
 
 	/**
 	 *  
-	 * Starts the server listen loop. While listening, the server process incoming requests from
-	 * @param <T> The type of 
+	 * Starts the server listen loop. 
+	 * While listening, the server process incoming messages from clients.
+	 * Each incoming message invokes a callback function. 
+	 * TODO
+	 * @param <T> The type of the incoming message . 
 	 * @param consumer The callback function incoming requests from the clients.
 	 */
-	public <T> void start(BiConsumer<T,String> callback, Class<T> type) {
+	public <T> void start(BiConsumer<T,String> callback, Class<T> answerType) {
 		
 		//TODO
 	}

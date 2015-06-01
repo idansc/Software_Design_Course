@@ -10,6 +10,7 @@ public class Client {
 	}
 	
 	// String - fromAddress. //TODO
+	//TODO: switch to single client logic.
 	public <T> void start(BiConsumer<T, String> callback, Class<T> type)
 	{
 		 //TODO
