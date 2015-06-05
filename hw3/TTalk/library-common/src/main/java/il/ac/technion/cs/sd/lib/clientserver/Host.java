@@ -2,6 +2,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
+import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 /**
  * Represents a host (either client or server).
@@ -9,6 +10,20 @@ import il.ac.technion.cs.sd.msg.MessengerException;
  */
 class Host {
 
+	private Messenger _messenger;
+	
+	/**
+	 * 
+	 * @param address The address of the new host.
+	 */
+	Host(String address)
+	{
+		_messenger = new MessengerFactory().start(address, () -> 
+		{
+			;
+		});
+	}
+	
 	// max time for a successful delivery of a message (from sending until receiving) in milisec.
 	private int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 200;
 	
@@ -19,11 +34,11 @@ class Host {
 	private boolean messageRecivedIndicator = false;
 	
 	/**
-	 * Sends a 'data' string to 'targetAddress' via 'messenger', without a chance to fail
+	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
 	 * The sending action can't fail.
 	 * @throws MessengerException 
 	 */
-	void powerSend(Messenger messenger, String  targetAddress, String data) throws MessengerException, InterruptedException
+	void powerSend(String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
 		assert(!messageRecivedIndicator);
 		

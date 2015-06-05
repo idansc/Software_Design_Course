@@ -1,5 +1,6 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -29,14 +30,14 @@ public class Client {
 	 * Each message received from the server invokes the consumer's callback function.
 	 * @param serverAddress The server's address.
 	 * @param consumer The consumer who's callback will be invoked for each message received from the server. 
-	 * @param type The type of the object the server sends the client in each message as data.
+	 * @param dataType The type of the object the server sends the client in each message as data.
 	 * (i.e. the type of the parameter the consumer's callback function receives).
 	 * Generic types are not supported.
 	 * @throws InvalidMessage Invalid message received from the server 
 	 * For example: the object sent as message data was not of type 'type'.
 	 * @throws InvalidOperation When the listen loop is already running when calling this method.
 	 */
-	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Class<T> type)
+	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Class<T> dataType)
 	{
 		_serverAddress = serverAddress;
 		 //TODO
@@ -58,9 +59,17 @@ public class Client {
 	 */
 	public <T> void send(T data) {
 		//TODO
-		
-		
 	}
+	
+	/**
+	 * Like {@link #send(Object)}, but sends a list of objects rather than a single object.
+	 * The type of the elements in 'data' must be non-generic. 
+	 * @param data
+	 */
+	public <T> void send(List<T> data) {
+		//TODO
+	}
+
 	
 	/**
 	 * Sends a message to the server, and blocks until a response message is received.
@@ -73,7 +82,21 @@ public class Client {
 	 * (and not some other unrelated message the server sent the client).
 	 * @throws InvalidMessage Invalid message was received back from the server. 
 	 */
-	public <T, S> S sendAndBlockUntilResponse(T data, Class<S> responseType)
+	public <T, S> S sendAndBlockUntilResponseArrives(T data, Class<S> responseType)
+	{
+		//TODO
+		return null;
+	}
+	
+	
+	/**
+	 * Just like {@link #sendAndBlockUntilResponseArrives(Object, Class)} but the returned response
+	 * is a list of objects instead of a single object.
+	 * @param data
+	 * @param responseType
+	 * @return
+	 */
+	public <T, S> List<S> sendAndBlockUntilResponseListArrives(T data, Class<S> responseType)
 	{
 		//TODO
 		return null;
