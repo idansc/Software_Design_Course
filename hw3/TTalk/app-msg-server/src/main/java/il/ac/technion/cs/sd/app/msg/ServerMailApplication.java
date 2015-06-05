@@ -1,12 +1,20 @@
 package il.ac.technion.cs.sd.app.msg;
 
+import il.ac.technion.cs.sd.lib.clientserver.Server;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * The server side of the TMail application. <br>
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerMailApplication {
-	
+	Server _server;
+	private Map<String, List<MessageData>> offlineMessages = new HashMap<String, List<MessageData>>();
+
     /**
      * Starts a new mail server. Servers with the same name retain all their information until
      * {@link ServerMailApplication#clean()} is called.
@@ -15,14 +23,14 @@ public class ServerMailApplication {
      */
 
 	public ServerMailApplication(String string) {
-		throw new UnsupportedOperationException("Not implemented");
+		_server = new Server(string);	
 	}
 	
 	/**
 	 * @return the server's address; this address will be used by clients connecting to the server
 	 */
 	public String getAddress() {
-		throw new UnsupportedOperationException("Not implemented");
+		return _server
 	}
 	
 	/**

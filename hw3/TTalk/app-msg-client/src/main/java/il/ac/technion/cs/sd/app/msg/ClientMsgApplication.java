@@ -1,15 +1,25 @@
 package il.ac.technion.cs.sd.app.msg;
 
+import il.ac.technion.cs.sd.lib.clientserver.Client;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import com.google.gson.reflect.TypeToken;
 
 /**
  * The client side of the TMail application. Allows sending and getting messages to and from other clients using a server. <br>
  * You should implement all the methods in this class
  */
 public class ClientMsgApplication {
+	
+	private String _userName;
+	private Client _client;
+	private String _serverAddress;
+
 	
 	/**
 	 * Creates a new application, tied to a single user
@@ -18,7 +28,10 @@ public class ClientMsgApplication {
 	 * @param username The username that will be sending and accepting the messages using this object
 	 */
 	public ClientMsgApplication(String serverAddress, String username) {
-		throw new UnsupportedOperationException("Not implemented");
+		_userName = username;
+		_serverAddress = serverAddress;
+		_client = new Client(_userName);
+		
 	}
 	
 	/**
@@ -35,7 +48,12 @@ public class ClientMsgApplication {
 	public void login(Consumer<InstantMessage> messageConsumer,
 			Function<String, Boolean> friendshipRequestHandler,
 			BiConsumer<String, Boolean> friendshipReplyConsumer) {
-		throw new UnsupportedOperationException("Not implemented");
+		List<MessageData> messages = _client.sendAndBlockUntilResponseArrives(new MessageData(TaskType.LOGIN_TASK)
+		,	new TypeToken<List<MessageData>>(){}.getType());
+		messages.forEach(new MessageDataConsumer(_client, messageConsumer, 
+				friendshipRequestHandler, friendshipReplyConsumer));
+		_client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(_client, messageConsumer, 
+				friendshipRequestHandler, friendshipReplyConsumer),MessageData.class);
 	}
 	
 	/**
@@ -43,7 +61,8 @@ public class ClientMsgApplication {
 	 * messages. A client can login (using {@link ClientMsgApplication#login(Consumer, Function, BiConsumer)} after logging out.
 	 */
 	public void logout() {
-		throw new UnsupportedOperationException("Not implemented");
+		_client.send(new MessageData(TaskType.LOGOUT_TASK));
+		_client.stopListenLoop();
 	}
 	
 	/**
@@ -53,7 +72,7 @@ public class ClientMsgApplication {
 	 * @param what The message to send
 	 */
 	public void sendMessage(String target, String what) {
-		throw new UnsupportedOperationException("Not implemented");
+		_client.send(new MessageData(TaskType.SEND_MESSAGE_TASK,new InstantMessage(_userName,target,what)));
 	}
 	
 	/**
@@ -65,7 +84,7 @@ public class ClientMsgApplication {
 	 * @param who The recipient of the friend request.
 	 */
 	public void requestFriendship(String who) {
-		throw new UnsupportedOperationException("Not implemented");
+		_client.send(new MessageData(TaskType.REQUEST_FRIENDSHIP_TASK,who));
 	}
 	
 	/**
@@ -75,8 +94,9 @@ public class ClientMsgApplication {
 	 * @return A wrapped <code>true</code> if the user is a friend and is offline; a wrapped <code>false</code> if the
 	 *         user is a friend and is offline; an empty {@link Optional} if the user isn't a friend of the client
 	 */
-	public Optional<Boolean> isOnline(String who) {
-		throw new UnsupportedOperationException("Not implemented");
+	public Optional<Boolean> isOnline(String who) {	
+		return _client.sendAndBlockUntilResponseArrives(new MessageData(TaskType.IS_ONLINE_TASK,who),
+				new TypeToken<Optional<Boolean>>(){}.getType());
 	}
 	
     /**
@@ -85,7 +105,7 @@ public class ClientMsgApplication {
      * You can assume that a stopped client won't be restarted using {@link ClientMsgApplication#login(Consumer, Function, BiConsumer)}
      */
     public void stop() {
-            throw new UnsupportedOperationException("Not implemented");
+            //no need
     }
 
 }
