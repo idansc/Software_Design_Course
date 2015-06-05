@@ -8,7 +8,7 @@ import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
 
-/**
+/** 
  * Represents a reliable host (either client or server) - that always sends/receives successfully.
  * Provides general communication functionality common to all hosts for the implementation of the 
  * client-server package.
@@ -19,8 +19,8 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 class ReliableHost {
 
-	private boolean listenLoopRunning = false;
-	
+	private boolean currentlyListening = false;
+	private String _address;
 	private Messenger _messenger;
 	
 	private Consumer<String> _consumer;
@@ -88,37 +88,47 @@ class ReliableHost {
 	 */
 	ReliableHost(String address) throws MessengerException
 	{
-		_messenger = new MessengerFactory().start(address, (String data) -> 
-		{
-			newMessageArrivedCallback(data);
-		});
+		_address = address;
 	}
 	
 	
-	void start(Consumer<String> consumer)
+	void start(Consumer<String> consumer) throws MessengerException
 	{
-		if (listenLoopRunning)
+		if (currentlyListening)
 		{
 			throw new InvalidOperation();
 		}
 		_consumer = consumer;
 		
-		//TODO
+		_messenger = new MessengerFactory().start(_address, (String data) -> 
+		{
+			newMessageArrivedCallback(data);
+		});
 		
-		
-		listenLoopRunning = true;
+		currentlyListening = true;
 	}
 	
 	void stop()
 	{
-		if (!listenLoopRunning)
+		if (!currentlyListening)
 		{
 			throw new InvalidOperation();
 		}
 		
-		//TODO
+		// To let deliveries under process to finish succesfully.
+		try {
+			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+		} catch (InterruptedException e1) {
+			throw new RuntimeException("MAX_TIME_FOR_SUCCESFUL_DELIVERY");
+		}
 		
-		listenLoopRunning = false;
+		currentlyListening = false;
+		
+		try {
+			_messenger.kill();
+		} catch (MessengerException e) {
+			throw new RuntimeException("failed to kill messenger!");
+		}
 	}
 	
 
@@ -146,7 +156,7 @@ class ReliableHost {
 	String sendAndBlockUntilResponseArrives(
 			String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
-		if (!listenLoopRunning)
+		if (!currentlyListening)
 		{
 			throw new InvalidOperation();
 		}
@@ -223,7 +233,7 @@ class ReliableHost {
 	private void send(String  targetAddress, String data, Long respnseTargetId, Long newMessageId) 
 			throws MessengerException, InterruptedException
 	{
-		if (!listenLoopRunning)
+		if (!currentlyListening)
 		{
 			throw new InvalidOperation();
 		}
@@ -255,5 +265,7 @@ class ReliableHost {
 		
 		messageRecivedIndicator = false;
 	}
+
+
 	
 }
