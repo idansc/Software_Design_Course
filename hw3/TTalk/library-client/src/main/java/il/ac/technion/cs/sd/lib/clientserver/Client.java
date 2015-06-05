@@ -23,7 +23,7 @@ public class Client {
 	 * @param serverAddress The server's address.
 	 * @param consumer The consumer who's callback will be invoked for each message received from the server. 
 	 * @param type The type of the object the server sends the client in each message as data.
-	 * (i.e. the parameter type of the consumer's callback function).
+	 * (i.e. the type of the parameter the consumer's callback function receives).
 	 * Generic types are not supported.
 	 * @throws InvalidMessage Invalid message received from the server 
 	 * For example: the object sent as message data was not of type 'type'.
@@ -51,17 +51,22 @@ public class Client {
 	 */
 	public <T> void send(T data) {
 		//TODO
+		
+		
 	}
 	
 	/**
 	 * Sends a message to the server, and blocks until a response message is received.
+	 * @param data The object to be sent to the server (as message data).
+	 * @param responseType The type of the object the server sends back as data.
+	 * (i.e. the type of the returned value).
+	 * Generic types are not supported.
 	 * @return The response message data. 
 	 * The response message is guaranteed to be the response to the message sent by this method
-	 * (and not some other unrelated message the server sent the client). 
-	 *  
-	 * @param data The object to be sent to the server (as message data).
+	 * (and not some other unrelated message the server sent the client).
+	 * @throws InvalidMessage Invalid message was received back from the server. 
 	 */
-	public <T, S> S sendAndBlock(T data, Class<S> answerType)
+	public <T, S> S sendAndBlock(T data, Class<S> responseType)
 	{
 		//TODO
 		return null;
