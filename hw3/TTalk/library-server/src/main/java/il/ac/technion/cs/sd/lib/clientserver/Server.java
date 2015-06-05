@@ -78,7 +78,7 @@ public class Server {
 	{
 		//TODO
 	}
-	
+	 
 	/**
 	 * Reads a list of objects from persistent memory (file).
 	 * @param filename The filename of the file to read, without path.
