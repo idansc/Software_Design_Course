@@ -17,9 +17,14 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 class ReliableHost {
 
 	private Messenger _messenger;
-	private Consumer<String> consumer = null;
 	
-	private String magicStrRepresentingEmptyStr = "zQSGRo9ODtGO60v0nUht";
+	private Consumer<String> _consumer;
+	
+	private class Message
+	{
+		Integer tag; // null if the message does not require a response.
+		String data;
+	}
 
 	/**
 	 * @param address The address of the new host.
@@ -37,9 +42,15 @@ class ReliableHost {
 	}
 	
 	
+	void startListenLoop(Consumer<String> consumer)
+	{
+		_consumer = consumer;
+		
+	}
 	
-	// max time for a successful delivery of a message (from sending until receiving) in milisec.
-	private int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 200;
+
+	// length (character #) of the field holding the tag of the message.
+	private final int TAG_FIELD_LENGHT = 20;
 	
 	
 	/* the powerSend method would busy wait on this field until its true (and then would re-set it to
@@ -55,14 +66,8 @@ class ReliableHost {
 	void send(String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
 		
-		/*
-		 * Actual empty string messages are represented by magicStrRepresentingEmptyStr.
-		 */
 		
-		if (data.isEmpty())
-		{
-			data = magicStrRepresentingEmptyStr;
-		}
+
 		
 		assert(!messageRecivedIndicator);
 		
@@ -92,10 +97,6 @@ class ReliableHost {
 	
 	private void newMessageArrivedCallback(String data)
 	{
-		/* 
-		 * Empty message from A to B is a signal for B: "I've recived the message you just sent me.
-		 * Actual empty string messages are represented by magicStrRepresentingEmptyStr.
-		 */
 		
 		if (data.isEmpty())
 		{
@@ -103,11 +104,26 @@ class ReliableHost {
 			messageRecivedIndicator = true;
 		} else
 		{
-			if (data.equals(magicStrRepresentingEmptyStr))
-			{
-				data = "";
-			}
-			consumer.accept(data);
+			
+			_consumer.accept(data);
 		}
+	}
+	
+	private int getMessageTag(String message)
+	{
+		String tmp = message.substring(0, TAG_FIELD_LENGHT);
+		return Integer.parseInt(tmp);
+		
+	}
+	
+	private String getMessageWithoutTag(String message)
+	{
+		return message.substring(TAG_FIELD_LENGHT, message.length());
+	}
+	
+	private String getMessageWithTag(String messageWithoutTag, int tag)
+	{
+		tag.toString().
+		return 
 	}
 }
