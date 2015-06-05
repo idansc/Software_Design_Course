@@ -6,7 +6,8 @@ import java.util.function.BiConsumer;
 
 //TODO: add documentation to the package.
 //TODO: compile to html javadoc.
-
+//TODO: consider documenting the fact that any type not suited for GSON - is not supported (not only
+		// generic types (also types with generic fields.
 /**
  * Represents a server that can communicate with multiple clients.
  * The messages sent and received consist of objects of any (non-generic) type.

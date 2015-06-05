@@ -73,7 +73,7 @@ public class Client {
 	 * (and not some other unrelated message the server sent the client).
 	 * @throws InvalidMessage Invalid message was received back from the server. 
 	 */
-	public <T, S> S sendAndBlock(T data, Class<S> responseType)
+	public <T, S> S sendAndBlockUntilResponse(T data, Class<S> responseType)
 	{
 		//TODO
 		return null;
