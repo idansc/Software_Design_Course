@@ -1,7 +1,6 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**

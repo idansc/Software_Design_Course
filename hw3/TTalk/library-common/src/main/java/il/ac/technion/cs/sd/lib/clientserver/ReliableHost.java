@@ -22,9 +22,9 @@ class ReliableHost {
 	private Consumer<String> _consumer;
 	
 	/* This is not null iff sendAndBlockUntilResponseArrives is currently waiting for a response. 
-	 * A Message object representing the response will be pushed to this queue when received.
+	 * A InnerMessage object representing the response will be pushed to this queue when received.
 	 * This queue can hold maximum one element. */
-	private BlockingQueue<Message> responseBQ;
+	private BlockingQueue<InnerMessage> responseBQ;
 	
 	/* This is null iff responseBQ is null.
 	 * When not null - this is the id of the message that requests a response. */
@@ -35,20 +35,20 @@ class ReliableHost {
 	/**
 	 * We'll send objects of this class via Messenger.
 	 */
-	private class Message
+	private class InnerMessage
 	{
-		Message() {}
-		Message(int messageId, Integer respnseTargetId, String data) {
+		InnerMessage() {}
+		InnerMessage(long messageId, Long respnseTargetId, String data) {
 			this.messageId = messageId;
 			this.respnseTargetId = respnseTargetId;
 			this.data = data;
 		}
 
-		int messageId;
+		long messageId;
 		
 		/* The id of the message that this message is the response to, 
 		 * or null if this message is not a response. */
-		Integer respnseTargetId; 
+		Long respnseTargetId; 
 		
 		String data;
 	}
@@ -108,7 +108,7 @@ TODO
 		responseBQ = new LinkedBlockingQueue();
 		
 		send(targetAddress, data);
-		Message response = responseBQ.take();
+		InnerMessage response = responseBQ.take();
 		assert(responseBQ.isEmpty());
 		responseBQ = null;
 		
@@ -118,16 +118,17 @@ TODO
 	
 	 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
+	 * @param respnseTargetId May be null.
 	 * @return the id of the new message sent.
 	 * @throws MessengerException 
 	 */
-	private int sendAndGetMessageId(String  targetAddress, String data) 
+	private long sendAndGetMessageId(String  targetAddress, String data, Long respnseTargetId) 
 			throws MessengerException, InterruptedException
 	{
 		assert(!messageRecivedIndicator);
 		
-		Message newMessage = new Message();
-		nextMessageIdToGive++;
+		InnerMessage newMessage = new InnerMessage(nextMessageIdToGive,respnseTargetId, data);
+		long $ = nextMessageIdToGive++;
 		
 		while (!messageRecivedIndicator)
 		{
@@ -136,12 +137,13 @@ TODO
 		}
 		
 		messageRecivedIndicator = false;
+		
+		return $;
 	}
 
 	
 	private void newMessageArrivedCallback(String data)
 	{
-		
 		if (data.isEmpty())
 		{
 			assert(!messageRecivedIndicator);
@@ -149,7 +151,18 @@ TODO
 			return;
 		} 
 		
-		Message message = Utils.fromGsonStrToObject(data, Message.class);
+		InnerMessage message = Utils.fromGsonStrToObject(data, Message.class);
+		
+		if (responseRequestorId != null && responseRequestorId == message.respnseTargetId)
+		{
+			try {
+				responseBQ.put(message);
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			}
+			return;
+		}
+
 		_consumer.accept( message.data );
 	}
 
