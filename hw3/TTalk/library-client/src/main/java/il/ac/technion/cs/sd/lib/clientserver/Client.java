@@ -27,6 +27,7 @@ public class Client {
 	 * Generic types are not supported.
 	 * @throws InvalidMessage Invalid message received from the server 
 	 * For example: the object sent as message data was not of type 'type'.
+	 * @throws InvalidOperation When the listen loop is already running when calling this method.
 	 */
 	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Class<T> type)
 	{
@@ -46,18 +47,27 @@ public class Client {
 	/**
 	 * Sends a message to the server.
 	 * @param data The object to be sent to the server (as message data).
+	 * Parametric types of data are not supported.
 	 */
 	public <T> void send(T data) {
 		//TODO
 	}
 	
-	public <RequestType, AnswerType> AnswerType sendAndBlock(
-			String serverAddress, RequestType data, Class<AnswerType> answerType)
+	/**
+	 * Sends a message to the server, and blocks until a response message is received.
+	 * @return The response message data. 
+	 * The response message is guaranteed to be the response to the message sent by this method
+	 * (and not some other unrelated message the server sent the client). 
+	 *  
+	 * @param data The object to be sent to the server (as message data).
+	 */
+	public <T, S> S sendAndBlock(T data, Class<S> answerType)
 	{
 		//TODO
 		return null;
 	}
 
+	
 	public class InvalidMessage extends RuntimeException {private static final long serialVersionUID = 1L;}
 	public class InvalidOperation extends RuntimeException {private static final long serialVersionUID = 1L;}
 }
