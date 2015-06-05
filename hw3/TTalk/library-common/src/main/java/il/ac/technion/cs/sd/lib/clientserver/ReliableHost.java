@@ -3,6 +3,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
+
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
@@ -18,6 +19,8 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 class ReliableHost {
 
+	private boolean listenLoopRunning = false;
+	
 	private Messenger _messenger;
 	
 	private Consumer<String> _consumer;
@@ -29,7 +32,16 @@ class ReliableHost {
 	
 	/* This is null iff responseBQ is null.
 	 * When not null - this is the id of the message that requests a response. */
-	Long responseRequestorId; 
+	Long responseRequestorId;
+	
+	/*
+	 * This is not null iff a message is currently being consumed by '_consumer'.
+	 * sendResponse uses this variable to determine the response target. 
+	 * Note that this is an id of a message sent - so it may collide with an arbitrary message
+	 * this object has sent (and it's no problem).
+	 * This object is used as a monitor to synchronize messages consumptions.
+	 */
+	Long currentMessageConsumedId;
 	
 	/*
 	 * All modification to synchronized must be done while synchronized by the nextMessageIdToGive
@@ -41,11 +53,19 @@ class ReliableHost {
 	 * in milisec */
 	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 200;
 	
+	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
+	 * false.
+	 */
+	private boolean messageRecivedIndicator = false;
+	
+	Object sendingLock;
+	
 	/**
 	 * We'll send objects of this class via Messenger.
 	 */
 	private class InnerMessage
 	{
+		@SuppressWarnings("unused")
 		InnerMessage() {}
 		InnerMessage(long messageId, Long respnseTargetId, String data) {
 			this.messageId = messageId;
@@ -72,27 +92,41 @@ class ReliableHost {
 		{
 			newMessageArrivedCallback(data);
 		});
-	
-		//consumerWithStr = () 
 	}
 	
 	
-	void startListenLoop(Consumer<String> consumer)
+	void start(Consumer<String> consumer)
 	{
+		if (listenLoopRunning)
+		{
+			throw new InvalidOperation();
+		}
 		_consumer = consumer;
 		
+		//TODO
+		
+		
+		listenLoopRunning = true;
 	}
 	
+	void stop()
+	{
+		if (!listenLoopRunning)
+		{
+			throw new InvalidOperation();
+		}
+		
+		//TODO
+		
+		listenLoopRunning = false;
+	}
 	
-	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
-	 * false.
-	 */
-	private boolean messageRecivedIndicator = false;
+
 	
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
 	 * Must not wait on 'this' monitor.
-	 * @param respnseTargetId May be null.
+	 * @param respnseTargetId Should be null if 'data' is not a response.
 	 * @throws MessengerException 
 	 */
 	void send(String targetAddress, String data, Long respnseTargetId) 
@@ -112,8 +146,15 @@ class ReliableHost {
 	String sendAndBlockUntilResponseArrives(
 			String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
+		if (!listenLoopRunning)
+		{
+			throw new InvalidOperation();
+		}
+		
+		
 		assert(responseBQ == null);
 		assert(responseRequestorId == null);
+		
 		
 		synchronized(nextMessageIdToGive)
 		{
@@ -138,6 +179,9 @@ class ReliableHost {
 
 
 	
+	/*
+	 * Only a single non-empty message can be consumed at any given time.
+	 */
 	private void newMessageArrivedCallback(String data)
 	{
 		if (data.isEmpty())
@@ -159,20 +203,31 @@ class ReliableHost {
 			return;
 		}
 
-		_consumer.accept( message.data );
+		
+		synchronized(currentMessageConsumedId)
+		{
+			assert(currentMessageConsumedId == null);
+			currentMessageConsumedId = message.messageId;
+			_consumer.accept( message.data );
+			currentMessageConsumedId = null;
+		}
 	}
 
 	
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
-	 * Must not wait on 'this' monitor.
-	 * @param respnseTargetId May be null.
+	 * @param respnseTargetId Should be null if 'data' is not a response.
 	 * @param newMessageId If null, nextMessageIdToGive is used and incremented.
 	 * @throws MessengerException 
 	 */
 	private void send(String  targetAddress, String data, Long respnseTargetId, Long newMessageId) 
 			throws MessengerException, InterruptedException
 	{
+		if (!listenLoopRunning)
+		{
+			throw new InvalidOperation();
+		}
+		
 		assert(!messageRecivedIndicator);
 		
 		if (newMessageId == null)
@@ -185,10 +240,17 @@ class ReliableHost {
 		}
 		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data);
 		
-		while (!messageRecivedIndicator)
+		synchronized (sendingLock)
 		{
-			_messenger.send(targetAddress, data);
-			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+			/*
+			 * The synchronization is important, otherwise, we won't know for which message the 
+			 * "ok, I've got it" empty message refers to. 
+			 */
+			while (!messageRecivedIndicator)
+			{
+				_messenger.send(targetAddress, data);
+				Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+			}
 		}
 		
 		messageRecivedIndicator = false;
