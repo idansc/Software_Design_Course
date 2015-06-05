@@ -35,16 +35,28 @@ public class Server {
 		//TODO
 	}
 	
+	
+
+	/**
+	 * Sends a message to a client.
+	 * @param clientAddress The address of the client.
+	 * @param data The data to be sent to the client.
+	 * Generic types of 'data' are not supported.
+	 */
+	public <T> void send(String clientAddress, T data)
+	{
+		
+	}
+	
+	
 	/**
 	 * Saves a list of objects to persistent memory (file).
 	 * @param filename The filename of the file to save, without path.
+	 * If the file already exists, the previous content is lost.
 	 * @param objects The objects to be saved to the file (order is preserved).
 	 * Generic object types are not supported.
-	 * @param append If true, the new objects are appended to the end of the existing file.
-	 * If false, the previous content of the file is lost.
-	 * If the file does not already exist - it will be created and this flag is irrelevant.
 	 */
-	public <T> void saveObjectsToFile(String filename, List<T> objects, boolean append)
+	public <T> void saveObjectsToFile(String filename, List<T> objects)
 	{
 		//TODO
 	}
@@ -54,22 +66,13 @@ public class Server {
 	 * @param filename The filename of the file to read, without path.
 	 * @param objects The objects to be saved to the file (order is preserved).
 	 * Generic object types are not supported.
-	 * @return List of read objects (order preserved), or null if no file with that name exists.
+	 * @return List of read objects (order preserved), or empty value if no file with that name exists.
 	 */
 	public <T> Optional<List<T>> readObjectsFromFile(String filename, Class<T> type)
 	{
 		return null;
 		//TODO
 	}
-	
-	
-	
-	/*
-	 * sends the message 'data' 
-	 */
-	private <T> void send(String clientAddress, T data, int tag)
-	{
-		
-	}
+
 	
 }
