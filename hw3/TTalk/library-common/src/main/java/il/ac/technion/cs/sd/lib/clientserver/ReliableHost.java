@@ -20,9 +20,17 @@ class ReliableHost {
 	
 	private Consumer<String> _consumer;
 	
+	
+	/**
+	 * We'll send objects of this class via Messenger.
+	 */
 	private class Message
 	{
-		Integer tag; // null if the message does not require a response.
+		int messageId;
+		
+		/* The id of the message that this message is the response to, or null if not relevant. */
+		Integer respnseTargetId; 
+		
 		String data;
 	}
 
