@@ -21,11 +21,15 @@ public class Server {
 	 * Starts the server listen loop. 
 	 * While listening, the server process incoming messages from clients.
 	 * Each incoming message invokes a callback function. 
-	 * TODO
-	 * @param <T> The type of the incoming message . 
-	 * @param consumer The callback function incoming requests from the clients.
+	 * @param consumer The consumer who's callback will be invoked for each message received from a client.
+	 * Any message sent back to the client via @{link {@link #sendResponse(String, Object)} 
+	 * from the callback function is considered by the client as a response to the specific message 
+	 * that invoked the callback.
+	 * @param dataType The type of the object sent by the client in each message
+	 * (i.e., the type of the object passed to the consumer's callback function).
+	 * @throws InvalidMessage If the list loop is already running. 
 	 */
-	public <T> void start(BiConsumer<T,String> callback, Class<T> answerType) {
+	public <T> void start(BiConsumer<T,String> consumer, Class<T> dataType) {
 		
 		//TODO
 	}
@@ -38,12 +42,26 @@ public class Server {
 	
 
 	/**
-	 * Sends a message to a client.
+	 * Sends a message to a client. The message is not considered a response to a specific 
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
 	 * Generic types of 'data' are not supported.
 	 */
 	public <T> void send(String clientAddress, T data)
+	{
+		
+	}
+	
+	
+	/**
+	 * Just like {@link #send(String, Object)} except that the message sent will be considered by
+	 * a response to a specific message sent by a client.
+	 * You must call this method only from the consumer of the of the listen loop (i.e., from the 
+	 * callback function invoked by the message to which the response is for).
+	 * @param clientAddress
+	 * @param data
+	 */
+	public <T> void sendResponse(String clientAddress, T data)
 	{
 		
 	}
@@ -75,4 +93,5 @@ public class Server {
 	}
 
 	
+	public class InvalidMessage extends RuntimeException {private static final long serialVersionUID = 1L;}
 }

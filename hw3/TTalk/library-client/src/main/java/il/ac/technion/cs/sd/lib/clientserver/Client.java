@@ -74,5 +74,5 @@ public class Client {
 
 	
 	public class InvalidMessage extends RuntimeException {private static final long serialVersionUID = 1L;}
-	public class InvalidOperation extends RuntimeException {private static final long serialVersionUID = 1L;}
+	public class InvalidOperation extends RuntimeException {private static final long serialVersionUID = 2L;}
 }
