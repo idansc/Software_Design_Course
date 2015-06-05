@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+//TODO: decide if this should be public at all.
 /**
  * Common utilities.
  */
@@ -25,7 +26,7 @@ public class Utils {
 	 * @param type The type of the object represented by the string.
 	 * @return the deserialized object.
 	 */
-	public <T> T fromGsonStrToObject(String gsonStr, Class<T> type)
+	public static <T> T fromGsonStrToObject(String gsonStr, Class<T> type)
 	{
 		ByteArrayInputStream is = new ByteArrayInputStream(gsonStr.getBytes());
 		
@@ -46,7 +47,7 @@ public class Utils {
 	 * @param object The object to be serialized.
 	 * @return The UTF-8 GSON string representing the object.
 	 */
-	public <T> String fromObjectToGsonStr(T object)
+	public static <T> String fromObjectToGsonStr(T object)
 	{
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {

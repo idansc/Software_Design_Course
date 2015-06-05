@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -20,15 +21,33 @@ class ReliableHost {
 	
 	private Consumer<String> _consumer;
 	
+	/* This is not null iff sendAndBlockUntilResponseArrives is currently waiting for a response. 
+	 * A Message object representing the response will be pushed to this queue when received.
+	 * This queue can hold maximum one element. */
+	private BlockingQueue<Message> responseBQ;
+	
+	/* This is null iff responseBQ is null.
+	 * When not null - this is the id of the message that requests a response. */
+	Integer responseRequestorId; 
+	
+	long nextMessageIdToGive = 0;
 	
 	/**
 	 * We'll send objects of this class via Messenger.
 	 */
 	private class Message
 	{
+		Message() {}
+		Message(int messageId, Integer respnseTargetId, String data) {
+			this.messageId = messageId;
+			this.respnseTargetId = respnseTargetId;
+			this.data = data;
+		}
+
 		int messageId;
 		
-		/* The id of the message that this message is the response to, or null if not relevant. */
+		/* The id of the message that this message is the response to, 
+		 * or null if this message is not a response. */
 		Integer respnseTargetId; 
 		
 		String data;
@@ -61,31 +80,18 @@ class ReliableHost {
 	private final int TAG_FIELD_LENGHT = 20;
 	
 	
-	/* the powerSend method would busy wait on this field until its true (and then would re-set it to
+	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
 	 * false.
 	 */
 	private boolean messageRecivedIndicator = false;
 	
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
-	 * The sending action can't fail.
 	 * @throws MessengerException 
 	 */
 	void send(String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
-		
-		
-
-		
-		assert(!messageRecivedIndicator);
-		
-		while (!messageRecivedIndicator)
-		{
-			_messenger.send(targetAddress, data);
-			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
-		}
-		
-		messageRecivedIndicator = false;
+TODO
 	}
 	
 	/**
@@ -98,10 +104,40 @@ class ReliableHost {
 	String sendAndBlockUntilResponseArrives(
 			String  targetAddress, String data) throws MessengerException, InterruptedException
 	{
+		assert(BlockingQueue == null);
+		responseBQ = new LinkedBlockingQueue();
+		
 		send(targetAddress, data);
-		//TODO
+		Message response = responseBQ.take();
+		assert(responseBQ.isEmpty());
+		responseBQ = null;
+		
+		assert(response.respnseTargetId == )
+		return response.data;
 	}
 	
+	 	/**
+	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
+	 * @return the id of the new message sent.
+	 * @throws MessengerException 
+	 */
+	private int sendAndGetMessageId(String  targetAddress, String data) 
+			throws MessengerException, InterruptedException
+	{
+		assert(!messageRecivedIndicator);
+		
+		Message newMessage = new Message();
+		nextMessageIdToGive++;
+		
+		while (!messageRecivedIndicator)
+		{
+			_messenger.send(targetAddress, data);
+			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+		}
+		
+		messageRecivedIndicator = false;
+	}
+
 	
 	private void newMessageArrivedCallback(String data)
 	{
@@ -110,28 +146,11 @@ class ReliableHost {
 		{
 			assert(!messageRecivedIndicator);
 			messageRecivedIndicator = true;
-		} else
-		{
-			
-			_consumer.accept(data);
-		}
-	}
-	
-	private int getMessageTag(String message)
-	{
-		String tmp = message.substring(0, TAG_FIELD_LENGHT);
-		return Integer.parseInt(tmp);
+			return;
+		} 
 		
+		Message message = Utils.fromGsonStrToObject(data, Message.class);
+		_consumer.accept( message.data );
 	}
-	
-	private String getMessageWithoutTag(String message)
-	{
-		return message.substring(TAG_FIELD_LENGHT, message.length());
-	}
-	
-	private String getMessageWithTag(String messageWithoutTag, int tag)
-	{
-		tag.toString().
-		return 
-	}
+
 }

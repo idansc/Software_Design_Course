@@ -1,5 +1,6 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -37,6 +38,8 @@ public class Server {
 	 * Any message sent back to the client via @{link {@link #sendResponse(String, Object)} 
 	 * from the callback function is considered by the client as a response to the specific message 
 	 * that invoked the callback.
+	 * While the consumer's callback is running - the listen loop is frozen, so the code in the 
+	 * callback shouldn't wait for a new message to arrive. 
 	 * @param dataType The type of the object sent by the client in each message
 	 * (i.e., the type of the object passed to the consumer's callback function).
 	 * If the type is generic, for example, a list of Integers, you should pass as 'dataType' 
@@ -44,7 +47,7 @@ public class Server {
 	 * {@code new TypeToken<List<Integer>>(){}.getType())}
 	 * @throws InvalidMessage If the listen loop is already running. 
 	 */
-	public <T> void startListenLoop(BiConsumer<T,String> consumer, Class<T> dataType) {
+	public <T> void startListenLoop(BiConsumer<T,String> consumer, Type dataType) { //TODO
 		
 		//TODO
 	}
@@ -108,7 +111,7 @@ public class Server {
 	 * If false, we read the next object in the file.
 	 * @return The object read, or null if we've already read all objects.
 	 */
-	public <T> T readObjectsFromFile(String filename, Class<T> type, boolean startFromStart)
+	public <T> T readObjectsFromFile(String filename, Type type, boolean startFromStart) //TODO
 	{
 		return null;
 		//TODO
