@@ -43,6 +43,19 @@ public class Client {
 		 //TODO
 	}
 	
+	
+	/**
+	 * Just like {@link #startListenLoop(String, Consumer, Class)}, but now the consumer receives
+	 * a list of objects (of type 'dataType') instead of a single object.
+	 * @param dataType - non-generic types are not supported. 
+	 */
+	public <T> void startListenLoopReceivingList(
+			String serverAddress, Consumer<T> consumer, Class<T> dataType)
+	{
+		_serverAddress = serverAddress;
+		 //TODO
+	}
+	
 	/**
 	 * Stop the listen loop of the client (messages sent from server will no longer be consumed.
 	 * @throws InvalidOperation When the listen loop was not running when calling this method.

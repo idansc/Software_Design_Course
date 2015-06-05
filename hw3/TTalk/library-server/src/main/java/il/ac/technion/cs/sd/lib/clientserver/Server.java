@@ -42,7 +42,20 @@ public class Server {
 	 * (i.e., the type of the object passed to the consumer's callback function).
 	 * @throws InvalidMessage If the list loop is already running. 
 	 */
-	public <T> void start(BiConsumer<T,String> consumer, Class<T> dataType) {
+	public <T> void startListenLoop(BiConsumer<T,String> consumer, Class<T> dataType) {
+		
+		//TODO
+	}
+	
+	/**
+	 * Just like @{link {@link #startListenLoop(BiConsumer, Class)}, but now the consumer receives
+	 * a list of objects (of type 'dataType') instead of a single object.
+	 * @param dataType - non-generic types are not supported.  
+	 * @param consumer
+	 * @param dataType
+	 */
+	public <T> void startListenLoopReceivingList(
+			BiConsumer<List<T>,String> consumer, Class<T> dataType) {
 		
 		//TODO
 	}

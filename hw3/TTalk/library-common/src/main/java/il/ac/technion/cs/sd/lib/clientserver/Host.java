@@ -15,12 +15,13 @@ class Host {
 	/**
 	 * 
 	 * @param address The address of the new host.
+	 * @throws MessengerException 
 	 */
-	Host(String address)
+	Host(String address) throws MessengerException
 	{
-		_messenger = new MessengerFactory().start(address, () -> 
+		_messenger = new MessengerFactory().start(address, (String data) -> 
 		{
-			;
+			newMessageArrivedCallback(data);
 		});
 	}
 	
@@ -44,11 +45,17 @@ class Host {
 		
 		while (!messageRecivedIndicator)
 		{
-			messenger.send(targetAddress, data);
+			_messenger.send(targetAddress, data);
 			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
 		}
 		
 		messageRecivedIndicator = false;
 	}
+	
+	private void newMessageArrivedCallback(String data)
+	{
+		
+	}
+
 	
 }
