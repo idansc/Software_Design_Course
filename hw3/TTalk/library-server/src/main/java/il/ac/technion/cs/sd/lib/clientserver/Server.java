@@ -39,6 +39,9 @@ public class Server {
 	 * that invoked the callback.
 	 * @param dataType The type of the object sent by the client in each message
 	 * (i.e., the type of the object passed to the consumer's callback function).
+	 * If the type is generic, for example, a list of Integers, you should pass as 'dataType' 
+	 * something created with the following pattern:
+	 * {@code new TypeToken<List<Integer>>(){}.getType())}
 	 * @throws InvalidMessage If the listen loop is already running. 
 	 */
 	public <T> void startListenLoop(BiConsumer<T,String> consumer, Class<T> dataType) {
