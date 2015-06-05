@@ -9,7 +9,7 @@ public class Client {
 	
 	/**
 	 * 
-	 * @param address The address of the client.
+	 * @param address The address of the new client.
 	 */
 	public Client(String address)
 	{
