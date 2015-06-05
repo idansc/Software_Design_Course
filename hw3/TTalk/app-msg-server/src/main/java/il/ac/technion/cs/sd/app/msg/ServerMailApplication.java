@@ -3,8 +3,12 @@ package il.ac.technion.cs.sd.app.msg;
 import il.ac.technion.cs.sd.lib.clientserver.Server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import com.google.gson.reflect.TypeToken;
 
 
 /**
@@ -12,8 +16,11 @@ import java.util.Map;
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerMailApplication {
+	private static final String filename = "serverData";
 	Server _server;
-	private Map<String, List<MessageData>> offlineMessages = new HashMap<String, List<MessageData>>();
+	private Map<String, List<MessageData>> _offlineMessages = new HashMap<String, List<MessageData>>();
+	private final Set<String> _onlineClients = new HashSet<String>();
+	private Map<String, Set<String>> _clientFriends = new HashMap<String, Set<String>>();
 
     /**
      * Starts a new mail server. Servers with the same name retain all their information until
@@ -22,15 +29,15 @@ public class ServerMailApplication {
      * @param name The name of the server by which it is known.
      */
 
-	public ServerMailApplication(String string) {
-		_server = new Server(string);	
+	public ServerMailApplication(String name) {
+		_server = new Server(name);	
 	}
 	
 	/**
 	 * @return the server's address; this address will be used by clients connecting to the server
 	 */
 	public String getAddress() {
-		return _server
+		return _server.getAddress();
 	}
 	
 	/**
@@ -38,7 +45,25 @@ public class ServerMailApplication {
 	 * This should be a <b>non-blocking</b> call.
 	 */
 	public void start() {
-		throw new UnsupportedOperationException("Not implemented");
+		_offlineMessages = _server.readObjectFromFile(filename, 
+				new TypeToken<Map<String, List<MessageData>>>(){}.getType(), false);
+		_clientFriends = _server.readObjectFromFile(filename, new TypeToken<Map<String, Set<String>>>(){}.getType(), false);
+		_server.<MessageData>startListenLoop((messageData,from)->{
+			switch (messageData._serverTaskType) {
+			case LOGIN_TASK:{
+				_onlineClients.add(from);
+				_server.send(from, _offlineMessages.get(from));
+				break;
+			}
+			case SEND_MESSAGE_TASK:{
+				if(_onlineClients.contains(messageData._target))
+					_server.sendResponse(clientAddress, data);
+				break;
+			}
+			default:
+				break;
+			}
+		}, MessageData.class);
 	}
 	
 	/**

@@ -7,7 +7,7 @@ package il.ac.technion.cs.sd.app.msg;
  * @author idansc
  *
  */
-public enum TaskType {
+public enum ServerTaskType {
 	LOGIN_TASK,
 	LOGOUT_TASK,
 	SEND_MESSAGE_TASK,

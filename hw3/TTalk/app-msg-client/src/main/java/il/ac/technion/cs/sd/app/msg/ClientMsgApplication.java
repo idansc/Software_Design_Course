@@ -48,7 +48,7 @@ public class ClientMsgApplication {
 	public void login(Consumer<InstantMessage> messageConsumer,
 			Function<String, Boolean> friendshipRequestHandler,
 			BiConsumer<String, Boolean> friendshipReplyConsumer) {
-		List<MessageData> messages = _client.sendAndBlockUntilResponseArrives(new MessageData(TaskType.LOGIN_TASK)
+		List<MessageData> messages = _client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.LOGIN_TASK)
 		,	new TypeToken<List<MessageData>>(){}.getType());
 		messages.forEach(new MessageDataConsumer(_client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer));
@@ -61,7 +61,7 @@ public class ClientMsgApplication {
 	 * messages. A client can login (using {@link ClientMsgApplication#login(Consumer, Function, BiConsumer)} after logging out.
 	 */
 	public void logout() {
-		_client.send(new MessageData(TaskType.LOGOUT_TASK));
+		_client.send(new MessageData(ServerTaskType.LOGOUT_TASK));
 		_client.stopListenLoop();
 	}
 	
@@ -72,7 +72,7 @@ public class ClientMsgApplication {
 	 * @param what The message to send
 	 */
 	public void sendMessage(String target, String what) {
-		_client.send(new MessageData(TaskType.SEND_MESSAGE_TASK,new InstantMessage(_userName,target,what)));
+		_client.send(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage(_userName,target,what),target));
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class ClientMsgApplication {
 	 * @param who The recipient of the friend request.
 	 */
 	public void requestFriendship(String who) {
-		_client.send(new MessageData(TaskType.REQUEST_FRIENDSHIP_TASK,who));
+		_client.send(new MessageData(ServerTaskType.REQUEST_FRIENDSHIP_TASK,who));
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class ClientMsgApplication {
 	 *         user is a friend and is offline; an empty {@link Optional} if the user isn't a friend of the client
 	 */
 	public Optional<Boolean> isOnline(String who) {	
-		return _client.sendAndBlockUntilResponseArrives(new MessageData(TaskType.IS_ONLINE_TASK,who),
+		return _client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.IS_ONLINE_TASK,who),
 				new TypeToken<Optional<Boolean>>(){}.getType());
 	}
 	

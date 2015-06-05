@@ -10,7 +10,7 @@ package il.ac.technion.cs.sd.app.msg;
  */
 class MessageData{
 	ClientTaskType _clientTaskType;
-	TaskType _taskType;
+	ServerTaskType _serverTaskType;
 	
 	InstantMessage _message;
 	
@@ -30,19 +30,20 @@ class MessageData{
 	MessageData(ClientTaskType clientTaskType, InstantMessage message){
 		_clientTaskType = clientTaskType;
 		_message = message;
+		
+	}
+	MessageData(ServerTaskType taskType){
+		_serverTaskType = taskType;
 
 	}
-	MessageData(TaskType taskType){
-		_taskType = taskType;
-
-	}
-	MessageData(TaskType taskType,String target){
-		_taskType = taskType;
+	MessageData(ServerTaskType taskType,String target){
+		_serverTaskType = taskType;
 		_target = target;
 	}
-	MessageData(TaskType taskType, InstantMessage message){
-		_taskType = taskType;
+	MessageData(ServerTaskType taskType, InstantMessage message, String target){
+		_serverTaskType = taskType;
 		_message = message;
+		_target = target;
 	}
 
 }
