@@ -103,7 +103,7 @@ public class Server {
 	 * @param append If true 'data' is appended to the end of the file (if already exists).
 	 * If false, the previous content of the file (if already exists) is lost.   
 	 */
-	public <T> void saveObjectsToFile(String filename, T data, boolean append)
+	public <T> void saveObjectToFile(String filename, T data, boolean append)
 	{
 		//TODO
 	}
@@ -116,7 +116,7 @@ public class Server {
 	 * If false, we read the next object in the file.
 	 * @return The object read, or null if we've already read all objects.
 	 */
-	public <T> T readObjectsFromFile(String filename, Type type, boolean startFromStart) //TODO
+	public <T> T readObjectFromFile(String filename, Type type, boolean readFromStart) //TODO
 	{
 		return null;
 		//TODO
