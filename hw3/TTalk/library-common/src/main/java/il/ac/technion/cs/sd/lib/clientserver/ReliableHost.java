@@ -23,6 +23,10 @@ class ReliableHost {
 	private String _address;
 	private Messenger _messenger;
 	
+	public String getAddress() {
+		return _address;
+	}
+
 	private Consumer<String> _consumer;
 	
 	/* This is not null iff sendAndBlockUntilResponseArrives is currently waiting for a response. 
@@ -129,20 +133,38 @@ class ReliableHost {
 		} catch (MessengerException e) {
 			throw new RuntimeException("failed to kill messenger!");
 		}
+		
+		responseBQ = null;
+		responseRequestorId = null;
+		currentMessageConsumedId = null;
 	}
 	
 
 	
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
-	 * Must not wait on 'this' monitor.
 	 * @param respnseTargetId Should be null if 'data' is not a response.
 	 * @throws MessengerException 
 	 */
-	void send(String targetAddress, String data, Long respnseTargetId) 
+	void send(String targetAddress, String data) 
 			throws MessengerException, InterruptedException
 	{
-		send(targetAddress, data, respnseTargetId, null);
+		send(targetAddress, data, null, null);
+	}
+	
+	/**
+	 * Sends a 'data' response string to 'targetAddress', without a chance to fail.
+	 * @param respnseTargetId Should be null if 'data' is not a response.
+	 * @throws MessengerException 
+	 */
+	void sendResponse(String targetAddress, String data) 
+			throws MessengerException, InterruptedException
+	{
+		if (currentMessageConsumedId == null)
+		{
+			throw new InvalidOperation();
+		}
+		send(targetAddress, data, currentMessageConsumedId, null);
 	}
 	
 	
@@ -186,7 +208,6 @@ class ReliableHost {
 		
 		return response.data;
 	}
-
 
 	
 	/*

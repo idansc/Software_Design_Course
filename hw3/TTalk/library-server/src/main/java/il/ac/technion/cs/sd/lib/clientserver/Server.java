@@ -1,5 +1,9 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -7,6 +11,7 @@ import java.util.function.BiConsumer;
 //TODO: add documentation to the package.
 //TODO: compile to html javadoc.
 //TODO: consider giving in javadoc a tip on sending a type for generic types.
+//TODO: add to documentation each time there's a "Type" - the generic pattern.
 
 /**
  * Represents a server that can communicate (reliably) with multiple clients, and save/load 
@@ -19,6 +24,10 @@ import java.util.function.BiConsumer;
 public class Server {
 
 	private String _address;
+	
+	private InputStream persistentDataInputStream;
+	private OutputStream persistentDataOutputStream;
+	
 	
 	public String getAddress() {
 		return _address;
@@ -71,26 +80,14 @@ public class Server {
 	
 
 	/**
-	 * Sends a message to a client. The message is NOT a response to a previous message from the client.
+	 * Sends a message to a client.
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
-	 */
-	public <T> void send(String clientAddress, T data)
-	{
-		//TODO
-	}
-	
-	
-	
-	
-	/**
-	 * Sends a message to a client as a response to a message previously sent from it.
-	 * You must call this method only from the consumer of the listen loop (i.e., from the 
+	 * @param isResponse true iff 'data' is a response to a message previously sent by the client.
+	 * When true, you must call this method only from the consumer of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
-	 * @param clientAddress The address of the client.
-	 * @param data The data to be sent to the client.
 	 */
-	public <T> void sendResponse(String clientAddress, T data)
+	public <T> void send(String clientAddress, T data, boolean isResponse)
 	{
 		//TODO
 	}
@@ -105,7 +102,32 @@ public class Server {
 	 */
 	public <T> void saveObjectToFile(String filename, T data, boolean append)
 	{
-		//TODO
+		
+		OutputStream out = 
+				_persistentConfig.getPersistentMailOverwriteOutputStream();
+		
+		if (out == null)
+			return;
+		
+		JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+		Gson gson = new GsonBuilder().create();
+		writer.beginArray();
+		
+		Iterator<Mail> it = allMail.descendingIterator();
+		while (it.hasNext())
+		{
+			Mail mail = it.next(); 
+			DoublyLinkedList<Mail>.Node tmp = mail.newMailNode;
+			mail.newMailNode = null;
+			
+			gson.toJson(mail, Mail.class, writer);
+			
+			mail.newMailNode = tmp;
+		}	
+		writer.endArray();
+		writer.close();
+		
+		
 	}
 	 
 	/**
@@ -114,12 +136,65 @@ public class Server {
 	 * @param objects The objects to be saved to the file (order is preserved).
 	 * @param startFromStart If true, the reading starts from the beginning of the file.
 	 * If false, we read the next object in the file.
-	 * @return The object read, or null if we've already read all objects.
+	 * @return The object read, or empty if we've already read all objects, or the file doesn't exist.
 	 */
-	public <T> T readObjectFromFile(String filename, Type type, boolean readFromStart) //TODO
+	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStart) //TODO
 	{
-		return null;
-		//TODO
+		File file = getFileByNameAndCreateItsDirIfNecessary(filename);
+		if (!file.exists())
+		{
+			return Optional.empty();
+		}
+		
+		if (readFromStart)
+		{
+			if (persistentDataInputStream != null)
+			{
+				persistentDataInputStream.close();
+			}
+			persistentDataInputStream = new FileInputStream(file);
+		} else
+		{
+			if (persistentDataInputStream == null)
+			{
+				throw new InvalidOperation();
+			}
+		}
+		
+		try{
+			Utils.fromGsonStrToObject(gsonStr, type)	
+		} catch (RuntimeException e)
+		{
+			return Optional.empty();
+		}
+		
 	}
+	
 
+
+	
+	
+	/**
+	 * Returns a File object representing the file.
+	 * If the directory of the file does not exist - it is created (along with all necessary parents).
+	 * @param filename - the filename, without path.
+	 */
+	private File getFileByNameAndCreateItsDirIfNecessary(String filename)
+	{
+		File serverDir = new File(getPesistentDirOfAllServers(), getServerDirName());
+		serverDir.mkdirs();
+		return new File(serverDir, filename);
+		
+	}
+	
+	// returns the unique name (wihtout path) of the directory holding the persistent files of the server. 
+	private String getServerDirName()
+	{
+		return Integer.toString(getAddress().hashCode());
+	}
+	
+	private static File getPesistentDirOfAllServers()
+	{
+		return new File("./TMP___ServersData");
+	}
 }
