@@ -42,7 +42,8 @@ public class Server {
 	
 
 	/**
-	 * Sends a message to a client. The message is not considered a response to a specific 
+	 * Sends a message to a client. The message is not considered a response to a specific message
+	 * from the client.
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
 	 * Generic types of 'data' are not supported.
@@ -54,12 +55,10 @@ public class Server {
 	
 	
 	/**
-	 * Just like {@link #send(String, Object)} except that the message sent will be considered by
-	 * a response to a specific message sent by a client.
+	 * Just like {@link #send(String, Object)} except that the message sent will be considered a 
+	 * response to a specific message sent by a client.
 	 * You must call this method only from the consumer of the of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
-	 * @param clientAddress
-	 * @param data
 	 */
 	public <T> void sendResponse(String clientAddress, T data)
 	{
