@@ -20,6 +20,11 @@ public class Server {
 
 	private String _address;
 	
+	public String getAddress() {
+		return _address;
+	}
+
+
 	/*
 	 * @param address - the address of the new server.
 	 */

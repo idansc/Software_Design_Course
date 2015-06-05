@@ -11,13 +11,13 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-//TODO: decide if this should be public at all.
+//TODO: decide if this should be public.
 /**
  * Common utilities.
  */
-public class Utils {
+class Utils {
 	
-	private final String ENCODING = "UTF-8";
+	private final static String ENCODING = "UTF-8";
 	
 	
 	/**
