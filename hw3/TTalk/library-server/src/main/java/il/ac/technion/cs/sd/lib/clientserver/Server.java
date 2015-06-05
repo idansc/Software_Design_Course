@@ -46,6 +46,7 @@ public class Server {
 		
 		//TODO
 	}
+
 	
 	/**
 	 * Just like @{link {@link #startListenLoop(BiConsumer, Class)}, but now the consumer receives

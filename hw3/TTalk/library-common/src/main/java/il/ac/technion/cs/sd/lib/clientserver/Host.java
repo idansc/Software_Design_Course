@@ -1,5 +1,8 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
@@ -12,8 +15,11 @@ class Host {
 
 	private Messenger _messenger;
 	
+	private Optional<BiConsumer<Object,String>> consumerWithStr;
+	
+	
+	
 	/**
-	 * 
 	 * @param address The address of the new host.
 	 * @throws MessengerException 
 	 */
@@ -23,6 +29,21 @@ class Host {
 		{
 			newMessageArrivedCallback(data);
 		});
+		
+		Optional<BiConsumer<Object, String>> x = null;
+		
+		Object o = x;
+		
+		Optional<BiConsumer<Integer, String>> y, z;
+		
+		y = (Optional<BiConsumer<Integer, String>>) o;
+		
+		z = (Optional<BiConsumer<Integer, String>>) x;
+				
+				//TODO
+				
+		
+		//consumerWithStr = () 
 	}
 	
 	// max time for a successful delivery of a message (from sending until receiving) in milisec.
@@ -52,9 +73,20 @@ class Host {
 		messageRecivedIndicator = false;
 	}
 	
+	
 	private void newMessageArrivedCallback(String data)
 	{
+		/* 
+		 * Empty message from A to B is a signal for B: "I've recived the message you just sent me.
+		 */
 		
+		if (data.isEmpty())
+		{
+			messageRecivedIndicator = true;
+		} else
+		{
+			
+		}
 	}
 
 	
