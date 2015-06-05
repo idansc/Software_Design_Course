@@ -78,8 +78,5 @@ public class Client {
 		//TODO
 		return null;
 	}
-
 	
-	public class InvalidMessage extends RuntimeException {private static final long serialVersionUID = 1L;}
-	public class InvalidOperation extends RuntimeException {private static final long serialVersionUID = 2L;}
 }

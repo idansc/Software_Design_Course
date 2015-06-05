@@ -1,4 +1,5 @@
 package il.ac.technion.cs.sd.lib.clientserver;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -44,6 +45,10 @@ public class Server {
 		//TODO
 	}
 	
+	/**
+	 * Stop the listen loop (messages sent from clients will no longer be consumed.
+	 * @throws InvalidOperation When the listen loop was not running when calling this method.
+	 */
 	public void stop()
 	{
 		//TODO
@@ -52,27 +57,49 @@ public class Server {
 	
 
 	/**
-	 * Sends a message to a client. The message is not considered a response to a specific message
-	 * from the client.
+	 * Sends a message to a client. The message is NOT a response to a previous message from the client.
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
 	 * Generic types of 'data' are not supported.
 	 */
 	public <T> void send(String clientAddress, T data)
 	{
-		
+		//TODO
 	}
 	
 	
 	/**
-	 * Just like {@link #send(String, Object)} except that the message sent will be considered a 
-	 * response to a specific message sent by a client.
-	 * You must call this method only from the consumer of the of the listen loop (i.e., from the 
+	 * Just like {@link #send(String, Object)}, but sends a list of objects rather than a
+	 * single object.
+	 * The type of the elements in 'data' must be non-generic. 
+	 */
+	public <T> void send(String clientAddress, List<T> data)
+	{
+		//TODO
+	}
+	
+	
+	/**
+	 * Sends a message to a client as a response to a message previously sent from it.
+	 * You must call this method only from the consumer of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
+	 * @param clientAddress The address of the client.
+	 * @param data The data to be sent to the client.
+	 * Generic types of 'data' are not supported.
 	 */
 	public <T> void sendResponse(String clientAddress, T data)
 	{
-		
+		//TODO
+	}
+	
+	/**
+	 * Just like {@link #sendResponse(String, Object)}, but sends a list of objects rather than a
+	 * single object.
+	 * The type of the elements in 'data' must be non-generic. 
+	 */
+	public <T> void sendResponse(String clientAddress, List<T> data)
+	{
+		//TODO
 	}
 	
 	
@@ -101,6 +128,4 @@ public class Server {
 		//TODO
 	}
 
-	
-	public class InvalidMessage extends RuntimeException {private static final long serialVersionUID = 1L;}
 }
