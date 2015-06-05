@@ -7,8 +7,11 @@ import il.ac.technion.cs.sd.msg.Messenger;
  */
 class GeneralCommunication {
 
-	// 
-	void powerSend(Messenger m)
+	/**
+	 * 
+	 * @param TODO
+	 */
+	void powerSend(Messenger messenger)
 	{
 		
 	}
