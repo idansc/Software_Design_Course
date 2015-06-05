@@ -1,17 +1,16 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 //TODO: add documentation to the package.
 //TODO: compile to html javadoc.
-//TODO: consider documenting the fact that any type not suited for GSON - is not supported (not only
-		// generic types (also types with generic fields.
+//TODO: consider giving in javadoc a tip on sending a type for generic types.
+
 /**
  * Represents a server that can communicate (reliably) with multiple clients, and save/load 
  * persistent data.
- * The messages sent and received consist of objects of any (non-generic) type.
+ * The messages sent and received consist of objects of any type.
  * 
  * This class is not thread-safe (meaning you must not access an object of this class from multiple 
  * threads simultaneously). 
@@ -40,7 +39,7 @@ public class Server {
 	 * that invoked the callback.
 	 * @param dataType The type of the object sent by the client in each message
 	 * (i.e., the type of the object passed to the consumer's callback function).
-	 * @throws InvalidMessage If the list loop is already running. 
+	 * @throws InvalidMessage If the listen loop is already running. 
 	 */
 	public <T> void startListenLoop(BiConsumer<T,String> consumer, Class<T> dataType) {
 		
@@ -64,7 +63,6 @@ public class Server {
 	 * Sends a message to a client. The message is NOT a response to a previous message from the client.
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
-	 * Generic types of 'data' are not supported.
 	 */
 	public <T> void send(String clientAddress, T data)
 	{
@@ -72,15 +70,6 @@ public class Server {
 	}
 	
 	
-	/**
-	 * Just like {@link #send(String, Object)}, but sends a list of objects rather than a
-	 * single object.
-	 * The type of the elements in 'data' must be non-generic. 
-	 */
-	public <T> void send(String clientAddress, List<T> data)
-	{
-		//TODO
-	}
 	
 	
 	/**
@@ -89,19 +78,8 @@ public class Server {
 	 * callback function invoked by the message to which the response is for).
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
-	 * Generic types of 'data' are not supported.
 	 */
 	public <T> void sendResponse(String clientAddress, T data)
-	{
-		//TODO
-	}
-	
-	/**
-	 * Just like {@link #sendResponse(String, Object)}, but sends a list of objects rather than a
-	 * single object.
-	 * The type of the elements in 'data' must be non-generic. 
-	 */
-	public <T> void sendResponse(String clientAddress, List<T> data)
 	{
 		//TODO
 	}
@@ -109,12 +87,12 @@ public class Server {
 	
 	/**
 	 * Saves a list of objects to persistent memory (file).
-	 * @param filename The filename of the file to save, without path.
-	 * If the file already exists, the previous content is lost.
-	 * @param objects The objects to be saved to the file (order is preserved).
-	 * Generic object types are not supported.
+	 * @param filename The filename, without path, of the file to save 'data' into.
+	 * @param data The object to be saved to the file.
+	 * @param append If true 'data' is appended to the end of the file (if already exists).
+	 * If false, the previous content of the file (if already exists) is lost.   
 	 */
-	public <T> void saveObjectsToFile(String filename, List<T> objects)
+	public <T> void saveObjectsToFile(String filename, T data, boolean append)
 	{
 		//TODO
 	}
@@ -123,10 +101,11 @@ public class Server {
 	 * Reads a list of objects from persistent memory (file).
 	 * @param filename The filename of the file to read, without path.
 	 * @param objects The objects to be saved to the file (order is preserved).
-	 * Generic object types are not supported.
-	 * @return List of read objects (order preserved), or empty value if no file with that name exists.
+	 * @param startFromStart If true, the reading starts from the beginning of the file.
+	 * If false, we read the next object in the file.
+	 * @return The object read, or null if we've already read all objects.
 	 */
-	public <T> Optional<List<T>> readObjectsFromFile(String filename, Class<T> type)
+	public <T> T readObjectsFromFile(String filename, Class<T> type, boolean startFromStart)
 	{
 		return null;
 		//TODO

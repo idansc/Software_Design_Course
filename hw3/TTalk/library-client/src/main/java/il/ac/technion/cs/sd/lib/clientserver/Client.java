@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 /**
  * Represents a client that can communicate (reliably) with a single server.
- * The messages sent and received consist of objects of any (non-generic) type.
+ * The messages sent and received consist of objects of any type.
  * 
  * This class is not thread-safe (meaning you must not access an object of this class from multiple 
  * threads simultaneously). 
@@ -32,7 +32,6 @@ public class Client {
 	 * @param consumer The consumer who's callback will be invoked for each message received from the server. 
 	 * @param dataType The type of the object the server sends the client in each message as data.
 	 * (i.e. the type of the parameter the consumer's callback function receives).
-	 * Generic types are not supported.
 	 * @throws InvalidMessage Invalid message received from the server 
 	 * For example: the object sent as message data was not of type 'type'.
 	 * @throws InvalidOperation When the listen loop is already running when calling this method.
@@ -61,14 +60,12 @@ public class Client {
 		//TODO
 	}
 	
-
 	
 	/**
 	 * Sends a message to the server, and blocks until a response message is received.
 	 * @param data The object to be sent to the server (as message data).
 	 * @param responseType The type of the object the server sends back as data.
 	 * (i.e. the type of the returned value).
-	 * Generic types are not supported.
 	 * @return The response message data. 
 	 * The response message is guaranteed to be the response to the message sent by this method
 	 * (and not some other unrelated message the server sent the client).
@@ -81,17 +78,5 @@ public class Client {
 	}
 	
 	
-	/**
-	 * Just like {@link #sendAndBlockUntilResponseArrives(Object, Class)} but the returned response
-	 * is a list of objects instead of a single object.
-	 * @param data
-	 * @param responseType
-	 * @return
-	 */
-	public <T, S> List<S> sendAndBlockUntilResponseListArrives(T data, Class<S> responseType)
-	{
-		//TODO
-		return null;
-	}
 	
 }
