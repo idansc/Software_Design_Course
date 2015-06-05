@@ -9,7 +9,8 @@ import java.util.function.BiConsumer;
 //TODO: consider documenting the fact that any type not suited for GSON - is not supported (not only
 		// generic types (also types with generic fields.
 /**
- * Represents a server that can communicate with multiple clients.
+ * Represents a server that can communicate (reliably) with multiple clients, and save/load 
+ * persistent data.
  * The messages sent and received consist of objects of any (non-generic) type.
  * 
  * This class is not thread-safe (meaning you must not access an object of this class from multiple 

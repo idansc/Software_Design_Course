@@ -3,7 +3,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import java.util.function.Consumer;
 
 /**
- * Represents a client that can communicate with a single server.
+ * Represents a client that can communicate (reliably) with a single server.
  * The messages sent and received consist of objects of any (non-generic) type.
  * 
  * This class is not thread-safe (meaning you must not access an object of this class from multiple 
