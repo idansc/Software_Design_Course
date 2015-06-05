@@ -2,6 +2,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -41,6 +42,27 @@ class Utils {
 		
 		return gson.fromJson(reader, type);
 	}
+	
+	
+	/**
+	 * Reads from a UTF-8 GSON stream and deserializes into an object.
+	 * @return the deserialized object.
+	 * @throws RuntimeException on reading failure.
+	 */
+	public static <T> T fromGsonStreamToObject(InputStream gsonStream, Class<T> type)
+	{		
+		Gson gson = new GsonBuilder().create();
+		
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new InputStreamReader(gsonStream, ENCODING));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("bad encoding");
+		}
+		
+		return gson.fromJson(reader, type);
+	}
+	
 	
 	/**
 	 * Serializes an object into a UTF-8 GSON string.

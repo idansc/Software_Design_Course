@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
@@ -23,6 +24,10 @@ import java.util.function.BiConsumer;
 public class Server {
 
 	private String _address;
+	
+	private InputStream persistentDataInputStream;
+	private OutputStream persistentDataOutputStream;
+	
 	
 	public String getAddress() {
 		return _address;
@@ -75,26 +80,14 @@ public class Server {
 	
 
 	/**
-	 * Sends a message to a client. The message is NOT a response to a previous message from the client.
+	 * Sends a message to a client.
 	 * @param clientAddress The address of the client.
 	 * @param data The data to be sent to the client.
-	 */
-	public <T> void send(String clientAddress, T data)
-	{
-		//TODO
-	}
-	
-	
-	
-	
-	/**
-	 * Sends a message to a client as a response to a message previously sent from it.
-	 * You must call this method only from the consumer of the listen loop (i.e., from the 
+	 * @param isResponse true iff 'data' is a response to a message previously sent by the client.
+	 * When true, you must call this method only from the consumer of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
-	 * @param clientAddress The address of the client.
-	 * @param data The data to be sent to the client.
 	 */
-	public <T> void sendResponse(String clientAddress, T data)
+	public <T> void send(String clientAddress, T data, boolean isResponse)
 	{
 		//TODO
 	}
@@ -147,33 +140,38 @@ public class Server {
 	 */
 	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStart) //TODO
 	{
-		return null;
-		//TODO
+		File file = getFileByNameAndCreateItsDirIfNecessary(filename);
+		if (!file.exists())
+		{
+			return Optional.empty();
+		}
+		
+		if (readFromStart)
+		{
+			if (persistentDataInputStream != null)
+			{
+				persistentDataInputStream.close();
+			}
+			persistentDataInputStream = new FileInputStream(file);
+		} else
+		{
+			if (persistentDataInputStream == null)
+			{
+				throw new InvalidOperation();
+			}
+		}
+		
+		try{
+			Utils.fromGsonStrToObject(gsonStr, type)	
+		} catch (RuntimeException e)
+		{
+			return Optional.empty();
+		}
+		
 	}
 	
 
-	
-	
-	/* Returns a stream from which persistent data should be read */
-	private Stream getPersistentInputStream() throws FileNotFoundException, IOException
-	{
-		File file = getServerPesistentFilename();
-		if (!file.exists())
-		{
-			clearAndInitPersistentDataFile();
-		}
-		assert(file.exists());
-		return new FileInputStream(file);
-	}
-	
-	
-	/* Returns a stream to which persistent data should be written.
-	 * Anything written with the returned stream overwrites existing persistent 
-	 * data that was written with an older stream. */
-	private OutputStream getPersistentOverwriteOutputStream() throws FileNotFoundException
-	{
-		
-	}
+
 	
 	
 	/**
