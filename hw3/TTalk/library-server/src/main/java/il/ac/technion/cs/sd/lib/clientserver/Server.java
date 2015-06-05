@@ -3,6 +3,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+//TODO: add documentation to the package.
+//TODO: compile to html javadoc.
+
+/**
+ * Represents a server that can communicate with multiple clients.
+ * The messages sent and received consist of objects of any (non-generic) type.
+ * 
+ * This class is not thread-safe (meaning you must not access an object of this class from multiple 
+ * threads simultaneously). 
+ */
 public class Server {
 
 	private String _address;
