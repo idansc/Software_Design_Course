@@ -48,19 +48,7 @@ public class Server {
 	}
 
 	
-	/**
-	 * Just like @{link {@link #startListenLoop(BiConsumer, Class)}, but now the consumer receives
-	 * a list of objects (of type 'dataType') instead of a single object.
-	 * @param dataType - non-generic types are not supported.  
-	 * @param consumer
-	 * @param dataType
-	 */
-	public <T> void startListenLoopReceivingList(
-			BiConsumer<List<T>,String> consumer, Class<T> dataType) {
-		
-		//TODO
-	}
-	
+
 	/**
 	 * Stop the listen loop (messages sent from clients will no longer be consumed.
 	 * @throws InvalidOperation When the listen loop was not running when calling this method.
