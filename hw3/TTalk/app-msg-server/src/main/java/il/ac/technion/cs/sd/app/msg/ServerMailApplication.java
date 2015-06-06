@@ -76,7 +76,10 @@ public class ServerMailApplication {
 			switch (messageData._serverTaskType) {
 			case LOGIN_TASK:{
 				_onlineClients.add(from);
-				_server.send(from, _offlineMessages.get(from),true);
+
+				_server.send(from,
+						_offlineMessages.containsKey(from)? Optional.of(_offlineMessages.get(from)) : Optional.empty()
+								,true);
 				break;
 			}
 			case CLIENT_REPLY_FRIEND_REQUEST_TASK:

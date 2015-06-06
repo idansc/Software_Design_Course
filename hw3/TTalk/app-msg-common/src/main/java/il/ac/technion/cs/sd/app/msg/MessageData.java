@@ -18,7 +18,7 @@ class MessageData{
 	String _target;
 	Boolean _friendRequestAnswer;
 	
-
+	MessageData(){}
 	MessageData(ServerTaskType taskType){
 		_serverTaskType = taskType;
 		

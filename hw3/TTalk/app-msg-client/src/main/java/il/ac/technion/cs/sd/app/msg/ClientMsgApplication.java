@@ -17,7 +17,7 @@ import com.google.gson.reflect.TypeToken;
 public class ClientMsgApplication {
 	
 	private String _userName;
-	private Client _client;
+	private Client client;
 	private String _serverAddress;
 
 	
@@ -30,10 +30,14 @@ public class ClientMsgApplication {
 	public ClientMsgApplication(String serverAddress, String username) {
 		_userName = username;
 		_serverAddress = serverAddress;
-		_client = new Client(_userName);
+		client = new Client(_userName);
 		
 	}
 	
+	void setClient(Client client) {
+		this.client = client;
+	}
+
 	/**
 	 * Logs the client to the server. Any incoming messages from the server will be routed to the provided consumer. If
 	 * the client missed any messages while he was offline, all of these will be first routed to client in the order
@@ -49,14 +53,14 @@ public class ClientMsgApplication {
 			Function<String, Boolean> friendshipRequestHandler,
 			BiConsumer<String, Boolean> friendshipReplyConsumer) {
 		
-		_client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(_client, messageConsumer, 
+		client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer),MessageData.class);
 		
-		List<MessageData> messages = _client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.LOGIN_TASK)
-		,	new TypeToken<List<MessageData>>(){}.getType());
+		Optional<List<MessageData>> messages = client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.LOGIN_TASK)
+												,new TypeToken<Optional<List<MessageData>>>(){}.getType());
 		
-		messages.forEach(new MessageDataConsumer(_client, messageConsumer, 
-				friendshipRequestHandler, friendshipReplyConsumer));
+		messages.ifPresent(list->list.forEach(new MessageDataConsumer(client, messageConsumer, 
+				friendshipRequestHandler, friendshipReplyConsumer)));
 	}
 	
 	/**
@@ -64,8 +68,8 @@ public class ClientMsgApplication {
 	 * messages. A client can login (using {@link ClientMsgApplication#login(Consumer, Function, BiConsumer)} after logging out.
 	 */
 	public void logout() {
-		_client.send(new MessageData(ServerTaskType.LOGOUT_TASK));
-		_client.stopListenLoop();
+		client.send(new MessageData(ServerTaskType.LOGOUT_TASK));
+		client.stopListenLoop();
 	}
 	
 	/**
@@ -75,7 +79,7 @@ public class ClientMsgApplication {
 	 * @param what The message to send
 	 */
 	public void sendMessage(String target, String what) {
-		_client.send(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage(_userName,target,what),target));
+		client.send(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage(_userName,target,what),target));
 	}
 	
 	/**
@@ -87,7 +91,7 @@ public class ClientMsgApplication {
 	 * @param who The recipient of the friend request.
 	 */
 	public void requestFriendship(String who) {
-		_client.send(new MessageData(ServerTaskType.REQUEST_FRIENDSHIP_TASK,who));
+		client.send(new MessageData(ServerTaskType.REQUEST_FRIENDSHIP_TASK,who));
 	}
 	
 	/**
@@ -98,7 +102,7 @@ public class ClientMsgApplication {
 	 *         user is a friend and is offline; an empty {@link Optional} if the user isn't a friend of the client
 	 */
 	public Optional<Boolean> isOnline(String who) {	
-		return _client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.IS_ONLINE_TASK,who),
+		return client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.IS_ONLINE_TASK,who),
 				new TypeToken<Optional<Boolean>>(){}.getType());
 	}
 	
