@@ -48,10 +48,13 @@ public class ClientMsgApplication {
 	public void login(Consumer<InstantMessage> messageConsumer,
 			Function<String, Boolean> friendshipRequestHandler,
 			BiConsumer<String, Boolean> friendshipReplyConsumer) {
+		
 		_client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(_client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer),MessageData.class);
+		
 		List<MessageData> messages = _client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.LOGIN_TASK)
 		,	new TypeToken<List<MessageData>>(){}.getType());
+		
 		messages.forEach(new MessageDataConsumer(_client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer));
 	}
