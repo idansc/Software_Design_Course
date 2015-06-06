@@ -1,7 +1,11 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import il.ac.technion.cs.sd.msg.MessengerException;
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
+
+import org.omg.CORBA._PolicyStub;
 
 /**
  * Represents a client that can communicate (reliably) with a single server.
@@ -12,8 +16,8 @@ import java.util.function.Consumer;
  */
 public class Client {
 
-	private String _address;
 	private String _serverAddress;
+	private ReliableHost _reliableHost;
 	
 	/**
 	 * 
@@ -21,7 +25,19 @@ public class Client {
 	 */
 	public Client(String address)
 	{
-		_address = address;
+		try {
+			_reliableHost = new ReliableHost(address);
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
+	}
+	
+	/**
+	 * returns the address of this client.
+	 */
+	public String getAddress()
+	{
+		return _reliableHost.getAddress();
 	}
 	
 	
@@ -43,9 +59,16 @@ public class Client {
 	 */
 	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Type dataType) //TODO
 	{
+		try {
+			_reliableHost.start(str -> {
+				consumer.accept(Utils.fromGsonStrToObject(str, dataType));
+			});
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
 		_serverAddress = serverAddress;
-		 //TODO
 	}
+	
 	
 	/**
 	 * Stop the listen loop of the client (messages sent from server will no longer be consumed.
@@ -53,7 +76,7 @@ public class Client {
 	 */
 	public void stopListenLoop()
 	{
-		//TODO
+		_reliableHost.stop();
 	}
 
 	/**
@@ -62,7 +85,11 @@ public class Client {
 	 * Parametric types of data are not supported.
 	 */
 	public <T> void send(T data) {
-		//TODO
+		try {
+			_reliableHost.send(_serverAddress, Utils.fromObjectToGsonStr(data));
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		} 
 	}
 	
 	
@@ -78,8 +105,15 @@ public class Client {
 	 */
 	public <T, S> S sendAndBlockUntilResponseArrives(T data, Type responseType) //TODO
 	{
-		//TODO
-		return null;
+		try {
+			String str = _reliableHost.sendAndBlockUntilResponseArrives(
+					_serverAddress, Utils.fromObjectToGsonStr(data));
+			
+			return Utils.fromGsonStrToObject(str, responseType);
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
+		
 	}
 	
 	

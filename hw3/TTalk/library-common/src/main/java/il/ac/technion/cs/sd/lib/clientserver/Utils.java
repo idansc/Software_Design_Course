@@ -3,7 +3,6 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +28,7 @@ class Utils {
 	 * @param type The type of the object represented by the string.
 	 * @return the deserialized object.
 	 */
-	public static <T> T fromGsonStrToObject(String gsonStr, Class<T> type)
+	public static <T> T fromGsonStrToObject(String gsonStr, Type type)
 	{
 		ByteArrayInputStream is = new ByteArrayInputStream(gsonStr.getBytes());
 		

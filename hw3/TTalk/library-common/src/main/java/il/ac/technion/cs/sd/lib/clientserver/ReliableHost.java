@@ -147,7 +147,7 @@ class ReliableHost {
 	 * @throws MessengerException 
 	 */
 	void send(String targetAddress, String data) 
-			throws MessengerException, InterruptedException
+			throws MessengerException
 	{
 		send(targetAddress, data, null, null);
 	}
@@ -176,7 +176,7 @@ class ReliableHost {
 	 * @throws InterruptedException
 	 */
 	String sendAndBlockUntilResponseArrives(
-			String  targetAddress, String data) throws MessengerException, InterruptedException
+			String  targetAddress, String data) throws MessengerException
 	{
 		if (!currentlyListening)
 		{
@@ -198,7 +198,12 @@ class ReliableHost {
 		send(targetAddress, data, null, responseRequestorId);
 		
 		
-		InnerMessage response = responseBQ.take();
+		InnerMessage response;
+		try {
+			response = responseBQ.take();
+		} catch (InterruptedException e) {
+			throw new RuntimeException("InterruptedException");
+		}
 		
 		assert(responseBQ.isEmpty());
 		responseBQ = null;
@@ -252,7 +257,7 @@ class ReliableHost {
 	 * @throws MessengerException 
 	 */
 	private void send(String  targetAddress, String data, Long respnseTargetId, Long newMessageId) 
-			throws MessengerException, InterruptedException
+			throws MessengerException
 	{
 		if (!currentlyListening)
 		{
@@ -279,8 +284,12 @@ class ReliableHost {
 			 */
 			while (!messageRecivedIndicator)
 			{
-				_messenger.send(targetAddress, data);
-				Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+				_messenger.send(targetAddress, Utils.fromObjectToGsonStr(newMessage));
+				try {
+					Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
+				} catch (InterruptedException e) {
+					throw new RuntimeException("InterruptedException");
+				}
 			}
 		}
 		
