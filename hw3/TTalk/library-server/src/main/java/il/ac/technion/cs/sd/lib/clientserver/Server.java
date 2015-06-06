@@ -3,12 +3,19 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 //TODO: add documentation to the package.
 //TODO: compile to html javadoc.
@@ -27,8 +34,8 @@ public class Server {
 
 	private String _address;
 	
-	private InputStream persistentDataInputStream;
-	private OutputStream persistentDataOutputStream;
+	private JsonReader persistentDataReader;
+	private JsonWriter persistentDataWritter;
 	
 	
 	public String getAddress() {
@@ -126,7 +133,6 @@ public class Server {
 			
 			mail.newMailNode = tmp;
 		}	
-		writer.endArray();
 		writer.close();
 	}
 	 
@@ -148,15 +154,13 @@ public class Server {
 		
 		if (readFromStart)
 		{
-			if (persistentDataInputStream != null)
+			if (persistentDataReader != null)
 			{
-				try {
-					persistentDataInputStream.close();
-				} catch (IOException e) {
-					throw new RuntimeException("Failed to close stream!");
-				}
+				persistentDataReader.close();
 			}
 			try {
+				persistentDataReader = new JsonReader(new FileInputStream(file));
+				
 				persistentDataInputStream = new FileInputStream(file);
 			} catch (FileNotFoundException e) {
 				assert(false);
@@ -165,7 +169,11 @@ public class Server {
 		{
 			if (persistentDataInputStream == null)
 			{
-				throw new InvalidOperation();
+				try {
+					persistentDataInputStream = new FileInputStream(file);
+				} catch (FileNotFoundException e) {
+					assert(false);
+				}
 			}
 		}
 		
@@ -178,6 +186,37 @@ public class Server {
 	}
 	
 
+	
+
+	/**
+	 * Precondition: the directory f is in must already exist (f itself might not exist).
+	 */
+	private JsonWriter createJsonWriter(File f)
+	{
+		try (OutputStream stream = new FileOutputStream(f)){
+			return new JsonWriter(new OutputStreamWriter(stream, Utils.ENCODING));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("UnsupportedEncodingException");
+		} catch (IOException e1) {
+			throw new RuntimeException("Failed to close stream!");
+		} 
+	}
+	
+	
+	/**
+	 * Precondition: f is an existing file.
+	 */
+	private JsonReader createJsonReader(File f) throws FileNotFoundException
+	{
+		assert(f.exists());
+		try (InputStream stream = new FileInputStream(f)){
+			return new JsonReader(new InputStreamReader(stream, Utils.ENCODING));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("UnsupportedEncodingException");
+		} catch (IOException e1) {
+			throw new RuntimeException("Failed to close stream!");
+		}
+	}
 
 	/**
 	 * Returns a File object representing the file.

@@ -20,7 +20,7 @@ import com.google.gson.stream.JsonWriter;
  */
 class Utils {
 	
-	private final static String ENCODING = "UTF-8";
+	final static String ENCODING = "UTF-8";
 	
 	
 	/**
@@ -53,7 +53,13 @@ class Utils {
 			throw new RuntimeException("bad encoding");
 		}
 		
-		return gson.fromJson(reader, type);
+		T $ = gson.fromJson(reader, type);;
+		try {
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Fialed to close reader!");
+		}
+		return $;
 	}
 	
 	
