@@ -49,22 +49,20 @@ public class ClientMsgApplicationTest {
 		assertEquals("Friend", messages.take().getContent());
 	}
 	
-//	@Test
-//	public void loginShouldHandleOfflineMessage() throws InterruptedException {
-//		final BlockingQueue<InstantMessage>	messages = new LinkedBlockingQueue<>();
-//		List<MessageData> messageData = new LinkedList<MessageData>();
-//		messageData.add(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage("Idan", "Ofer", "Hi")));
-//		messageData.add(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage("Idan", "Ofer", "There")));
-//		messageData.add(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage("Idan", "Ofer", "My")));
-//		messageData.add(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage("Idan", "Ofer", "Friend")));
-//		Mockito.when(mockClient.sendAndBlockUntilResponseArrives(Mockito.any(), Mockito.any())).thenReturn(Optional.of(messageData));
-//		
-//		idan.login(x->messages.add(x), x -> true, (x, y) -> {});
-//		
-//		assertEquals("Hi", messages.take().getContent());
-//		assertEquals("There", messages.take().getContent());		
-//		assertEquals("My", messages.take().getContent());
-//		assertEquals("Friend", messages.take().getContent());
-//	}
+	@Test
+	public void loginShouldHandleOfflineFriendRequest() throws InterruptedException {
+		final BlockingQueue<String> friendshipRequest	= new LinkedBlockingQueue<>();
+		List<MessageData> messageData = new LinkedList<MessageData>();
+		messageData.add(new MessageData(ServerTaskType.SEND_MESSAGE_TASK,new InstantMessage("Idan", "Ofer", "Hi")));
+		MessageData friendRequestSend = new MessageData(ServerTaskType.REQUEST_FRIENDSHIP_TASK,"Idan");
+		friendRequestSend._from="Ofer";
+		messageData.add(friendRequestSend);
+		Mockito.when(mockClient.sendAndBlockUntilResponseArrives(Mockito.any(), Mockito.any())).thenReturn(Optional.of(messageData));
+		
+		idan.login(x->{}, x ->{if(x=="Ofer") friendshipRequest.add("Ofer"); return true;}, (x, y) -> {});
+		
+		assertEquals("Ofer", friendshipRequest.take());
+	}
+	
 
 }

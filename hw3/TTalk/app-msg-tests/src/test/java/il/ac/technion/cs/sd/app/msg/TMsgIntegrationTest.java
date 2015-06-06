@@ -60,17 +60,17 @@ public class TMsgIntegrationTest {
 		assertEquals("Okay I get it :( nevermind", messages.take().getContent());
 	}
 	
-//	@Test(timeout=3000)
-//	public void loginShouldGetOfflineFriendRequest() throws InterruptedException {
-//		final BlockingQueue<String> friendshipRequest	= new LinkedBlockingQueue<>();
-//		ClientMsgApplication idan = buildClient("Idan");
-//		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
-//		idan.sendMessage("Ofer", "Hi wanna be my friend?");
-//		idan.requestFriendship("Ofer");
-//		ClientMsgApplication ofer = buildClient("Ofer");
-//		ofer.login(x->{}, x -> friendshipRequest.add(x), (x, y) -> {});
-//		assertEquals("Idan", friendshipRequest.take());
-//	}
+	@Test(timeout=3000)
+	public void loginShouldGetOfflineFriendRequest() throws InterruptedException {
+		final BlockingQueue<String> friendshipRequest	= new LinkedBlockingQueue<>();
+		ClientMsgApplication idan = buildClient("Idan");
+		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
+		idan.sendMessage("Ofer", "Hi wanna be my friend?");
+		idan.requestFriendship("Ofer");
+		ClientMsgApplication ofer = buildClient("Ofer");
+		ofer.login(x->{}, x -> friendshipRequest.add(x), (x, y) -> {});
+		assertEquals("Idan", friendshipRequest.take());
+	}
 //	
 //	@Test(timeout=3000)
 //	public void loginShouldGetOfflineFriendReplay() throws InterruptedException{

@@ -21,7 +21,7 @@ public class ServerMailApplication {
 	private static final String offlineMessagesFileName = "offlineMessages";
 	private static final String onlineClientsFileName = "onlineClients";
 	private static final String clientFriendsFileName = "clientFriends";
-	Server _server;
+	Server server;
 	private Map<String, List<MessageData>> _offlineMessages = new HashMap<String, List<MessageData>>();
 	private Set<String> _onlineClients = new HashSet<String>();
 	private Map<String, List<String>> _clientFriends = new HashMap<String, List<String>>();
@@ -34,30 +34,34 @@ public class ServerMailApplication {
      */
 
 	public ServerMailApplication(String name) {
-		_server = new Server(name);	
+		server = new Server(name);	
 	}
 	
+	void setServer(Server server) {
+		this.server = server;
+	}
+
 	/**
 	 * @return the server's address; this address will be used by clients connecting to the server
 	 */
 	public String getAddress() {
-		return _server.getAddress();
+		return server.getAddress();
 	}
 	
 	private void initializeDataFromFile(){
-		_server.<Map<String, List<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
+		server.<Map<String, List<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
 				new TypeToken<Map<String, List<MessageData>>>(){}.getType())
 				.ifPresent((data)->_offlineMessages = data);
-		_server.<Map<String, List<String>>>readObjectFromFile(onlineClientsFileName, new TypeToken<Map<String, Set<String>>>(){}.getType())
+		server.<Map<String, List<String>>>readObjectFromFile(onlineClientsFileName, new TypeToken<Map<String, Set<String>>>(){}.getType())
 				.ifPresent(data->_clientFriends = data);
-		_server.<Set<String>>readObjectFromFile(clientFriendsFileName,new TypeToken<Set<String>>(){}.getType())
+		server.<Set<String>>readObjectFromFile(clientFriendsFileName,new TypeToken<Set<String>>(){}.getType())
 				.ifPresent(data->_onlineClients = data);
 	}
 	
 	private void handleReplyMessageData(String from, MessageData messageData){
 		messageData._from = from;
 		if(_onlineClients.contains(messageData._target))
-			_server.send(messageData._target, messageData, false);
+			server.send(messageData._target, messageData, false);
 		else if(!_offlineMessages.containsKey(messageData._target))
 			_offlineMessages.put(messageData._target,Arrays.asList(messageData));
 		else
@@ -72,12 +76,12 @@ public class ServerMailApplication {
 
 		initializeDataFromFile();
 		
-		_server.<MessageData>startListenLoop((messageData,from)->{
+		server.<MessageData>startListenLoop((messageData,from)->{
 			switch (messageData._serverTaskType) {
 			case LOGIN_TASK:{
 				_onlineClients.add(from);
 
-				_server.send(from,
+				server.send(from,
 						_offlineMessages.containsKey(from)? Optional.of(_offlineMessages.get(from)) : Optional.empty()
 								,true);
 				break;
@@ -100,8 +104,8 @@ public class ServerMailApplication {
 			case IS_ONLINE_TASK:
 				if(_clientFriends.containsKey(from))
 					if(_clientFriends.get(from).contains(messageData._target))
-						_server.send(from, Optional.of(_onlineClients.contains(messageData._target)), true);
-				_server.send(from, Optional.empty(), true);
+						server.send(from, Optional.of(_onlineClients.contains(messageData._target)), true);
+				server.send(from, Optional.empty(), true);
 				break;
 			case LOGOUT_TASK:
 				_onlineClients.remove(from);
@@ -116,10 +120,10 @@ public class ServerMailApplication {
 	 * Stops the server. A stopped server can't accept messages, but doesn't delete any data (messages that weren't received).
 	 */
 	public void stop() {
-		_server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
-		_server.saveObjectToFile(onlineClientsFileName, _clientFriends);
-		_server.saveObjectToFile(clientFriendsFileName, _onlineClients);
-		_server.stop();
+		server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
+		server.saveObjectToFile(onlineClientsFileName, _clientFriends);
+		server.saveObjectToFile(clientFriendsFileName, _onlineClients);
+		server.stop();
 	}
 	
 	/**
@@ -127,6 +131,6 @@ public class ServerMailApplication {
 	 * run on a new, clean server. you may assume the server is stopped before this method is called.
 	 */
 	public void clean() {
-		_server.clearPersistentData();
+		server.clearPersistentData();
 	}
 }
