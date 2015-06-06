@@ -152,47 +152,29 @@ public class Server {
 	}
 	
 	/**
-	 * Saves a list of objects to persistent memory (file).
+	 * Saves a an object to persistent memory (file).
 	 * @param filename The filename, without path, of the file to save 'data' into.
-	 * @param data The object to be saved to the file.
-	 * @param append If true 'data' is appended to the end of the file (if already exists).
-	 * If false, the previous content of the file (if already exists) is lost.   
+	 * This file will hold a single object ('data'). Previous content, if the file already exists,
+	 * will be lost.
+	 * @param data The object to be saved to the file.  
 	 */
 	public <T> void saveObjectToFile(String filename, T data)
 	{
 		File file = getFileByName(filename, true);
 		
-		if (append)
+		try (JsonWriter persistentDataWriter = createJsonWriter(file)) 
 		{
-			if (persistentDataWriter == null)
-			{
-				persistentDataWriter = createJsonWriter(file); 
-			}
-		} else
-		{
-			if (persistentDataWriter != null)
-			{
-				try {
-					persistentDataWriter.close();					
-				} catch (IOException e) {
-					throw new RuntimeException("Failed to close stream");
-				}
-			}
-			persistentDataWriter = createJsonWriter(file); 
+			Utils.writeObjectToJsonWriter(data,persistentDataWriter);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to close stream");
 		}
-
-		Utils.writeObjectToJsonWriter(data,persistentDataWriter);
 	}
 	 
 	
 	/**
-	 * Reads a list of objects from persistent memory (file).
-	 * @param filename The filename of the file to read, without path.
-	 * @param objects The objects to be saved to the file (order is preserved).
-	 * @param readFromStartOfFile If true, the reading starts from the beginning of the file (useful
-	 * when reading multiple objects).
-	 * If false, we read the next object in the file.
-	 * @return The object read, or empty if we've already read all objects, or the file doesn't exist.
+	 * Reads an object from persistent memory (file).
+	 * @param filename The filename of the file to read, without path. This file cotains a single object.
+	 * @return The object read, or empty if the file doesn't exist.
 	 * @throws BadFileContent If an unexpected file content was read.
 	 */
 	public <T> Optional<T> readObjectFromFile(String filename, Type type)
@@ -204,33 +186,21 @@ public class Server {
 			return Optional.empty();
 		}
 		
-		if (readFromStartOfFile)
-		{
-			if (persistentDataReader != null)
-			{
-				try {
-					persistentDataReader.close();
-				} catch (IOException e) {
-					throw new RuntimeException("Failed to close stream");
-				}
-			}
-			persistentDataReader = createJsonReader(file); 
-		} else
-		{
-			if (persistentDataReader == null)
-			{
-				persistentDataReader = createJsonReader(file); 
-			}
-		}
 		
-		try
+		Optional<T> $;
+		
+		try (JsonReader persistentDataReader = createJsonReader(file))
 		{
-			return Utils.readObjectFromGsonReader(persistentDataReader, type);
+			$ =  Optional.of(Utils.readObjectFromGsonReader(persistentDataReader, type));
 		}
 		catch (RuntimeException e)
 		{
 			throw new BadFileContent();
+		} catch (IOException e1) {
+			throw new RuntimeException("Failed to close stream");
 		}
+		
+		return $;
 	}
 	
 
