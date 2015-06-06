@@ -58,7 +58,7 @@ class ReliableHost {
 	
 	/* maximum time for a successful message to be delivered (from sending time to receiving time), 
 	 * in milisec */
-	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 20; 
+	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 100; 
 	//TODO: Gal recommended MAX_TIME_FOR_SUCCESFUL_DELIVERY=100, but 4 seems to be enough.
 	
 	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
@@ -92,6 +92,14 @@ class ReliableHost {
 		
 		// The address of the sender.
 		String fromAddress;
+		
+		
+		@Override
+		public String toString()
+		{
+			return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
+			"," + "responseTargetId=" + responseTargetId + "]"; 
+		}
 	}
 
 	/**
@@ -215,6 +223,9 @@ class ReliableHost {
 			throw new RuntimeException("InterruptedException");
 		}
 		
+		System.out.println("Took, _address=" + showable(_address) + ", msg=" + response); //TODO:DELTE.
+		
+		
 		assert(responseBQ.isEmpty());
 		responseBQ = null;
 		
@@ -230,22 +241,38 @@ class ReliableHost {
 	 */
 	private void newMessageArrivedCallback(String data)
 	{
+		
+		//TODO: DELETE
+		System.out.println("NewArrived. _address="+ showable(_address) + 
+				", data.length()=" + data.length() + ", data=" + showable(data));
+		
 		if (data.isEmpty())
 		{
+			//TODO: DELETE
+			System.out.println("\"\"   _address=" + showable(_address)); 
+			
 			assert(!messageRecivedIndicator);
 			messageRecivedIndicator = true;
 			return;
 		} 
 		
 		InnerMessage message = Utils.fromGsonStrToObject(data, InnerMessage.class);
-		try {
-			_messenger.send(message.fromAddress, "");
-		} catch (MessengerException e1) {
-			throw new RuntimeException("comunication faulure"); 
-		}
+		
+		System.out.println("msg=" + message);
+		
+		
+		primitiveSendRepeatedly(message.fromAddress, "");
+		
+		
 		
 		if (responseRequestorId != null && responseRequestorId == message.responseTargetId)
 		{
+			
+			//TODO: DELETE
+			System.out.println("---responseBQ.put(message)");
+			
+			
+			
 			try {
 				responseBQ.put(message);
 			} catch (InterruptedException e) {
@@ -253,6 +280,9 @@ class ReliableHost {
 			}
 			return;
 		}
+		  
+		//TODO: DELETE
+		System.out.println("---regular-consume");
 
 		
 		synchronized(consumptionLock)
@@ -291,27 +321,72 @@ class ReliableHost {
 		}
 		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data, _address);
 		
+		int TMP__tries = 0; //TODO:DELETE
+		
 		synchronized (sendingLock)
 		{
+			
+			
+			System.out.println(">>>Sending message from " + _address + ", msg=" + newMessage); //TODO: DELETE
+			
+			
 			/*
 			 * The synchronization is important, otherwise, we won't know for which message the 
 			 * "ok, I've got it" empty message refers to. 
 			 */
 			while (!messageRecivedIndicator)
 			{
+				
+				//TODO:DELETE
+				TMP__tries++;
+				System.out.println("===try #" + TMP__tries + "     (by " + _address + ")");
+				
+				
 				String payload = Utils.fromObjectToGsonStr(newMessage);
-				_messenger.send(targetAddress, payload);
+				primitiveSendRepeatedly(targetAddress, payload);
 				try {
 					Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
 				} catch (InterruptedException e) {
 					throw new RuntimeException("InterruptedException");
 				}
 			}
+			
+			System.out.println("===success   (by " + _address + ")"); //TODO:DELETE
+			
 		}
 		
 		messageRecivedIndicator = false;
 	}
 
 
+	/* sends a message via _messenger, repeatedly, until recipient is a valid messenger (note that 
+	 * it can still fail to be delivered).
+	 */
+	private void primitiveSendRepeatedly(String to, String payload)
+	{
+		while (true)
+		{	
+			try {
+				_messenger.send(to, payload);
+				return;
+			} catch (MessengerException e) {
+				//trying again///
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e1) {
+					assert(false);
+				}
+			}
+		}
+	}
+
 	
+	private String showable(String str)
+	{
+		if (str.length() <= 15)
+			return str;
+		return str.substring(0, 15);
+	}
 }
+
+

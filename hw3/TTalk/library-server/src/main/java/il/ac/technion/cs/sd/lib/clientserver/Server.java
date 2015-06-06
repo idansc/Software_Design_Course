@@ -115,7 +115,7 @@ public class Server {
 		try {
 			_reliableHost.send(clientAddress, Utils.fromObjectToGsonStr(data), isResponse);
 		} catch (MessengerException e) {
-			throw new InvalidOperation();
+			throw new CommunicationFailure();
 		}
 	}
 	

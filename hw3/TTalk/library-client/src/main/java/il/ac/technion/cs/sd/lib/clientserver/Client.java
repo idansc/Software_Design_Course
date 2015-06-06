@@ -62,7 +62,7 @@ public class Client {
 			});
 		} catch (MessengerException e) {
 			_serverAddress = originalServerAddress;
-			throw new InvalidOperation();
+			throw new CommunicationFailure();
 		}
 		
 	}
