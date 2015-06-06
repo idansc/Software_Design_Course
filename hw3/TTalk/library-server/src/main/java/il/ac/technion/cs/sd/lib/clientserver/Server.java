@@ -2,6 +2,8 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
@@ -126,8 +128,6 @@ public class Server {
 		}	
 		writer.endArray();
 		writer.close();
-		
-		
 	}
 	 
 	/**
@@ -150,9 +150,17 @@ public class Server {
 		{
 			if (persistentDataInputStream != null)
 			{
-				persistentDataInputStream.close();
+				try {
+					persistentDataInputStream.close();
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to close stream!");
+				}
 			}
-			persistentDataInputStream = new FileInputStream(file);
+			try {
+				persistentDataInputStream = new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				assert(false);
+			}
 		} else
 		{
 			if (persistentDataInputStream == null)
@@ -162,18 +170,15 @@ public class Server {
 		}
 		
 		try{
-			Utils.fromGsonStrToObject(gsonStr, type)	
+			return Utils.fromGsonStreamToObject(persistentDataInputStream, type);
 		} catch (RuntimeException e)
 		{
 			return Optional.empty();
 		}
-		
 	}
 	
 
 
-	
-	
 	/**
 	 * Returns a File object representing the file.
 	 * If the directory of the file does not exist - it is created (along with all necessary parents).
@@ -184,7 +189,6 @@ public class Server {
 		File serverDir = new File(getPesistentDirOfAllServers(), getServerDirName());
 		serverDir.mkdirs();
 		return new File(serverDir, filename);
-		
 	}
 	
 	// returns the unique name (wihtout path) of the directory holding the persistent files of the server. 

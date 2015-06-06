@@ -2,10 +2,12 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,16 +33,7 @@ class Utils {
 	{
 		ByteArrayInputStream is = new ByteArrayInputStream(gsonStr.getBytes());
 		
-		Gson gson = new GsonBuilder().create();
-		
-		JsonReader reader;
-		try {
-			reader = new JsonReader(new InputStreamReader(is, ENCODING));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("bad encoding");
-		}
-		
-		return gson.fromJson(reader, type);
+		return fromGsonStreamToObject(is, type);
 	}
 	
 	
@@ -49,7 +42,7 @@ class Utils {
 	 * @return the deserialized object.
 	 * @throws RuntimeException on reading failure.
 	 */
-	public static <T> T fromGsonStreamToObject(InputStream gsonStream, Class<T> type)
+	public static <T> T fromGsonStreamToObject(InputStream gsonStream, Type type)
 	{		
 		Gson gson = new GsonBuilder().create();
 		
@@ -76,7 +69,15 @@ class Utils {
 			JsonWriter writer = new JsonWriter(new OutputStreamWriter(os, ENCODING));
 			Gson gson = new GsonBuilder().create();
 			gson.toJson(object, object.getClass(), writer);
-			return new String(os.toByteArray(),ENCODING);
+			String $ = new String(os.toByteArray(),ENCODING);
+			
+			try {
+				writer.close();
+			} catch (IOException e) {
+				throw new RuntimeException("Failed to close writer!");
+			}
+			
+			return $;
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("bad encoding");
 		}
