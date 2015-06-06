@@ -2,7 +2,6 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import org.apache.commons.io.FileUtils;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -101,6 +101,22 @@ public class Server {
 		//TODO
 	}
 	
+	/**
+	 * Clears all persistent data saved by this server.
+	 */
+	public void clearPersistentData()
+	{
+		File persistentDataDir = getServerPersistentDir();
+		if (!persistentDataDir.exists())
+		{
+			return;
+		}
+		try {
+			FileUtils.deleteDirectory(getServerPersistentDir());
+		} catch (IOException e) {
+			throw new RuntimeException("deleting directory failed!");
+		}
+	}
 	
 	/**
 	 * Saves a list of objects to persistent memory (file).
@@ -221,16 +237,23 @@ public class Server {
 	 */
 	private File getFileByName(String filename, boolean createItsDirIfNecessary)
 	{
-		File serverDir = new File(getPesistentDirOfAllServers(), getServerDirName());
+		File serverDir = getServerPersistentDir();
 		if (createItsDirIfNecessary)
 		{
 			serverDir.mkdirs();
 		}
 		return new File(serverDir, filename);
 	}
+
+
+	// returns the directory holding the persistent files of the server.
+	private File getServerPersistentDir() {
+		return new File(getPesistentDirOfAllServers(), getServerPersistentDirName());
+	}
+	
 	
 	// returns the unique name (wihtout path) of the directory holding the persistent files of the server. 
-	private String getServerDirName()
+	private String getServerPersistentDirName()
 	{
 		return Integer.toString(getAddress().hashCode());
 	}
