@@ -5,6 +5,10 @@ public class InstantMessage {
 	private final String to;
 	private final String content;
 
+	public String getContent() {
+		return content;
+	}
+
 	public InstantMessage(String from, String to, String content) {
 		super();
 		this.from = from;
