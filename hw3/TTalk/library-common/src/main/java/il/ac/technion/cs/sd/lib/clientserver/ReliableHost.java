@@ -58,7 +58,8 @@ class ReliableHost {
 	
 	/* maximum time for a successful message to be delivered (from sending time to receiving time), 
 	 * in milisec */
-	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 200;
+	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 20; 
+	//TODO: Gal recommended MAX_TIME_FOR_SUCCESFUL_DELIVERY=100, but 4 seems to be enough.
 	
 	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
 	 * false.

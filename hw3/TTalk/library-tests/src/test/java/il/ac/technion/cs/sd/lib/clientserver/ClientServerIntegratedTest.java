@@ -208,17 +208,20 @@ public class ClientServerIntegratedTest {
 	}
 	
 	
-	@Test(timeout=990000)//TODO
+	@Test(timeout=10000)
 	public void clientSendsToServerMessage() throws InterruptedException {
 		
 		
 		client1.startListenLoop("server1", consumer1, POJO1.class);
 		server1.startListenLoop(biConsumer1, POJO1.class);
 
-		client1.send(pojo1);
-		Pair<POJO1,String> $ = biConsumer1_bq.take();
-		assertEquals($.first, pojo1);
-		assertEquals($.second, "client1");
+		for (int i=0; i<10; i++)
+		{
+			client1.send(pojo1);
+			Pair<POJO1,String> $ = biConsumer1_bq.take();
+			assertEquals($.first, pojo1);
+			assertEquals($.second, "client1");
+		}
 		
 		client1.stopListenLoop();
 		server1.stop();
