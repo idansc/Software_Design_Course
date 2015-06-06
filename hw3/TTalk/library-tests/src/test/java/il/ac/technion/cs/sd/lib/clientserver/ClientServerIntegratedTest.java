@@ -2,8 +2,11 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.function.BiConsumer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,8 +19,7 @@ public class ClientServerIntegratedTest {
 	private Client client1;
 	private Client client2;
 	
-	
-	
+
 	private class POJO1
 	{
 		public int i;
@@ -36,8 +38,6 @@ public class ClientServerIntegratedTest {
 			if (getClass() != obj.getClass())
 				return false;
 			POJO1 other = (POJO1) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
 			if (i != other.i)
 				return false;
 			if (str == null) {
@@ -47,15 +47,13 @@ public class ClientServerIntegratedTest {
 				return false;
 			return true;
 		}
-		private ClientServerIntegratedTest getOuterType() {
-			return ClientServerIntegratedTest.this;
-		}
 	}
 	
 	private class POJO2
 	{
 		public int i;
 		public String str;
+
 		POJO2(int i, String str, List<POJO1> pojos) {
 			this.i = i;
 			this.str = str;
@@ -70,8 +68,6 @@ public class ClientServerIntegratedTest {
 			if (getClass() != obj.getClass())
 				return false;
 			POJO2 other = (POJO2) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
 			if (i != other.i)
 				return false;
 			if (pojos == null) {
@@ -87,10 +83,23 @@ public class ClientServerIntegratedTest {
 			return true;
 		}
 		public List<POJO1> pojos;
-		private ClientServerIntegratedTest getOuterType() {
-			return ClientServerIntegratedTest.this;
-		}
 	}
+
+	private class  Pair<F,S>
+	{
+		Pair(F first, S second) {
+			this.first = first;
+			this.second = second;
+		}
+		F first;
+		S second;
+	}
+	
+	BlockingQueue<Pair<POJO1,String>> consumer1_bq;
+	private BiConsumer<POJO1,String> consumer1 = (p,from) ->
+	{
+		consumer1_bq.add(new Pair<POJO1,String>(p,from));
+	};
 	
 	
 	@Before
@@ -118,5 +127,60 @@ public class ClientServerIntegratedTest {
 		Optional<POJO1> $ = server1.readObjectFromFile("pojo1", POJO1.class);
 		assertEquals($.get(), pojo1);
 	}
+	
+	@Test
+	public void saveAndThenLoadTwoSimpleObjects() {
+		POJO1 pojo1 = new POJO1(1, "hi");
+		POJO1 pojo2 = new POJO1(2, "bye");
+		
+		server1.saveObjectToFile("pojo1", pojo1);
+		server1.saveObjectToFile("pojo2", pojo2);
+		
+		Optional<POJO1> $ = server1.readObjectFromFile("pojo1", POJO1.class);
+		assertEquals($.get(), pojo1);
+		
+		$ = server1.readObjectFromFile("pojo2", POJO1.class);
+		assertEquals($.get(), pojo2);
+	}
+	
+	
+	@Test
+	public void saveAndThenLoadComplexObjects() {
+		POJO1 pojo1 = new POJO1(1, "hi");
+		POJO1 pojo2 = new POJO1(2, "bye");
+		
+		List pojos = new LinkedList();
+		pojos.add(pojo1);
+		pojos.add(pojo2);
+		
+		POJO2 complex = new POJO2(5,"aaa",pojos);
+		
+		
+		server1.saveObjectToFile("c", complex);
+		
+		Optional<POJO2> $ = server1.readObjectFromFile("c", POJO2.class );
+		//Optional<POJO2> $ = server1.readObjectFromFile("c", new POJO2().getClass() );
+	
+		assertEquals($.get(), complex);
+	}
 
+	@Test
+	public void saveAndThenLoadFromNewServerWithSameName() {
+		
+		POJO1 pojo1 = new POJO1(1, "hi");
+		
+		server1.startListenLoop(consumer1, POJO1.class);
+		server1.saveObjectToFile("pojo1", pojo1);
+		server1.stop();
+		
+		
+		Server s = new Server("server1");
+		s.startListenLoop(consumer1, POJO1.class);
+		
+		s.stop();
+		
+		Optional<POJO1> $ = server1.readObjectFromFile("pojo1", POJO1.class);
+		assertEquals($.get(), pojo1);
+	}
+	
 }

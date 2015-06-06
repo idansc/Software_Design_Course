@@ -25,6 +25,7 @@ import com.google.gson.stream.JsonWriter;
 //TODO: compile to html javadoc.
 //TODO: consider giving in javadoc a tip on sending a type for generic types.
 //TODO: add to documentation each time there's a "Type" - the generic pattern.
+//TODO: recommend against nested classes because of gson.
 
 /**
  * Represents a server that can communicate (reliably) with multiple clients, and save/load 
