@@ -99,22 +99,24 @@ public class ClientServerIntegratedTest {
 		server2 = new Server("server2");
 		client1 = new Client("client1");
 		client2 = new Client("client2");
+		
+		server1.clearPersistentData();
+		server2.clearPersistentData();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		server1.clearPersistentData();
-		server2.clearPersistentData();
 	}
 
 	@Test
 	public void saveAndThenLoadSimpleObject() {
 		
 		POJO1 pojo1 = new POJO1(1, "hi");
+		
 		server1.saveObjectToFile("pojo1", pojo1);
 		
 		Optional<POJO1> $ = server1.readObjectFromFile("pojo1", POJO1.class);
-		assertEquals($, pojo1);
+		assertEquals($.get(), pojo1);
 	}
 
 }

@@ -58,7 +58,14 @@ class Utils {
 	public static <T> T readObjectFromGsonReader(JsonReader reader, Type type)
 	{		
 		Gson gson = new GsonBuilder().create();
-		T $ = gson.fromJson(reader, type);;
+		T $;
+		try {
+			reader.beginArray();
+			$ = gson.fromJson(reader, type);
+			reader.endArray();
+		} catch (IOException e) {
+			throw new RuntimeException("IOException");
+		}
 		return $;
 	}
 	
@@ -100,7 +107,13 @@ class Utils {
 	public static <T> void writeObjectToJsonWriter(T object, JsonWriter writer)
 	{
 			Gson gson = new GsonBuilder().create();
-			gson.toJson(object, object.getClass(), writer);
+			try {
+				writer.beginArray();
+				gson.toJson(object, object.getClass(), writer);
+				writer.endArray();
+			} catch (IOException e) {
+				throw new RuntimeException("IOException");
+			}
 	}
 	
 	

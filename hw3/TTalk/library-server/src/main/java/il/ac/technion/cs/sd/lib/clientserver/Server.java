@@ -4,6 +4,7 @@ import il.ac.technion.cs.sd.msg.MessengerException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -148,7 +149,7 @@ public class Server {
 		try (JsonWriter persistentDataWriter = createJsonWriter(file)) 
 		{
 			Utils.writeObjectToJsonWriter(data,persistentDataWriter);
-		} catch (IOException e) {
+		} catch (IOException e) {			
 			throw new RuntimeException("Failed to close stream");
 		}
 	}
@@ -194,13 +195,14 @@ public class Server {
 	 */
 	private JsonWriter createJsonWriter(File f)
 	{
-		try (OutputStream stream = new FileOutputStream(f)){
-			return new JsonWriter(new OutputStreamWriter(stream, Utils.ENCODING));
+		try {
+			OutputStream stream = new FileOutputStream(f);
+			return  new JsonWriter(new OutputStreamWriter(stream, Utils.ENCODING));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("UnsupportedEncodingException");
-		} catch (IOException e1) {
-			throw new RuntimeException("Failed to close stream!");
-		} 
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("FileNotFoundException");
+		}
 	}
 	
 	
@@ -214,12 +216,13 @@ public class Server {
 		{
 			throw new RuntimeException("File does not exist");
 		}
-		try (InputStream stream = new FileInputStream(f)){
+		try {
+			InputStream stream = new FileInputStream(f);
 			return new JsonReader(new InputStreamReader(stream, Utils.ENCODING));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("UnsupportedEncodingException");
-		} catch (IOException e1) {
-			throw new RuntimeException("Failed to close stream!");
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("FileNotFoundException");
 		}
 	}
 
