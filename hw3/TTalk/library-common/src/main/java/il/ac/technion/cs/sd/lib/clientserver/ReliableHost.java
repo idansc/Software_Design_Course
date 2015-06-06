@@ -2,7 +2,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
@@ -27,7 +27,8 @@ class ReliableHost {
 		return _address;
 	}
 
-	private Consumer<String> _consumer;
+	// The first argument is the sender's address, the second is the data.
+	private BiConsumer<String, String> _consumer;
 	
 	/* This is not null iff sendAndBlockUntilResponseArrives is currently waiting for a response. 
 	 * A InnerMessage object representing the response will be pushed to this queue when received.
@@ -71,10 +72,11 @@ class ReliableHost {
 	{
 		@SuppressWarnings("unused")
 		InnerMessage() {}
-		InnerMessage(long messageId, Long respnseTargetId, String data) {
+		InnerMessage(long messageId, Long respnseTargetId, String data, String fromAddress) {
 			this.messageId = messageId;
 			this.responseTargetId = respnseTargetId;
 			this.data = data;
+			this.fromAddress = fromAddress;
 		}
 
 		Long messageId;
@@ -84,19 +86,25 @@ class ReliableHost {
 		Long responseTargetId; 
 		
 		String data;
+		
+		// The address of the sender.
+		String fromAddress;
 	}
 
 	/**
 	 * @param address The address of the new host.
 	 * @throws MessengerException 
 	 */
-	ReliableHost(String address) throws MessengerException
+	ReliableHost(String address)
 	{
 		_address = address;
 	}
 	
 	
-	void start(Consumer<String> consumer) throws MessengerException
+	/**
+	 * @param consumer The first argument taken is the sender's address, the second is the data.
+	 */
+	void start(BiConsumer<String, String> consumer) throws MessengerException
 	{
 		if (currentlyListening)
 		{
@@ -144,28 +152,27 @@ class ReliableHost {
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
 	 * @param respnseTargetId Should be null if 'data' is not a response.
+	 * @param isResponse true iff 'data' is a response to a message previously sent by another host.
+	 * When true, you must call this method only from the consumer of the listen loop (i.e., from the 
+	 * callback function invoked by the message to which the response is for).
 	 * @throws MessengerException 
 	 */
-	void send(String targetAddress, String data) 
+	void send(String targetAddress, String data, boolean isResponse) 
 			throws MessengerException
 	{
-		send(targetAddress, data, null, null);
+		if (isResponse)
+		{
+			if (currentMessageConsumedId == null)
+			{
+				throw new InvalidOperation();
+			}
+			send(targetAddress, data, currentMessageConsumedId, null);
+		} else
+		{
+			send(targetAddress, data, null, null);
+		}
 	}
 	
-	/**
-	 * Sends a 'data' response string to 'targetAddress', without a chance to fail.
-	 * @param respnseTargetId Should be null if 'data' is not a response.
-	 * @throws MessengerException 
-	 */
-	void sendResponse(String targetAddress, String data) 
-			throws MessengerException, InterruptedException
-	{
-		if (currentMessageConsumedId == null)
-		{
-			throw new InvalidOperation();
-		}
-		send(targetAddress, data, currentMessageConsumedId, null);
-	}
 	
 	
 	/**
@@ -244,7 +251,7 @@ class ReliableHost {
 		{
 			assert(currentMessageConsumedId == null);
 			currentMessageConsumedId = message.messageId;
-			_consumer.accept( message.data );
+			_consumer.accept(message.fromAddress, message.data);
 			currentMessageConsumedId = null;
 		}
 	}
@@ -274,7 +281,7 @@ class ReliableHost {
 				nextMessageIdToGive++;
 			}
 		}
-		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data);
+		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data, _address);
 		
 		synchronized (sendingLock)
 		{

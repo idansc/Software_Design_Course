@@ -1,5 +1,7 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
+import il.ac.technion.cs.sd.msg.MessengerException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.stream.JsonReader;
@@ -32,23 +35,23 @@ import com.google.gson.stream.JsonWriter;
  */
 public class Server {
 
-	private String _address;
+	private ReliableHost _reliableHost;
 	
 	private JsonReader persistentDataReader;
 	private JsonWriter persistentDataWriter;
 	
 	
 	public String getAddress() {
-		return _address;
+		return _reliableHost.getAddress();
 	}
 
 
-	/*
-	 * @param address - the address of the new server.
+	/**
+	 * @param address - the address of the new server. 
 	 */
 	public Server(String address)
 	{
-		_address = address;
+		_reliableHost = new ReliableHost(address);
 	}
 
 
@@ -58,6 +61,7 @@ public class Server {
 	 * While listening, the server process incoming messages from clients.
 	 * Each incoming message invokes a callback function. 
 	 * @param consumer The consumer who's callback will be invoked for each message received from a client.
+	 * The first argument it takes is the data sent, and the second argument is the sender's address.
 	 * Any message sent back to the client via @{link {@link #sendResponse(String, Object)} 
 	 * from the callback function is considered by the client as a response to the specific message 
 	 * that invoked the callback.
@@ -72,7 +76,14 @@ public class Server {
 	 */
 	public <T> void startListenLoop(BiConsumer<T,String> consumer, Type dataType) { //TODO
 		
-		//TODO
+		try {
+			_reliableHost.start((fromAddress, data) -> {
+				consumer.accept(Utils.fromGsonStrToObject(data, dataType), fromAddress);
+			});
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
+		
 	}
 
 	
@@ -83,9 +94,8 @@ public class Server {
 	 */
 	public void stop()
 	{
-		//TODO
+		_reliableHost.stop();
 	}
-	
 	
 
 	/**
@@ -95,11 +105,17 @@ public class Server {
 	 * @param isResponse true iff 'data' is a response to a message previously sent by the client.
 	 * When true, you must call this method only from the consumer of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
+	 * @throws InvalidOperation Bad clientAddress address etc..
 	 */
 	public <T> void send(String clientAddress, T data, boolean isResponse)
 	{
-		//TODO
+		try {
+			_reliableHost.send(clientAddress, Utils.fromObjectToGsonStr(data), isResponse);
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
 	}
+	
 	
 	/**
 	 * Clears all persistent data saved by this server.
@@ -160,6 +176,7 @@ public class Server {
 	 * when reading multiple objects).
 	 * If false, we read the next object in the file.
 	 * @return The object read, or empty if we've already read all objects, or the file doesn't exist.
+	 * @throws BadFileContent If an unexpected file content was read.
 	 */
 	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStartOfFile) //TODO
 	{
@@ -189,7 +206,14 @@ public class Server {
 			}
 		}
 		
-		return Utils.readObjectFromGsonReader(persistentDataReader, type);
+		try
+		{
+			return Utils.readObjectFromGsonReader(persistentDataReader, type);
+		}
+		catch (RuntimeException e)
+		{
+			throw new BadFileContent();
+		}
 	}
 	
 

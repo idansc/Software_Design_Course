@@ -5,8 +5,6 @@ import il.ac.technion.cs.sd.msg.MessengerException;
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 
-import org.omg.CORBA._PolicyStub;
-
 /**
  * Represents a client that can communicate (reliably) with a single server.
  * The messages sent and received consist of objects of any type.
@@ -25,11 +23,7 @@ public class Client {
 	 */
 	public Client(String address)
 	{
-		try {
-			_reliableHost = new ReliableHost(address);
-		} catch (MessengerException e) {
-			throw new InvalidOperation();
-		}
+		_reliableHost = new ReliableHost(address);
 	}
 	
 	/**
@@ -59,14 +53,18 @@ public class Client {
 	 */
 	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Type dataType) //TODO
 	{
+		String originalServerAddress = _serverAddress;
+		_serverAddress = serverAddress;
+		
 		try {
-			_reliableHost.start(str -> {
-				consumer.accept(Utils.fromGsonStrToObject(str, dataType));
+			_reliableHost.start((fromAddress,data) -> {
+				consumer.accept(Utils.fromGsonStrToObject(data, dataType));
 			});
 		} catch (MessengerException e) {
+			_serverAddress = originalServerAddress;
 			throw new InvalidOperation();
 		}
-		_serverAddress = serverAddress;
+		
 	}
 	
 	
@@ -86,7 +84,7 @@ public class Client {
 	 */
 	public <T> void send(T data) {
 		try {
-			_reliableHost.send(_serverAddress, Utils.fromObjectToGsonStr(data));
+			_reliableHost.send(_serverAddress, Utils.fromObjectToGsonStr(data), false);
 		} catch (MessengerException e) {
 			throw new InvalidOperation();
 		} 
