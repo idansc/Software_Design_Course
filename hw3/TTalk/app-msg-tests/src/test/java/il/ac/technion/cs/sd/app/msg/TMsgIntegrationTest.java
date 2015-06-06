@@ -45,9 +45,19 @@ public class TMsgIntegrationTest {
 	@Test
 	public void testLogin() {
 		ClientMsgApplication idan = buildClient("Idan");
-		idan.login(x -> {}, x -> true, (x, y) -> {
-			if(x!="Gal") friendshipReplies.add(y);
-		});
+		idan.login(x -> {}, x ->(x!="Gal")? true:false
+			, (x, y) -> friendshipReplies.add(y));
+		idan.sendMessage("OFer", "Hi wanna be my friend?");
+		idan.sendMessage("OFer", "Y U NO REPLY");
+		idan.sendMessage("OFer", "cri everytime :( :(");
+		idan.sendMessage("OFer", "Okay I get it :( nevermind");
+		ClientMsgApplication ofer = buildClient("Ofer");
+		ofer.login(x->{
+			if(x=="Hi wanna be my friend?")
+				ofer.sendMessage("Idan", "Yes);
+			if(x=="cri everytime :( :(")
+				ofer.
+		}, friendshipRequestHandler, friendshipReplyConsumer);
 		assertEquals(Optional.empty(), gal.isOnline("Itay")); // Itay isn't a friend
 		gal.sendMessage("Itay", "Hi");
 		ClientMsgApplication itay = buildClient("Itay");

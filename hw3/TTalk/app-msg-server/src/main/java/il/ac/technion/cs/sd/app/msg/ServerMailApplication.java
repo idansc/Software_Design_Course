@@ -18,7 +18,9 @@ import com.google.gson.reflect.TypeToken;
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerMailApplication {
-	private static final String filename = "serverData";
+	private static final String offlineMessagesFileName = "offlineMessages";
+	private static final String onlineClientsFileName = "onlineClients";
+	private static final String clientFriendsFileName = "clientFriends";
 	Server _server;
 	private Map<String, List<MessageData>> _offlineMessages = new HashMap<String, List<MessageData>>();
 	private Set<String> _onlineClients = new HashSet<String>();
@@ -43,12 +45,12 @@ public class ServerMailApplication {
 	}
 	
 	private void initializeDataFromFile(){
-		_server.<Map<String, List<MessageData>>>readObjectFromFile(filename, 
-				new TypeToken<Map<String, List<MessageData>>>(){}.getType(), false)
+		_server.<Map<String, List<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
+				new TypeToken<Map<String, List<MessageData>>>(){}.getType())
 				.ifPresent((data)->_offlineMessages = data);
-		_server.<Map<String, List<String>>>readObjectFromFile(filename, new TypeToken<Map<String, Set<String>>>(){}.getType(), false)
+		_server.<Map<String, List<String>>>readObjectFromFile(onlineClientsFileName, new TypeToken<Map<String, Set<String>>>(){}.getType())
 				.ifPresent(data->_clientFriends = data);
-		_server.<Set<String>>readObjectFromFile(filename,new TypeToken<Set<String>>(){}.getType() , false)
+		_server.<Set<String>>readObjectFromFile(clientFriendsFileName,new TypeToken<Set<String>>(){}.getType())
 				.ifPresent(data->_onlineClients = data);
 	}
 	
@@ -111,9 +113,9 @@ public class ServerMailApplication {
 	 * Stops the server. A stopped server can't accept messages, but doesn't delete any data (messages that weren't received).
 	 */
 	public void stop() {
-		_server.saveObjectToFile(filename, _offlineMessages, true);
-		_server.saveObjectToFile(filename, _clientFriends, true);
-		_server.saveObjectToFile(filename, _onlineClients, true);
+		_server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
+		_server.saveObjectToFile(onlineClientsFileName, _clientFriends);
+		_server.saveObjectToFile(clientFriendsFileName, _onlineClients);
 		_server.stop();
 	}
 	
