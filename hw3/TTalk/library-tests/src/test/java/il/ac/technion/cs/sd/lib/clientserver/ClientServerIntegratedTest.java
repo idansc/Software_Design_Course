@@ -215,14 +215,14 @@ public class ClientServerIntegratedTest {
 	}
 	
 	
-	@Test//TODO(timeout=10000)
+	@Test(timeout=5000)
 	public void clientSendsToServerMessage() throws InterruptedException {
 		
 		
 		client1.startListenLoop(server1.getAddress(), consumer1, POJO1.class);
 		server1.startListenLoop(biConsumer1, POJO1.class);
 
-		for (int i=0; i<20; i++) //TODO
+		for (int i=0; i<20; i++)
 		{
 			client1.send(pojo1_a);
 			Pair<POJO1,String> $ = biConsumer1_bq.take();
@@ -252,7 +252,7 @@ public class ClientServerIntegratedTest {
 	}
 	
 	
-	@Test //TODO(timeout=3000)
+	@Test(timeout=5000)
 	public void serverSendsResponseBackToClient() throws InterruptedException {
 		client1.startListenLoop(server1.getAddress(), consumer1, POJO1.class);
 		server1.startListenLoop((pojo, str) ->
@@ -261,8 +261,8 @@ public class ClientServerIntegratedTest {
 			server1.send(client1.getAddress(), pojo1_b, true);
 		}, POJO1.class);
 
-		//TODO
-		for (int i=0; i<1; i++)//TODO
+
+		for (int i=0; i<10; i++)
 		{			
 			POJO1 $ = client1.sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
 			assertEquals($,pojo1_b);
