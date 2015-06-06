@@ -194,7 +194,7 @@ public class ClientServerIntegratedTest {
 		server1.stop();
 		
 		
-		Server s = new Server("server1");
+		Server s = new Server(server1.getAddress());
 		s.startListenLoop(biConsumer1, POJO1.class);
 		Optional<POJO1> $ = s.readObjectFromFile("pojo1", POJO1.class);
 		s.stop();
@@ -222,7 +222,7 @@ public class ClientServerIntegratedTest {
 		client1.startListenLoop(server1.getAddress(), consumer1, POJO1.class);
 		server1.startListenLoop(biConsumer1, POJO1.class);
 
-		for (int i=0; i<1; i++) //TODO
+		for (int i=0; i<20; i++) //TODO
 		{
 			client1.send(pojo1_a);
 			Pair<POJO1,String> $ = biConsumer1_bq.take();
@@ -255,24 +255,21 @@ public class ClientServerIntegratedTest {
 	@Test //TODO(timeout=3000)
 	public void serverSendsResponseBackToClient() throws InterruptedException {
 
-//TODO
-//		client1.startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-//		server1.startListenLoop((pojo, str) ->
-//		{
-//			assertEquals(str, client1.getAddress());//TODO
-//			server1.send(client1.getAddress(), pojo1_b, true);
-//		}, POJO1.class);
-//
-//		for (int i=0; i<1; i++)//TODO
-//		{
-//			
-//			//TODO
-////			POJO1 $ = client1.sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
-////			assertEquals($,pojo1_b);
-//		}			
-//		
-//		client1.stopListenLoop();
-//		server1.stop();
+		client1.startListenLoop(server1.getAddress(), consumer1, POJO1.class);
+		server1.startListenLoop((pojo, str) ->
+		{
+			assertEquals(str, client1.getAddress());
+			server1.send(client1.getAddress(), pojo1_b, true);
+		}, POJO1.class);
+
+		for (int i=0; i<1; i++)//TODO
+		{			
+			POJO1 $ = client1.sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
+			assertEquals($,pojo1_b);
+		}			
+		
+		client1.stopListenLoop();
+		server1.stop();
 	}
 	
 	

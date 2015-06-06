@@ -19,7 +19,6 @@ import il.ac.technion.cs.sd.msg.MessengerFactory;
 
 class ReliableHost {
 
-	private boolean currentlyListening = false;
 	private String _address;
 	private Messenger _messenger;
 	
@@ -50,7 +49,7 @@ class ReliableHost {
 	//This object is used as a monitor to synchronize messages consumptions.
 	Object consumptionLock = new Object();
 	
-	/*
+	/* The id to give the next outgoing message.
 	 * All modification to synchronized must be done while synchronized by the nextMessageIdToGive
 	 * monitor. 
 	 */
@@ -68,39 +67,54 @@ class ReliableHost {
 	
 	Object sendingLock = new Object();
 	
+	
+	boolean messageLoopRequestedToStop = false;
+	boolean messageLoopCurrentlyRunning = false;
+	BlockingQueue<String> primitiveMessagesToHandle = new LinkedBlockingQueue<>();
+	Thread listenThread;
+
+	
 	/**
 	 * We'll send objects of this class via Messenger.
 	 */
-	private class InnerMessage
-	{
-		@SuppressWarnings("unused")
-		InnerMessage() {}
-		InnerMessage(long messageId, Long respnseTargetId, String data, String fromAddress) {
-			this.messageId = messageId;
-			this.responseTargetId = respnseTargetId;
-			this.data = data;
-			this.fromAddress = fromAddress;
-		}
-
-		Long messageId;
-		
-		/* The id of the message that this message is the response to, 
-		 * or null if this message is not a response. */
-		Long responseTargetId; 
-		
-		String data;
-		
-		// The address of the sender.
-		String fromAddress;
-		
-		
-		@Override
-		public String toString()
-		{
-			return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
-			"," + "responseTargetId=" + responseTargetId + "]"; 
-		}
-	}
+	//TODO
+//	private class InnerMessage
+//	{
+//		@SuppressWarnings("unused")
+//		InnerMessage() {}
+//		InnerMessage(long messageId, Long respnseTargetId, String data, String fromAddress) {
+//			this.messageId = messageId;
+//			this.responseTargetId = respnseTargetId;
+//			this.data = data;
+//			this.fromAddress = fromAddress;
+//		}
+//
+//		Long messageId;
+//		
+//		/* The id of the message that this message is the response to, 
+//		 * or null if this message is not a response. */
+//		Long responseTargetId; 
+//		
+//		String data;
+//		
+//		// The address of the sender.
+//		String fromAddress;
+//		
+//		
+//		@Override
+//		public String toString()
+//		{
+//			return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
+//			"," + "responseTargetId=" + responseTargetId + "]"; 
+//		}
+//		
+//		//TODO:DELETE
+//		public String TMP__toString()
+//		{
+//			return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
+//			"," + "responseTargetId=" + responseTargetId + "]"; 
+//		}
+//	}
 
 	/**
 	 * @param address The address of the new host.
@@ -117,23 +131,41 @@ class ReliableHost {
 	 */
 	void start(BiConsumer<String, String> consumer) throws MessengerException
 	{
-		if (currentlyListening)
+		if (messageLoopCurrentlyRunning)
 		{
 			throw new InvalidOperation();
 		}
+		
 		_consumer = consumer;
 		
-		_messenger = new MessengerFactory().start(_address, (String data) -> 
-		{
-			newMessageArrivedCallback(data);
+		_messenger = new MessengerFactory().start(_address, payload -> {
+			try {
+				primitiveMessagesToHandle.put(payload);
+			} catch (Exception e) {
+				throw new RuntimeException("failded to put in primitiveMessagesToHandle");
+			}
 		});
 		
-		currentlyListening = true;
+		listenThread = new Thread(() -> {
+			listeningLoop();
+		});
+		
+		listenThread.start();
+		
+		while (!messageLoopCurrentlyRunning)
+		{
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			}
+		}
+		
 	}
 	
 	void stop()
 	{
-		if (!currentlyListening)
+		if (!messageLoopCurrentlyRunning)
 		{
 			throw new InvalidOperation();
 		}
@@ -142,10 +174,19 @@ class ReliableHost {
 		try {
 			Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
 		} catch (InterruptedException e1) {
-			throw new RuntimeException("MAX_TIME_FOR_SUCCESFUL_DELIVERY");
+			throw new RuntimeException("InterruptedException");
 		}
 		
-		currentlyListening = false;
+		messageLoopRequestedToStop = true;
+		
+		while (messageLoopCurrentlyRunning)
+		{
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			}
+		}
 		
 		try {
 			_messenger.kill();
@@ -196,7 +237,7 @@ class ReliableHost {
 	String sendAndBlockUntilResponseArrives(
 			String  targetAddress, String data) throws MessengerException
 	{
-		if (!currentlyListening)
+		if (!messageLoopCurrentlyRunning)
 		{
 			throw new InvalidOperation();
 		}
@@ -223,7 +264,7 @@ class ReliableHost {
 			throw new RuntimeException("InterruptedException");
 		}
 		
-		System.out.println("Took, _address=" + showable(_address) + ", msg=" + response); //TODO:DELTE.
+		Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
 		
 		
 		assert(responseBQ.isEmpty());
@@ -243,13 +284,13 @@ class ReliableHost {
 	{
 		
 		//TODO: DELETE
-		System.out.println("NewArrived. _address="+ showable(_address) + 
-				", data.length()=" + data.length() + ", data=" + showable(data));
+		Utils.DEBUG_LOG_LINE("NewArrived. _address="+ Utils.showable(_address) + ", data.length()="
+		+ data.length() + ", data=" + Utils.showable(data));
 		
 		if (data.isEmpty())
 		{
 			//TODO: DELETE
-			System.out.println("\"\"   _address=" + showable(_address)); 
+			Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(_address)); 
 			
 			assert(!messageRecivedIndicator);
 			messageRecivedIndicator = true;
@@ -258,7 +299,9 @@ class ReliableHost {
 		
 		InnerMessage message = Utils.fromGsonStrToObject(data, InnerMessage.class);
 		
-		System.out.println("msg=" + message);
+		
+		//TODO: DELETE
+		Utils.DEBUG_LOG_LINE("msg=" + message);
 		
 		
 		primitiveSendRepeatedly(message.fromAddress, "");
@@ -269,7 +312,7 @@ class ReliableHost {
 		{
 			
 			//TODO: DELETE
-			System.out.println("---responseBQ.put(message)");
+			Utils.DEBUG_LOG_LINE("---responseBQ.put(message)");
 			
 			
 			
@@ -282,7 +325,7 @@ class ReliableHost {
 		}
 		  
 		//TODO: DELETE
-		System.out.println("---regular-consume");
+		Utils.DEBUG_LOG_LINE("---regular-consume");
 
 		
 		synchronized(consumptionLock)
@@ -304,7 +347,7 @@ class ReliableHost {
 	private void send(String  targetAddress, String data, Long respnseTargetId, Long newMessageId) 
 			throws MessengerException
 	{
-		if (!currentlyListening)
+		if (!messageLoopCurrentlyRunning)
 		{
 			throw new InvalidOperation();
 		}
@@ -327,7 +370,7 @@ class ReliableHost {
 		{
 			
 			
-			System.out.println(">>>Sending message from " + _address + ", msg=" + newMessage); //TODO: DELETE
+			Utils.DEBUG_LOG_LINE(">>>Sending message from " + _address + ", msg=" + newMessage); //TODO: DELETE
 			
 			
 			/*
@@ -339,7 +382,7 @@ class ReliableHost {
 				
 				//TODO:DELETE
 				TMP__tries++;
-				System.out.println("===try #" + TMP__tries + "     (by " + _address + ")");
+				Utils.DEBUG_LOG_LINE("===try #" + TMP__tries + "     (by " + _address + ")");
 				
 				
 				String payload = Utils.fromObjectToGsonStr(newMessage);
@@ -351,7 +394,7 @@ class ReliableHost {
 				}
 			}
 			
-			System.out.println("===success   (by " + _address + ")"); //TODO:DELETE
+			Utils.DEBUG_LOG_LINE("===success   (by " + _address + ")"); //TODO:DELETE
 			
 		}
 		
@@ -364,9 +407,14 @@ class ReliableHost {
 	 */
 	private void primitiveSendRepeatedly(String to, String payload)
 	{
+		assert(to != null && payload != null);	
 		while (true)
 		{	
 			try {
+				if (payload.isEmpty())
+				{
+					Utils.DEBUG_LOG_LINE("|||||| Sending empty message, from: " + _messenger.getAddress() + "; to: " + to + " |||||||||");
+				}
 				_messenger.send(to, payload);
 				return;
 			} catch (MessengerException e) {
@@ -381,12 +429,26 @@ class ReliableHost {
 	}
 
 	
-	private String showable(String str)
+	private void listeningLoop()
 	{
-		if (str.length() <= 15)
-			return str;
-		return str.substring(0, 15);
+		messageLoopCurrentlyRunning = true;
+		while (!messageLoopRequestedToStop)
+		{
+			String str;
+			try {
+				str = _messenger.getLastOrNextMessage(100);
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			}
+			if (str != null)
+			{
+				newMessageArrivedCallback(str);
+			}
+		}
+		messageLoopRequestedToStop = false;
+		messageLoopCurrentlyRunning = false;
 	}
+
 }
 
 

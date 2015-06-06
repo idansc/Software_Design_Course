@@ -1,6 +1,6 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
-public class InnerMessage {
+class InnerMessage {
 	@SuppressWarnings("unused")
 	InnerMessage() {}
 	InnerMessage(long messageId, Long respnseTargetId, String data, String fromAddress) {
@@ -25,21 +25,8 @@ public class InnerMessage {
 	@Override
 	public String toString()
 	{
-		return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
+		return "[from:" + Utils.showable(fromAddress) + ",messageId=" + messageId + 
 		"," + "responseTargetId=" + responseTargetId + "]"; 
 	}
 	
-	//TODO:DELETE
-	public String TMP__toString()
-	{
-		return "[from:" + showable(fromAddress) + ",messageId=" + messageId + 
-		"," + "responseTargetId=" + responseTargetId + "]"; 
-	}
-	
-	private String showable(String str)
-	{
-		if (str.length() <= 15)
-			return str;
-		return str.substring(0, 15);
-	}
 }

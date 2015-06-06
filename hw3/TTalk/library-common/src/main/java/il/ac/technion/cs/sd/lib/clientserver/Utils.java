@@ -2,6 +2,8 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -115,4 +117,35 @@ class Utils {
 	}
 	
 	
+	
+	//TODO: DELETE
+	private static FileWriter logWriter = initLogWriter();
+	private static FileWriter initLogWriter()  {
+		try {
+			return new FileWriter(new File("./TMP__DEBUG__log.txt"));
+		} catch (IOException e) {
+			throw new RuntimeException("failed to open log to write");
+		}
+	}
+	public static void DEBUG_LOG_LINE(String line)
+	{
+		synchronized(logWriter)
+		{
+			try {
+				logWriter.write(line + "\n");
+				logWriter.flush();
+			} catch (IOException e) {
+				throw new RuntimeException("failed to write to log");
+			}
+			
+		}
+	}
+	
+	
+	public static String showable(String str)
+	{
+		if (str.length() <= 15)
+			return str;
+		return str.substring(0, 15);
+	}
 }
