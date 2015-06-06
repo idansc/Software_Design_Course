@@ -33,7 +33,21 @@ class Utils {
 	{
 		ByteArrayInputStream is = new ByteArrayInputStream(gsonStr.getBytes());
 		
-		return fromGsonStreamToObject(is, type);
+		
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new InputStreamReader(is, ENCODING));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("bad encoding");
+		}
+		
+		T $ = readObjectFromGsonReader(reader, type);
+		try {
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Fialed to close reader!");
+		}
+		return $;
 	}
 	
 	
@@ -42,23 +56,10 @@ class Utils {
 	 * @return the deserialized object.
 	 * @throws RuntimeException on reading failure.
 	 */
-	public static <T> T fromGsonStreamToObject(InputStream gsonStream, Type type)
+	public static <T> T readObjectFromGsonReader(JsonReader reader, Type type)
 	{		
 		Gson gson = new GsonBuilder().create();
-		
-		JsonReader reader;
-		try {
-			reader = new JsonReader(new InputStreamReader(gsonStream, ENCODING));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("bad encoding");
-		}
-		
 		T $ = gson.fromJson(reader, type);;
-		try {
-			reader.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Fialed to close reader!");
-		}
 		return $;
 	}
 	
@@ -73,8 +74,9 @@ class Utils {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
 			JsonWriter writer = new JsonWriter(new OutputStreamWriter(os, ENCODING));
-			Gson gson = new GsonBuilder().create();
-			gson.toJson(object, object.getClass(), writer);
+		
+			writeObjectToJsonWriter(object, writer);
+			
 			String $ = new String(os.toByteArray(),ENCODING);
 			
 			try {
@@ -88,6 +90,18 @@ class Utils {
 			throw new RuntimeException("bad encoding");
 		}
 
+	}
+	
+	
+	/**
+	 * Serializes an object into a UTF-8 GSON string.
+	 * @param object The object to be serialized.
+	 * @return The UTF-8 GSON string representing the object.
+	 */
+	public static <T> void writeObjectToJsonWriter(T object, JsonWriter writer)
+	{
+			Gson gson = new GsonBuilder().create();
+			gson.toJson(object, object.getClass(), writer);
 	}
 	
 	

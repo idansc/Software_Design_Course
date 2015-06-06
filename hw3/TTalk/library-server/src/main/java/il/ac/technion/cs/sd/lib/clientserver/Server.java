@@ -35,7 +35,7 @@ public class Server {
 	private String _address;
 	
 	private JsonReader persistentDataReader;
-	private JsonWriter persistentDataWritter;
+	private JsonWriter persistentDataWriter;
 	
 	
 	public String getAddress() {
@@ -111,78 +111,69 @@ public class Server {
 	 */
 	public <T> void saveObjectToFile(String filename, T data, boolean append)
 	{
+		File file = getFileByName(filename, true);
 		
-		OutputStream out = 
-				_persistentConfig.getPersistentMailOverwriteOutputStream();
-		
-		if (out == null)
-			return;
-		
-		JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
-		Gson gson = new GsonBuilder().create();
-		writer.beginArray();
-		
-		Iterator<Mail> it = allMail.descendingIterator();
-		while (it.hasNext())
+		if (append)
 		{
-			Mail mail = it.next(); 
-			DoublyLinkedList<Mail>.Node tmp = mail.newMailNode;
-			mail.newMailNode = null;
-			
-			gson.toJson(mail, Mail.class, writer);
-			
-			mail.newMailNode = tmp;
-		}	
-		writer.close();
+			if (persistentDataWriter == null)
+			{
+				persistentDataWriter = createJsonWriter(file); 
+			}
+		} else
+		{
+			if (persistentDataWriter != null)
+			{
+				try {
+					persistentDataWriter.close();					
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to close stream");
+				}
+			}
+			persistentDataWriter = createJsonWriter(file); 
+		}
+
+		Utils.writeObjectToJsonWriter(data,persistentDataWriter);
 	}
 	 
+	
 	/**
 	 * Reads a list of objects from persistent memory (file).
 	 * @param filename The filename of the file to read, without path.
 	 * @param objects The objects to be saved to the file (order is preserved).
-	 * @param startFromStart If true, the reading starts from the beginning of the file.
+	 * @param readFromStartOfFile If true, the reading starts from the beginning of the file (useful
+	 * when reading multiple objects).
 	 * If false, we read the next object in the file.
 	 * @return The object read, or empty if we've already read all objects, or the file doesn't exist.
 	 */
-	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStart) //TODO
+	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStartOfFile) //TODO
 	{
-		File file = getFileByNameAndCreateItsDirIfNecessary(filename);
+		File file = getFileByName(filename, false);
+		
 		if (!file.exists())
 		{
 			return Optional.empty();
 		}
 		
-		if (readFromStart)
+		if (readFromStartOfFile)
 		{
 			if (persistentDataReader != null)
 			{
-				persistentDataReader.close();
+				try {
+					persistentDataReader.close();
+				} catch (IOException e) {
+					throw new RuntimeException("Failed to close stream");
+				}
 			}
-			try {
-				persistentDataReader = new JsonReader(new FileInputStream(file));
-				
-				persistentDataInputStream = new FileInputStream(file);
-			} catch (FileNotFoundException e) {
-				assert(false);
-			}
+			persistentDataReader = createJsonReader(file); 
 		} else
 		{
-			if (persistentDataInputStream == null)
+			if (persistentDataReader == null)
 			{
-				try {
-					persistentDataInputStream = new FileInputStream(file);
-				} catch (FileNotFoundException e) {
-					assert(false);
-				}
+				persistentDataReader = createJsonReader(file); 
 			}
 		}
 		
-		try{
-			return Utils.fromGsonStreamToObject(persistentDataInputStream, type);
-		} catch (RuntimeException e)
-		{
-			return Optional.empty();
-		}
+		return Utils.readObjectFromGsonReader(persistentDataReader, type);
 	}
 	
 
@@ -205,10 +196,14 @@ public class Server {
 	
 	/**
 	 * Precondition: f is an existing file.
+	 * @throws RuntimeException - file not found.
 	 */
-	private JsonReader createJsonReader(File f) throws FileNotFoundException
+	private JsonReader createJsonReader(File f)
 	{
-		assert(f.exists());
+		if(!f.exists())
+		{
+			throw new RuntimeException("File does not exist");
+		}
 		try (InputStream stream = new FileInputStream(f)){
 			return new JsonReader(new InputStreamReader(stream, Utils.ENCODING));
 		} catch (UnsupportedEncodingException e) {
@@ -220,13 +215,17 @@ public class Server {
 
 	/**
 	 * Returns a File object representing the file.
-	 * If the directory of the file does not exist - it is created (along with all necessary parents).
 	 * @param filename - the filename, without path.
+	 * @param createItsDirIfNecessary If true, and the directory of the file does not exist - it is 
+	 * created (along with all necessary parents).
 	 */
-	private File getFileByNameAndCreateItsDirIfNecessary(String filename)
+	private File getFileByName(String filename, boolean createItsDirIfNecessary)
 	{
 		File serverDir = new File(getPesistentDirOfAllServers(), getServerDirName());
-		serverDir.mkdirs();
+		if (createItsDirIfNecessary)
+		{
+			serverDir.mkdirs();
+		}
 		return new File(serverDir, filename);
 	}
 	
