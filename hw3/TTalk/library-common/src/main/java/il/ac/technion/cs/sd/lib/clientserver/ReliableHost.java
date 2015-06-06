@@ -2,6 +2,7 @@ package il.ac.technion.cs.sd.lib.clientserver;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import il.ac.technion.cs.sd.msg.Messenger;
@@ -436,7 +437,7 @@ class ReliableHost {
 		{
 			String str;
 			try {
-				str = _messenger.getLastOrNextMessage(100);
+				str = primitiveMessagesToHandle.poll(10, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
 				throw new RuntimeException("InterruptedException");
 			}
