@@ -10,6 +10,7 @@ public class ClientServerIntegratedTest {
 
 	@Before
 	public void setUp() throws Exception {
+		
 	}
 
 	@After
