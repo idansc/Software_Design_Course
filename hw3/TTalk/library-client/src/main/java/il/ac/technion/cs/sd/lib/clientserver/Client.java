@@ -84,7 +84,8 @@ public class Client {
 	 */
 	public <T> void send(T data) {
 		try {
-			_reliableHost.send(_serverAddress, Utils.fromObjectToGsonStr(data), false);
+			String payload = Utils.fromObjectToGsonStr(data);
+			_reliableHost.send(_serverAddress, payload, false);
 		} catch (MessengerException e) {
 			throw new InvalidOperation();
 		} 

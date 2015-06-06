@@ -63,7 +63,7 @@ class ReliableHost {
 	 */
 	private boolean messageRecivedIndicator = false;
 	
-	Object sendingLock;
+	Object sendingLock = new Object();
 	
 	/**
 	 * We'll send objects of this class via Messenger.
@@ -235,6 +235,11 @@ class ReliableHost {
 		} 
 		
 		InnerMessage message = Utils.fromGsonStrToObject(data, InnerMessage.class);
+		try {
+			_messenger.send(message.fromAddress, "");
+		} catch (MessengerException e1) {
+			throw new RuntimeException("comunication faulure"); 
+		}
 		
 		if (responseRequestorId != null && responseRequestorId == message.responseTargetId)
 		{
@@ -291,7 +296,8 @@ class ReliableHost {
 			 */
 			while (!messageRecivedIndicator)
 			{
-				_messenger.send(targetAddress, Utils.fromObjectToGsonStr(newMessage));
+				String payload = Utils.fromObjectToGsonStr(newMessage);
+				_messenger.send(targetAddress, payload);
 				try {
 					Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
 				} catch (InterruptedException e) {

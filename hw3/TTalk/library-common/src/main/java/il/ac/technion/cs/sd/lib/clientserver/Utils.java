@@ -82,16 +82,14 @@ class Utils {
 			JsonWriter writer = new JsonWriter(new OutputStreamWriter(os, ENCODING));
 		
 			writeObjectToJsonWriter(object, writer);
-			
-			String $ = new String(os.toByteArray(),ENCODING);
-			
+				
 			try {
 				writer.close();
 			} catch (IOException e) {
 				throw new RuntimeException("Failed to close writer!");
 			}
 			
-			return $;
+			return new String(os.toByteArray(),ENCODING);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("bad encoding");
 		}
