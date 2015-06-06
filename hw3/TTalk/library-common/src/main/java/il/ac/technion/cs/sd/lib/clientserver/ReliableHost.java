@@ -50,6 +50,9 @@ class ReliableHost {
 	//This object is used as a monitor to synchronize messages consumptions.
 	Object consumptionLock = new Object();
 	
+	//This object is used as a monitor to synchronize send-and-block mechanizem.
+	Object sendAndBlockLock = new Object();
+	
 	/* The id to give the next outgoing message.
 	 * All modification to synchronized must be done while synchronized by the nextMessageIdToGive
 	 * monitor. 
@@ -65,6 +68,7 @@ class ReliableHost {
 	 * false.
 	 */
 	private boolean messageRecivedIndicator = false;
+	private boolean waitingForRecepientConfirmation = false; // for debuging.
 	
 	Object sendingLock = new Object();
 	
@@ -142,6 +146,7 @@ class ReliableHost {
 					Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(_address)); 
 					
 					assert(!messageRecivedIndicator);
+					assert(waitingForRecepientConfirmation);
 					messageRecivedIndicator = true;
 					
 					return;
@@ -150,7 +155,11 @@ class ReliableHost {
 				//TODO: DELETE
 				Utils.DEBUG_LOG_LINE("+++ Adding to queue of: " + Utils.showable(_address) + ", payload.length():" + payload.length() );
 				
+				sendRecipeintConfirmation(payload);
 				primitiveMessagesToHandle.put(payload);
+				
+				
+				
 			} catch (Exception e) {
 				throw new RuntimeException("failded to put in primitiveMessagesToHandle");
 			}
@@ -239,6 +248,7 @@ class ReliableHost {
 	
 	/**
 	 * Sends a message to the server, and blocks until a response message is received.
+	 * This function runs either on the user's thread or on the listen loop thread.
 	 * @param targetAddress
 	 * @param data
 	 * @throws MessengerException
@@ -264,31 +274,37 @@ class ReliableHost {
 		}
 		responseBQ = new LinkedBlockingQueue<InnerMessage>();
 		
-		send(targetAddress, data, null, responseRequestorId);
+		synchronized(sendAndBlockLock)
+		{
+			send(targetAddress, data, null, responseRequestorId);
+			
+			
+			InnerMessage response;
+			try {
+				response = responseBQ.take();
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			}
 		
 		
-		InnerMessage response;
-		try {
-			response = responseBQ.take();
-		} catch (InterruptedException e) {
-			throw new RuntimeException("InterruptedException");
+			Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
+			
+			
+			
+			assert(responseBQ.isEmpty());
+			responseBQ = null;
+			
+			assert(response.responseTargetId == responseRequestorId);
+			responseRequestorId = null;
+			
+			return response.data;
 		}
-		
-		Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
-		
-		
-		assert(responseBQ.isEmpty());
-		responseBQ = null;
-		
-		assert(response.responseTargetId == responseRequestorId);
-		responseRequestorId = null;
-		
-		return response.data;
 	}
 
 	
 	/*
 	 * Only a single non-empty message can be consumed at any given time.
+	 * This function is run on the listen-loop thread.
 	 */
 	private void newMessageArrivedCallback(String data)
 	{
@@ -304,10 +320,6 @@ class ReliableHost {
 		
 		//TODO: DELETE
 		Utils.DEBUG_LOG_LINE("msg=" + message);
-		
-		
-		primitiveSendRepeatedly(message.fromAddress, "");
-		
 		
 		
 		if (responseRequestorId != null && responseRequestorId == message.responseTargetId)
@@ -343,6 +355,7 @@ class ReliableHost {
 	
 	/**
 	 * Sends a 'data' string to 'targetAddress', without a chance to fail.
+	 * This function runs either on the user's thread or on the listen loop thread.
 	 * @param respnseTargetId Should be null if 'data' is not a response.
 	 * @param newMessageId If null, nextMessageIdToGive is used and incremented.
 	 * @throws MessengerException 
@@ -356,6 +369,7 @@ class ReliableHost {
 		}
 		
 		assert(!messageRecivedIndicator);
+		assert(!waitingForRecepientConfirmation);
 		
 		if (newMessageId == null)
 		{
@@ -389,6 +403,8 @@ class ReliableHost {
 				
 				
 				String payload = Utils.fromObjectToGsonStr(newMessage);
+				
+				waitingForRecepientConfirmation = true;
 				primitiveSendRepeatedly(targetAddress, payload);
 				try {
 					Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
@@ -396,6 +412,7 @@ class ReliableHost {
 					throw new RuntimeException("InterruptedException");
 				}
 			}
+			waitingForRecepientConfirmation = false;
 			
 			Utils.DEBUG_LOG_LINE("===success   (by " + _address + ")"); //TODO:DELETE
 			
@@ -432,6 +449,7 @@ class ReliableHost {
 	}
 
 	
+	/* Runs on a single dedicated thread */
 	private void listeningLoop()
 	{
 		messageLoopCurrentlyRunning = true;
@@ -457,6 +475,16 @@ class ReliableHost {
 		
 		//TODO
 		Utils.DEBUG_LOG_LINE("!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: " + _address);
+	}
+	
+	/**
+	 * sends a confirmation (empty message) that the payload was received.
+	 * @param payload - a primitive payload received by _messenger.
+	 */
+	private void sendRecipeintConfirmation(String payload)
+	{
+		InnerMessage m = Utils.fromGsonStrToObject(payload, InnerMessage.class);
+		primitiveSendRepeatedly(m.fromAddress, "");
 	}
 
 }
