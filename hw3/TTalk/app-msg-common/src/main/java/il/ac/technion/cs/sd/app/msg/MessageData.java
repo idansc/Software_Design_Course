@@ -9,32 +9,29 @@ package il.ac.technion.cs.sd.app.msg;
  *
  */
 class MessageData{
-	ClientTaskType _clientTaskType;
+
 	ServerTaskType _serverTaskType;
 	
 	InstantMessage _message;
 	
-	String _whom;
+	String _from;
 	String _target;
 	Boolean _friendRequestAnswer;
 	
-	MessageData(ClientTaskType clientTaskType){
-		_clientTaskType = clientTaskType;
 
+	MessageData(ServerTaskType taskType){
+		_serverTaskType = taskType;
+		
 	}
-	MessageData(ClientTaskType clientTaskType, Boolean friendRequestAnswer){
-		_clientTaskType = clientTaskType;
+	MessageData(ServerTaskType serverTaskType, Boolean friendRequestAnswer){
+		_serverTaskType = serverTaskType;
 		_friendRequestAnswer = friendRequestAnswer;
 
 	}
-	MessageData(ClientTaskType clientTaskType, InstantMessage message){
-		_clientTaskType = clientTaskType;
+	MessageData(ServerTaskType serverTaskType, InstantMessage message){
+		_serverTaskType = serverTaskType;
 		_message = message;
 		
-	}
-	MessageData(ServerTaskType taskType){
-		_serverTaskType = taskType;
-
 	}
 	MessageData(ServerTaskType taskType,String target){
 		_serverTaskType = taskType;

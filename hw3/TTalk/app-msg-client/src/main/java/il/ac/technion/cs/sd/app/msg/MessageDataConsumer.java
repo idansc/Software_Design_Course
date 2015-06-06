@@ -28,17 +28,17 @@ class MessageDataConsumer implements Consumer<MessageData> {
 	}
 	@Override
 	public void accept(MessageData messageData){
-		switch (messageData._clientTaskType) {
-		case CLIENT_RECEIVED_MESSAGE:
+		switch (messageData._serverTaskType) {
+		case SEND_MESSAGE_TASK:
 			_mc.accept(messageData._message);
 			break;
-		case CLIENT_RECEIVED_FRIEND_REQUEST:{
-			MessageData friendRequestReply = new MessageData(ClientTaskType.CLIENT_RECEIVED_FRIEND_REQUEST,
-					_frh.apply(messageData._whom));
+		case REQUEST_FRIENDSHIP_TASK:{
+			MessageData friendRequestReply = new MessageData(ServerTaskType.CLIENT_REPLY_FRIEND_REQUEST_TASK,
+					_frh.apply(messageData._from));
 			_client.send(friendRequestReply);
 		}
-		case CLIENT_RECEIVED_FRIEND_REPLY:
-			_frc.accept(messageData._whom,messageData._friendRequestAnswer);
+		case CLIENT_REPLY_FRIEND_REQUEST_TASK:
+			_frc.accept(messageData._from,messageData._friendRequestAnswer);
 		default:
 			break;
 		}
