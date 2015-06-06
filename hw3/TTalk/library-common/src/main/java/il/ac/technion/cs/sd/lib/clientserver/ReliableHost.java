@@ -71,6 +71,7 @@ class ReliableHost {
 	
 	boolean messageLoopRequestedToStop = false;
 	boolean messageLoopCurrentlyRunning = false;
+	// queue for non-empty messages.
 	BlockingQueue<String> primitiveMessagesToHandle = new LinkedBlockingQueue<>();
 	Thread listenThread;
 
@@ -141,6 +142,21 @@ class ReliableHost {
 		
 		_messenger = new MessengerFactory().start(_address, payload -> {
 			try {
+				
+				if (payload.isEmpty())
+				{
+					//TODO: DELETE
+					Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(_address)); 
+					
+					assert(!messageRecivedIndicator);
+					messageRecivedIndicator = true;
+					
+					return;
+				} 
+				
+				//TODO: DELETE
+				Utils.DEBUG_LOG_LINE("+++ Adding to queue of: " + Utils.showable(_address) + ", payload.length():" + payload.length() );
+				
 				primitiveMessagesToHandle.put(payload);
 			} catch (Exception e) {
 				throw new RuntimeException("failded to put in primitiveMessagesToHandle");
@@ -288,15 +304,7 @@ class ReliableHost {
 		Utils.DEBUG_LOG_LINE("NewArrived. _address="+ Utils.showable(_address) + ", data.length()="
 		+ data.length() + ", data=" + Utils.showable(data));
 		
-		if (data.isEmpty())
-		{
-			//TODO: DELETE
-			Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(_address)); 
-			
-			assert(!messageRecivedIndicator);
-			messageRecivedIndicator = true;
-			return;
-		} 
+		assert (!data.isEmpty());
 		
 		InnerMessage message = Utils.fromGsonStrToObject(data, InnerMessage.class);
 		
@@ -329,13 +337,14 @@ class ReliableHost {
 		Utils.DEBUG_LOG_LINE("---regular-consume");
 
 		
-		synchronized(consumptionLock)
-		{
+//		synchronized(consumptionLock)
+//		{
 			assert(currentMessageConsumedId == null);
 			currentMessageConsumedId = message.messageId;
 			_consumer.accept(message.fromAddress, message.data);
 			currentMessageConsumedId = null;
-		}
+//		} TODO
+			
 	}
 
 	
@@ -444,10 +453,17 @@ class ReliableHost {
 			if (str != null)
 			{
 				newMessageArrivedCallback(str);
+			} else
+			{
+				//TODO: delete
+				Utils.DEBUG_LOG_LINE("____________________queue empty for: " + _address); 
 			}
 		}
 		messageLoopRequestedToStop = false;
 		messageLoopCurrentlyRunning = false;
+		
+		//TODO
+		Utils.DEBUG_LOG_LINE("!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: " + _address);
 	}
 
 }

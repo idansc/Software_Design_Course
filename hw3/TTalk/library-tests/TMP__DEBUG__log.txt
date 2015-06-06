@@ -1,272 +1,93 @@
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=0,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":0
-msg=[from:server1_0717a47,messageId=0,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+>>>Sending message from client1_103f635b-6bb9-4570-89a7-367789345f52, msg=[from:client1_103f635,messageId=0,responseTargetId=null]
+===try #1     (by client1_103f635b-6bb9-4570-89a7-367789345f52)
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
++++ Adding to queue of: server1_a7ed6ff, payload.length():114
+NewArrived. _address=server1_a7ed6ff, data.length()=114, data=[{"messageId":0
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+msg=[from:client1_103f635,messageId=0,responseTargetId=null]
+|||||| Sending empty message, from: server1_a7ed6ffe-d058-458e-8402-021c46368ea4; to: client1_103f635b-6bb9-4570-89a7-367789345f52 |||||||||
+""   _address=client1_103f635
 ---regular-consume
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=1,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":1
-msg=[from:server1_0717a47,messageId=1,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
----regular-consume
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=2,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":2
-msg=[from:server1_0717a47,messageId=2,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
----regular-consume
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=3,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":3
-msg=[from:server1_0717a47,messageId=3,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
----regular-consume
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=4,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":4
-msg=[from:server1_0717a47,messageId=4,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
----regular-consume
-""   _address=server1_0717a47
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=5,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":5
-msg=[from:server1_0717a47,messageId=5,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
----regular-consume
-""   _address=server1_0717a47
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=6,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-===try #2     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":6
-msg=[from:server1_0717a47,messageId=6,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
----regular-consume
-""   _address=server1_0717a47
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=7,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":7
-msg=[from:server1_0717a47,messageId=7,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
----regular-consume
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=8,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":8
-msg=[from:server1_0717a47,messageId=8,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
-NewArrived. _address=server1_0717a47, data.length()=0, data=
----regular-consume
-""   _address=server1_0717a47
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from server1_0717a475-989e-4dad-8edd-1244da6fdb08, msg=[from:server1_0717a47,messageId=9,responseTargetId=null]
-===try #1     (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
-NewArrived. _address=client1_abac79a, data.length()=114, data=[{"messageId":9
-msg=[from:server1_0717a47,messageId=9,responseTargetId=null]
-|||||| Sending empty message, from: client1_abac79a3-70e4-423e-a4c7-78e7a01c193a; to: server1_0717a475-989e-4dad-8edd-1244da6fdb08 |||||||||
----regular-consume
-NewArrived. _address=server1_0717a47, data.length()=0, data=
-""   _address=server1_0717a47
-===success   (by server1_0717a475-989e-4dad-8edd-1244da6fdb08)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=0,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":0
-msg=[from:client1_115af22,messageId=0,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=1,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=1,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=2,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":2
-msg=[from:client1_115af22,messageId=2,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
----regular-consume
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=3,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":3
-msg=[from:client1_115af22,messageId=3,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=4,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":4
-msg=[from:client1_115af22,messageId=4,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
----regular-consume
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=5,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":5
-msg=[from:client1_115af22,messageId=5,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=6,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":6
-msg=[from:client1_115af22,messageId=6,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=7,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-===try #2     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":7
-msg=[from:client1_115af22,messageId=7,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=8,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":8
-msg=[from:client1_115af22,messageId=8,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=9,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=114, data=[{"messageId":9
-msg=[from:client1_115af22,messageId=9,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=10,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=10,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
----regular-consume
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=11,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=11,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=12,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=12,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=13,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=13,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=14,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=14,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
----regular-consume
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=15,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=15,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=16,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=16,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
----regular-consume
-""   _address=client1_115af22
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=17,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=17,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=18,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=18,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
->>>Sending message from client1_115af22f-ffb8-4dfe-acf0-0da0123fd390, msg=[from:client1_115af22,messageId=19,responseTargetId=null]
-===try #1     (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
-NewArrived. _address=server1_1c657b2, data.length()=115, data=[{"messageId":1
-msg=[from:client1_115af22,messageId=19,responseTargetId=null]
-|||||| Sending empty message, from: server1_1c657b23-ca37-4bc4-9696-2891b0ad1c0c; to: client1_115af22f-ffb8-4dfe-acf0-0da0123fd390 |||||||||
-NewArrived. _address=client1_115af22, data.length()=0, data=
-""   _address=client1_115af22
----regular-consume
-===success   (by client1_115af22f-ffb8-4dfe-acf0-0da0123fd390)
+>>>Sending message from server1_a7ed6ffe-d058-458e-8402-021c46368ea4, msg=[from:server1_a7ed6ff,messageId=0,responseTargetId=0]
+===try #1     (by server1_a7ed6ffe-d058-458e-8402-021c46368ea4)
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
++++ Adding to queue of: client1_103f635, payload.length():136
+NewArrived. _address=client1_103f635, data.length()=136, data=[{"messageId":0
+msg=[from:server1_a7ed6ff,messageId=0,responseTargetId=0]
+|||||| Sending empty message, from: client1_103f635b-6bb9-4570-89a7-367789345f52; to: server1_a7ed6ffe-d058-458e-8402-021c46368ea4 |||||||||
+""   _address=server1_a7ed6ff
+---responseBQ.put(message)
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+===success   (by client1_103f635b-6bb9-4570-89a7-367789345f52)
+Took, _address=client1_103f635, msg=[from:server1_a7ed6ff,messageId=0,responseTargetId=0]
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+===success   (by server1_a7ed6ffe-d058-458e-8402-021c46368ea4)
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: client1_103f635b-6bb9-4570-89a7-367789345f52
+!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: client1_103f635b-6bb9-4570-89a7-367789345f52
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+____________________queue empty for: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
+!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: server1_a7ed6ffe-d058-458e-8402-021c46368ea4
