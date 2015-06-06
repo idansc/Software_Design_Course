@@ -95,23 +95,6 @@ public class Server {
 	public void stop()
 	{
 		_reliableHost.stop();
-		
-		try {
-			if (persistentDataReader != null)
-			{
-				persistentDataReader.close();
-				persistentDataReader = null;
-			}
-
-			if (persistentDataWriter != null)
-			{
-				persistentDataWriter.close();
-				persistentDataWriter = null;
-			}
-
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to close stream");
-		}
 	}
 	
 
