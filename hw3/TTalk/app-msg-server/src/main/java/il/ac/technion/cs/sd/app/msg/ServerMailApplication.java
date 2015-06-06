@@ -45,19 +45,21 @@ public class ServerMailApplication {
 	 * This should be a <b>non-blocking</b> call.
 	 */
 	public void start() {
-		_offlineMessages = _server.readObjectFromFile(filename, 
-				new TypeToken<Map<String, List<MessageData>>>(){}.getType(), false);
-		_clientFriends = _server.readObjectFromFile(filename, new TypeToken<Map<String, Set<String>>>(){}.getType(), false);
+		_server.<Map<String, List<MessageData>>>readObjectFromFile(filename, 
+				new TypeToken<Map<String, List<MessageData>>>(){}.getType(), false)
+				.ifPresent((data)->_offlineMessages = data);
+		_server.<Map<String, Set<String>>>readObjectFromFile(filename, new TypeToken<Map<String, Set<String>>>(){}.getType(), false)
+				.ifPresent(data->_clientFriends = data);
 		_server.<MessageData>startListenLoop((messageData,from)->{
 			switch (messageData._serverTaskType) {
 			case LOGIN_TASK:{
 				_onlineClients.add(from);
-				_server.send(from, _offlineMessages.get(from));
+				_server.send(from, _offlineMessages.get(from),true);
 				break;
 			}
 			case SEND_MESSAGE_TASK:{
 				if(_onlineClients.contains(messageData._target))
-					_server.sendResponse(clientAddress, data);
+					_server.send(clientAddress, data,false);
 				break;
 			}
 			default:
