@@ -176,11 +176,24 @@ public class ClientServerIntegratedTest {
 		
 		Server s = new Server("server1");
 		s.startListenLoop(consumer1, POJO1.class);
-		
+		Optional<POJO1> $ = s.readObjectFromFile("pojo1", POJO1.class);
 		s.stop();
+
+		assertEquals($.get(), pojo1);
+	}
+	
+	
+	@Test
+	public void saveAndThenLoadAfterClear() {
+		
+		POJO1 pojo1 = new POJO1(1, "hi");
+		
+		server1.saveObjectToFile("pojo1", pojo1);
+		
+		server1.clearPersistentData();
 		
 		Optional<POJO1> $ = server1.readObjectFromFile("pojo1", POJO1.class);
-		assertEquals($.get(), pojo1);
+		assertFalse($.isPresent());
 	}
 	
 }
