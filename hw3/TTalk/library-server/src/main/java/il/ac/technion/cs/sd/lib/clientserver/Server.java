@@ -37,9 +37,6 @@ public class Server {
 
 	private ReliableHost _reliableHost;
 	
-	private JsonReader persistentDataReader;
-	private JsonWriter persistentDataWriter;
-	
 	
 	public String getAddress() {
 		return _reliableHost.getAddress();
@@ -89,12 +86,32 @@ public class Server {
 	
 
 	/**
-	 * Stop the listen loop (messages sent from clients will no longer be consumed.
+	 * Stop the listen loop (messages sent from clients will no longer be consumed).
+	 *  {@link #saveObjectToFile(String, Object, boolean)} and {@link #readObjectFromFile(String, Type, boolean)} 
+	 *  will re-open streams, so you'll start reading/writing from the begining of the files).
 	 * @throws InvalidOperation When the listen loop was not running when calling this method.
+	 * 
 	 */
 	public void stop()
 	{
 		_reliableHost.stop();
+		
+		try {
+			if (persistentDataReader != null)
+			{
+				persistentDataReader.close();
+				persistentDataReader = null;
+			}
+
+			if (persistentDataWriter != null)
+			{
+				persistentDataWriter.close();
+				persistentDataWriter = null;
+			}
+
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to close stream");
+		}
 	}
 	
 
@@ -141,7 +158,7 @@ public class Server {
 	 * @param append If true 'data' is appended to the end of the file (if already exists).
 	 * If false, the previous content of the file (if already exists) is lost.   
 	 */
-	public <T> void saveObjectToFile(String filename, T data, boolean append)
+	public <T> void saveObjectToFile(String filename, T data)
 	{
 		File file = getFileByName(filename, true);
 		
@@ -178,7 +195,7 @@ public class Server {
 	 * @return The object read, or empty if we've already read all objects, or the file doesn't exist.
 	 * @throws BadFileContent If an unexpected file content was read.
 	 */
-	public <T> Optional<T> readObjectFromFile(String filename, Type type, boolean readFromStartOfFile) //TODO
+	public <T> Optional<T> readObjectFromFile(String filename, Type type)
 	{
 		File file = getFileByName(filename, false);
 		
