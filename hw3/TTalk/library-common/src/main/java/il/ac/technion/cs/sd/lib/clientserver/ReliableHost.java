@@ -44,9 +44,11 @@ class ReliableHost {
 	 * sendResponse uses this variable to determine the response target. 
 	 * Note that this is an id of a message sent - so it may collide with an arbitrary message
 	 * this object has sent (and it's no problem).
-	 * This object is used as a monitor to synchronize messages consumptions.
 	 */
 	Long currentMessageConsumedId;
+	
+	//This object is used as a monitor to synchronize messages consumptions.
+	Object consumptionLock = new Object();
 	
 	/*
 	 * All modification to synchronized must be done while synchronized by the nextMessageIdToGive
@@ -252,7 +254,7 @@ class ReliableHost {
 		}
 
 		
-		synchronized(currentMessageConsumedId)
+		synchronized(consumptionLock)
 		{
 			assert(currentMessageConsumedId == null);
 			currentMessageConsumedId = message.messageId;

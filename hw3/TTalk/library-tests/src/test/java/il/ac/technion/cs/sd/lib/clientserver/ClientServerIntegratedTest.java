@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -125,6 +126,9 @@ public class ClientServerIntegratedTest {
 		
 		server1.clearPersistentData();
 		server2.clearPersistentData();
+		
+		biConsumer1_bq = new LinkedBlockingQueue<>(); 
+		consumer1_bq = new LinkedBlockingQueue<>();
 	}
 
 	@After
@@ -219,5 +223,13 @@ public class ClientServerIntegratedTest {
 		client1.stopListenLoop();
 		server1.stop();
 		
+	}
+	
+	@Test
+	public void TODO()
+	{
+		Server s = new Server("aaaa");
+		s.startListenLoop(biConsumer1, POJO1.class);
+		//s.stop();
 	}
 }
