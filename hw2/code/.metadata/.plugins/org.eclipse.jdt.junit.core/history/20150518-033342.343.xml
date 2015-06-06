@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="ServerMailApplicationTest" project="app-mail-server" tests="3" started="3" failures="0" errors="0" ignored="0">
-  <testsuite name="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.155">
-    <testcase name="starWhenAlreadyStarted" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.147"/>
-    <testcase name="starListen" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.008"/>
-    <testcase name="stopWhenAlteadyStopped" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.0"/>
-  </testsuite>
-</testrun>

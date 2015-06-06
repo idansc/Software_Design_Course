@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="ServerMailApplicationTest" project="app-mail-server" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testsuite name="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.131">
-    <testcase name="testSendMail" classname="il.ac.technion.cs.sd.app.mail.ServerMailApplicationTest" time="0.131"/>
-  </testsuite>
-</testrun>

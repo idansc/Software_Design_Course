@@ -1,8 +1,0 @@
-package il.ac.technion.cs.sd.lib.clientserver;
-
-public interface Task {
-	
-	/* @param sender
-	 * @param data The data sent to the server on which the task should act appon */
-	void run(String sender, byte[] data);
-}

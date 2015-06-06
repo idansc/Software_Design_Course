@@ -1,6 +1,0 @@
-package il.ac.technion.cs.sd.app.mail;
-
-/* Represents configurations related to I/O of persistent data. */
-interface PersistentConfig {
-
-}

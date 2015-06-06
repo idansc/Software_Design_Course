@@ -1,8 +1,0 @@
-package il.ac.technion.cs.sd.lib.clientserver;
-
-@FunctionalInterface
-public interface ServerTask {
-	
-	/* @param data The data that the client sent to the server. */
-	void run(Server, String clientAddress, byte[] data);
-}
