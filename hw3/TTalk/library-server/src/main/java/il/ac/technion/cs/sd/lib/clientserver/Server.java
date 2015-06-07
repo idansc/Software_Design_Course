@@ -133,6 +133,8 @@ public class Server {
 			return;
 		}
 		try {
+			if (!persistentDataDir.exists())
+				return;
 				FileUtils.cleanDirectory(getServerPersistentDir());
 				FileUtils.deleteDirectory(getServerPersistentDir());
 		} catch (IOException e) {
