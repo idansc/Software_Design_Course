@@ -50,6 +50,12 @@ public class ServerMailApplication {
 	}
 	
 	private void initializeDataFromFile(){
+		
+		server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
+		server.saveObjectToFile(onlineClientsFileName, _onlineClients);
+		server.saveObjectToFile(clientFriendsFileName, _clientFriends);
+		
+		
 		server.<Map<String, ArrayList<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
 				new TypeToken<Map<String, List<MessageData>>>(){}.getType())
 				.ifPresent((data)->_offlineMessages = data);
@@ -133,8 +139,8 @@ public class ServerMailApplication {
 	 */
 	public void stop() {
 		server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
-		server.saveObjectToFile(onlineClientsFileName, _clientFriends);
-		server.saveObjectToFile(clientFriendsFileName, _onlineClients);
+		server.saveObjectToFile(onlineClientsFileName, _onlineClients);
+		server.saveObjectToFile(clientFriendsFileName, _clientFriends);
 		server.stop();
 	}
 	

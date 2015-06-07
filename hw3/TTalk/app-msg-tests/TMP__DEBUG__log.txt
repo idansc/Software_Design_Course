@@ -1486,3 +1486,173 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+===success   (by Ofer)
+Took, _address=Ofer, msg=[from:Server,messageId=1,responseTargetId=0]
+____________________queue empty for: Idan
+>>>Sending message from Idan, msg=[from:Idan,messageId=5,responseTargetId=null]
+===try #1     (by Idan)
+____________________queue empty for: Ofer
+|||||| Sending empty message, from: Server; to: Idan |||||||||
+===success   (by Server)
+""   _address=Idan
+____________________queue empty for: Idan
++++ Adding to regular queue of: Server, payload.length():87
+NewArrived. _address=Server, data.length()=87, data=[{"messageId":5
+---regular-consume: [from:Idan,messageId=5,responseTargetId=null]
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+===success   (by Idan)
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
+>>>Sending message from Ofer, msg=[from:Ofer,messageId=1,responseTargetId=null]
+===try #1     (by Ofer)
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+===try #2     (by Ofer)
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+|||||| Sending empty message, from: Server; to: Ofer |||||||||
+""   _address=Ofer
++++ Adding to regular queue of: Server, payload.length():87
+NewArrived. _address=Server, data.length()=87, data=[{"messageId":1
+---regular-consume: [from:Ofer,messageId=1,responseTargetId=null]
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+===success   (by Ofer)
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Server
+!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Server
