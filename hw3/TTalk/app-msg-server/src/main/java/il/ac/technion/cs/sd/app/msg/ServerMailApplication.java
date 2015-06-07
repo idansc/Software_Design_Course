@@ -50,11 +50,7 @@ public class ServerMailApplication {
 	}
 	
 	private void initializeDataFromFile(){
-		
-		server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
-		server.saveObjectToFile(onlineClientsFileName, _onlineClients);
-		server.saveObjectToFile(clientFriendsFileName, _clientFriends);
-		
+				
 		
 		server.<HashMap<String, ArrayList<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
 				new TypeToken<HashMap<String, ArrayList<MessageData>>>(){}.getType())
