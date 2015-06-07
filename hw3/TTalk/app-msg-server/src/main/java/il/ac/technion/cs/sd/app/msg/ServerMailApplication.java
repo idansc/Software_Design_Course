@@ -36,7 +36,6 @@ public class ServerMailApplication {
 
 	public ServerMailApplication(String name) {
 		server = new Server(name);	
-		server.clearPersistentData();
 	}
 	
 	void setServer(Server server) {
