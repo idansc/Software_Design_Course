@@ -155,6 +155,7 @@ public class ClientServerIntegratedTest {
 
 		biConsumer1_bq = new LinkedBlockingQueue<>(); 
 		consumer1_bq = new LinkedBlockingQueue<>();
+		consumer2_bq = new LinkedBlockingQueue<>();
 	}
 
 	@After
@@ -326,7 +327,7 @@ public class ClientServerIntegratedTest {
 	}
 
 
-	@Test(timeout=5000)
+	@Test(timeout=8000)
 	public void serverSendsResponseBackToClient() throws InterruptedException {
 
 		for (int k=0; k<2; k++)
@@ -460,70 +461,75 @@ public class ClientServerIntegratedTest {
 
 	}
 
+	
+	@Test//TODO(timeout=120000)
+	public void clientSendsToServerMessagesBothFromConsumerAndFromUserThread() throws InterruptedException {
 
-	class MyInteger
-	{
-		int x;
+		for (int k=0; k<2; k++)//TODO
+		{
+			
+			final Integer messagesToSendFromClient_block = 3*2 + 1; // MUST BE ODD FOR THIS TEST!
+			final Integer messagesToSendFromClient_nonblock = 6;
+			final Integer messagesToSendFromClient_total = 
+					messagesToSendFromClient_block + messagesToSendFromClient_nonblock;
+			
+			clients.get(0).startListenLoop(server1.getAddress(), (Integer i) ->
+			{
+				if (i > 0)
+				{ 
+					i--;
+					tmp++;
+					assert(i%2 == 0);
 
-		MyInteger(int x) {
-			this.x = x;
+					Integer $ = clients.get(0).sendAndBlockUntilResponseArrives(
+							i,Integer.class);
+					assertEquals((Integer)$, i);
+						
+					if (i>0)
+					{
+						i--;
+						tmp++;
+						assert(i%2 == 1);
+						clients.get(0).send(i);
+					}
+
+				}
+			}, Integer.class);
+
+
+			server1.startListenLoop((Integer i,String from) ->
+			{
+				if (i<0)
+				{
+					tmp++;
+					return;
+				}
+				boolean isResponse = (i%2 == 0);
+				server1.<Integer>send(clients.get(0).getAddress(), i, isResponse);
+			}, Integer.class);
+
+			
+			for (int i=0; i<2; i++)//TODO
+			{
+				/* counter of [messages From Client send from consumer + messages server received from
+				 * user's thread */ 
+				tmp = 0;
+				
+				server1.send(clients.get(0).getAddress(), messagesToSendFromClient_block , false);
+				for (int s=0; s<messagesToSendFromClient_nonblock; s++)
+				{
+					clients.get(0).send(new Integer(-1));
+				}
+				
+				int total_transmitions = 
+						(3 * messagesToSendFromClient_block  + 2 * messagesToSendFromClient_nonblock );
+				Thread.sleep( total_transmitions * 200 );
+				
+				assertEquals(messagesToSendFromClient_total, new Integer(tmp));
+			}
+
+			clients.get(0).stopListenLoop();
+			server1.stop();
 		}
 	}
-	
-//	@Test//TODO(timeout=20000)
-//	public void clientSendsToServerMessagesBothFromConsumerAndFromUserThread() throws InterruptedException {
-//
-//		for (int k=0; k<1; k++)//TODO
-//		{
-//			// messages From Client Counter
-//			tmp = 0;
-//			
-//			final Integer messagesToSendFromClient = 7;
-//
-//			clients.get(0).<Integer>startListenLoop(server1.getAddress(), (Integer i) ->
-//			{
-//				i = new Integer(i);
-//				if (i > 0)
-//				{ 
-//					i--;
-//					tmp++;
-//					if (i%2 == 0)
-//					{
-//						Integer tmp = clients.get(0).<Integer,Integer>sendAndBlockUntilResponseArrives(i,Integer.class);
-//						assertEquals((Integer)tmp, i);
-//						
-//						if (i>0)
-//						{
-//							i--;
-//							tmp++;
-//							clients.get(0).<Integer>send(i);
-//						}
-//					} 
-//					else
-//					{
-//						clients.get(0).<Integer>send(i);
-//					}
-//				}
-//			}, Integer.class);
-//
-//
-//			server1.<Integer>startListenLoop((Integer i,String from) ->
-//			{
-//				i = new Integer(i);
-//				server1.<Integer>send(clients.get(0).getAddress(), i, i%2 == 0);
-//			}, Integer.class);
-//
-//			
-//			for (int i=0; i<1; i++)//TODO
-//			{
-//				server1.send(clients.get(0).getAddress(), messagesToSendFromClient , false);
-//				Thread.sleep(300 * messagesToSendFromClient);
-//			}
-//			
-//			assertEquals(messagesToSendFromClient, (Integer)tmp);
-//
-//			clients.get(0).stopListenLoop();
-//			server1.stop();
-//		}
-//	}
 }

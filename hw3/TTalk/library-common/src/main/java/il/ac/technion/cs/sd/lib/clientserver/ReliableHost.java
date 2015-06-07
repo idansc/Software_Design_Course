@@ -30,14 +30,11 @@ class ReliableHost {
 	// The first argument is the sender's address, the second is the data.
 	private BiConsumer<String, String> _consumer;
 	
-	/* This is not null iff sendAndBlockUntilResponseArrives is currently waiting for a response. 
-	 * A InnerMessage object representing the response will be pushed to this queue when received.
-	 * This queue can hold maximum one element. */
-	private BlockingQueue<InnerMessage> responseBQ;
+	/* A queue of InnerMessage objects representing the responses messages for messages sent by this host.
+	 * In practice, this queue will hold up to 2 elements (one for the user's thread and one for the
+	 * listening loop thread) */
+	private BlockingQueue<InnerMessage> responseBQ = new LinkedBlockingQueue<InnerMessage>();
 	
-	/* This is null iff responseBQ is null.
-	 * When not null - this is the id of the message that requests a response. */
-	Long responseRequestorId;
 	
 	/*
 	 * This is not null iff a message is currently being consumed by '_consumer'.
@@ -50,8 +47,6 @@ class ReliableHost {
 	//This object is used as a monitor to synchronize messages consumptions.
 	Object consumptionLock = new Object();
 	
-	//This object is used as a monitor to synchronize send-and-block mechanizem.
-	Object sendAndBlockLock = new Object();
 	
 	/* The id to give the next outgoing message.
 	 * All modification to synchronized must be done while synchronized by the nextMessageIdToGive
@@ -138,7 +133,7 @@ class ReliableHost {
 		_consumer = consumer;
 		
 		_messenger = new MessengerFactory().start(_address, payload -> {
-			try {
+
 				
 				if (payload.isEmpty())
 				{
@@ -152,21 +147,42 @@ class ReliableHost {
 					return;
 				} 
 				
-				//TODO: DELETE
-				Utils.DEBUG_LOG_LINE("+++ Adding to queue of: " + Utils.showable(_address) + ", payload.length():" + payload.length() );
-				
 				sendRecipeintConfirmation(payload);
-				primitiveMessagesToHandle.put(payload);
+				
+				InnerMessage message = getInnerMessageFromPayload(payload);
+				if (message.responseTargetId != null)
+				{
+					//TODO: DELETE
+					Utils.DEBUG_LOG_LINE("---responseBQ.put: " + message);
+					
+					try {
+						responseBQ.put(message);
+						assert(responseBQ.size() <= 2); // see documentation of responseBQ
+					} catch (InterruptedException e) {
+						throw new RuntimeException("InterruptedException");
+					}
+					return;
+				}
 				
 				
 				
-			} catch (Exception e) {
-				throw new RuntimeException("failded to put in primitiveMessagesToHandle");
-			}
+				//TODO: DELETE
+				Utils.DEBUG_LOG_LINE("+++ Adding to regular queue of: " + Utils.showable(_address) + ", payload.length():" + payload.length() );
+				
+				
+				try {
+					primitiveMessagesToHandle.put(payload);
+				} catch (Exception e) {
+					throw new RuntimeException("failded to put in primitiveMessagesToHandle");
+				}
+				
+				
+				
+
 		});
 		
 		listenThread = new Thread(() -> {
-			listeningLoop();
+				listeningLoop();
 		});
 		
 		listenThread.start();
@@ -213,8 +229,7 @@ class ReliableHost {
 			throw new RuntimeException("failed to kill messenger!");
 		}
 		
-		responseBQ = null;
-		responseRequestorId = null;
+		responseBQ.clear();
 		currentMessageConsumedId = null;
 	}
 	
@@ -263,42 +278,38 @@ class ReliableHost {
 		}
 		
 		
-		assert(responseBQ == null);
-		assert(responseRequestorId == null);
-		
-		
+		long responseRequestorId;
 		synchronized(nextMessageIdToGive)
 		{
 			responseRequestorId = nextMessageIdToGive;
 			nextMessageIdToGive++;
 		}
-		responseBQ = new LinkedBlockingQueue<InnerMessage>();
 		
-		synchronized(sendAndBlockLock)
+		
+		send(targetAddress, data, null, responseRequestorId);
+		
+		InnerMessage response;
+		
+		while (true)
 		{
-			send(targetAddress, data, null, responseRequestorId);
-			
-			
-			InnerMessage response;
 			try {
 				response = responseBQ.take();
 			} catch (InterruptedException e) {
 				throw new RuntimeException("InterruptedException");
 			}
-		
-		
-			Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
-			
-			
-			
-			assert(responseBQ.isEmpty());
-			responseBQ = null;
-			
-			assert(response.responseTargetId == responseRequestorId);
-			responseRequestorId = null;
-			
-			return response.data;
+			if (response.responseTargetId == responseRequestorId)
+			{
+				Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
+				return response.data;
+			}
+			try {
+				responseBQ.put(response);
+				Thread.sleep(50); // give the other thread a chance to grab the response.
+			} catch (InterruptedException e) {
+				throw new RuntimeException("InterruptedException");
+			} 
 		}
+		
 	}
 
 	
@@ -315,40 +326,18 @@ class ReliableHost {
 		
 		assert (!data.isEmpty());
 		
-		InnerMessage message = Utils.fromGsonStrToObject(data, InnerMessage.class);
+		InnerMessage message = getInnerMessageFromPayload(data);
 		
-		
-		//TODO: DELETE
-		Utils.DEBUG_LOG_LINE("msg=" + message);
-		
-		
-		if (responseRequestorId != null && responseRequestorId == message.responseTargetId)
-		{
-			
-			//TODO: DELETE
-			Utils.DEBUG_LOG_LINE("---responseBQ.put(message)");
-			
-			
-			
-			try {
-				responseBQ.put(message);
-			} catch (InterruptedException e) {
-				throw new RuntimeException("InterruptedException");
-			}
-			return;
-		}
+		assert(message.responseTargetId == null);
 		  
 		//TODO: DELETE
-		Utils.DEBUG_LOG_LINE("---regular-consume");
+		Utils.DEBUG_LOG_LINE("---regular-consume: " + message);
 
 		
-//		synchronized(consumptionLock)
-//		{
-			assert(currentMessageConsumedId == null);
-			currentMessageConsumedId = message.messageId;
-			_consumer.accept(message.fromAddress, message.data);
-			currentMessageConsumedId = null;
-//		} TODO
+		assert(currentMessageConsumedId == null);
+		currentMessageConsumedId = message.messageId;
+		_consumer.accept(message.fromAddress, message.data);
+		currentMessageConsumedId = null;
 			
 	}
 
@@ -486,8 +475,13 @@ class ReliableHost {
 	 */
 	private void sendRecipeintConfirmation(String payload)
 	{
-		InnerMessage m = Utils.fromGsonStrToObject(payload, InnerMessage.class);
+		InnerMessage m = getInnerMessageFromPayload(payload);
 		primitiveSendRepeatedly(m.fromAddress, "");
+	}
+
+
+	private InnerMessage getInnerMessageFromPayload(String payload) {
+		return Utils.fromGsonStrToObject(payload, InnerMessage.class);
 	}
 
 }
