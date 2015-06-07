@@ -36,6 +36,7 @@ public class ServerMailApplication {
 
 	public ServerMailApplication(String name) {
 		server = new Server(name);	
+		server.clearPersistentData();
 	}
 	
 	void setServer(Server server) {
@@ -143,4 +144,6 @@ public class ServerMailApplication {
 		_onlineClients.clear();
 		_clientFriends.clear();
 	}
+	
+	
 }

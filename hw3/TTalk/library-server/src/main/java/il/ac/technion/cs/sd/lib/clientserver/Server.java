@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -81,6 +82,7 @@ public class Server {
 				consumer.accept(Utils.fromGsonStrToObject(data, dataType), fromAddress);
 			});
 		} catch (MessengerException e) {
+			System.out.println(e.getMessage());
 			throw new InvalidOperation();
 		}
 		
@@ -131,9 +133,10 @@ public class Server {
 			return;
 		}
 		try {
-			FileUtils.deleteDirectory(getServerPersistentDir());
+				FileUtils.cleanDirectory(getServerPersistentDir());
+				FileUtils.deleteDirectory(getServerPersistentDir());
 		} catch (IOException e) {
-			throw new RuntimeException("deleting directory failed!");
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	

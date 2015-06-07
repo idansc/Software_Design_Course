@@ -28,6 +28,9 @@ class MessageDataConsumer implements Consumer<MessageData> {
 	}
 	@Override
 	public void accept(MessageData messageData){
+		if(messageData._serverTaskType==null){
+			return;
+		}
 		switch (messageData._serverTaskType) {
 		case SEND_MESSAGE_TASK:
 			_mc.accept(messageData._message);
