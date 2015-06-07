@@ -56,8 +56,9 @@ public class ClientMsgApplication {
 		client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer),MessageData.class);
 		
-		Optional<List<MessageData>> messages = client.sendAndBlockUntilResponseArrives(new MessageData(ServerTaskType.LOGIN_TASK)
-												,new TypeToken<Optional<List<MessageData>>>(){}.getType());
+		Optional<List<MessageData>> messages = client.sendAndBlockUntilResponseArrives(
+				new MessageData(ServerTaskType.LOGIN_TASK),
+				new TypeToken<Optional<List<MessageData>>>(){}.getType());
 		
 		messages.ifPresent(list->list.forEach(new MessageDataConsumer(client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer)));
@@ -112,7 +113,6 @@ public class ClientMsgApplication {
      * You can assume that a stopped client won't be restarted using {@link ClientMsgApplication#login(Consumer, Function, BiConsumer)}
      */
     public void stop() {
-            //no need
     }
 
 }
