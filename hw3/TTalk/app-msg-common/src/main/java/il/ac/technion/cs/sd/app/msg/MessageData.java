@@ -23,8 +23,9 @@ class MessageData{
 		_serverTaskType = taskType;
 		
 	}
-	MessageData(ServerTaskType serverTaskType, Boolean friendRequestAnswer){
+	MessageData(ServerTaskType serverTaskType,Boolean friendRequestAnswer,String target){
 		_serverTaskType = serverTaskType;
+		_target = target;
 		_friendRequestAnswer = friendRequestAnswer;
 
 	}

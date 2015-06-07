@@ -18,7 +18,7 @@ import org.junit.Test;
  *
  */
 public class TMsgIntegrationTest {
-	private ServerMailApplication server = new ServerMailApplication("Server");
+	private ServerMailApplication server;
 
 	
 	private ClientMsgApplication buildClient(String login) {
@@ -29,6 +29,7 @@ public class TMsgIntegrationTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		server = new ServerMailApplication("Server");
 		server.start(); // non-blocking
 	}
 
@@ -38,27 +39,31 @@ public class TMsgIntegrationTest {
 	@After
 	public void tearDown() throws Exception {
 		server.stop();
+		
 		server.clean();
+		
 	}
 
-//	@Test(timeout=3000)
-//	public void loginShouldGetOfflineMessages() throws InterruptedException{
-//		final BlockingQueue<InstantMessage>	messages = new LinkedBlockingQueue<>();
-//		ClientMsgApplication idan = buildClient("Idan");
-//		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
-//		idan.sendMessage("Ofer", "Hi wanna be my friend?");
-//		idan.sendMessage("Ofer", "Y U NO REPLY");
-//		idan.sendMessage("Ofer", "cri everytime :( :(");
-//		idan.sendMessage("Ofer", "Okay I get it :( nevermind");
-//		
-//		ClientMsgApplication ofer = buildClient("Ofer");
-//		ofer.login(x->messages.add(x), x -> true, (x, y) -> {});
-//		
-//		assertEquals("Hi wanna be my friend?", messages.take().getContent());
-//		assertEquals("Y U NO REPLY", messages.take().getContent());		
-//		assertEquals("cri everytime :( :(", messages.take().getContent());
-//		assertEquals("Okay I get it :( nevermind", messages.take().getContent());
-//	}
+	@Test(timeout=3000)
+	public void loginShouldGetOfflineMessages() throws InterruptedException{
+		final BlockingQueue<InstantMessage>	messages = new LinkedBlockingQueue<>();
+		ClientMsgApplication idan = buildClient("Idan");
+		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
+		idan.sendMessage("Ofer", "Hi wanna be my friend?");
+		idan.sendMessage("Ofer", "Y U NO REPLY");
+		idan.sendMessage("Ofer", "cri everytime :( :(");
+		idan.sendMessage("Ofer", "Okay I get it :( nevermind");
+		
+		ClientMsgApplication ofer = buildClient("Ofer");
+		ofer.login(x->messages.add(x), x -> true, (x, y) -> {});
+		
+		assertEquals("Hi wanna be my friend?", messages.take().getContent());
+		assertEquals("Y U NO REPLY", messages.take().getContent());		
+		assertEquals("cri everytime :( :(", messages.take().getContent());
+		assertEquals("Okay I get it :( nevermind", messages.take().getContent());
+		idan.logout();
+		ofer.logout();
+	}
 	
 	@Test(timeout=3000)
 	public void loginShouldGetOfflineFriendRequest() throws InterruptedException {
@@ -70,31 +75,38 @@ public class TMsgIntegrationTest {
 		ClientMsgApplication ofer = buildClient("Ofer");
 		ofer.login(x->{}, x -> friendshipRequest.add(x), (x, y) -> {});
 		assertEquals("Idan", friendshipRequest.take());
+		idan.logout();
+		ofer.logout();
 	}
 	
-//	@Test(timeout=3000)
-//	public void loginShouldGetOfflineFriendReplay() throws InterruptedException{
-//		final BlockingQueue<Boolean> friendshipReply	= new LinkedBlockingQueue<>();
-//		ClientMsgApplication idan = buildClient("Idan");
-//		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
-//		idan.sendMessage("Ofer", "Hi wanna be my friend?");
-//		idan.requestFriendship("Ofer");
-//
-//		idan.logout();
-//		ClientMsgApplication ofer = buildClient("Ofer");
-//		ofer.login(x->{}, x -> true, (x, y) -> {});
-//		idan.login(x->{}, x -> true,(x,y)->{if(x=="Ofer") friendshipReply.add(y);});
-//		assertEquals(true, friendshipReply.take());
-//	}
-//	
-//	@Test
-//	public void noFriendShouldFailOnlineCheck(){
-//		ClientMsgApplication idan = buildClient("Idan");
-//		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
-//		ClientMsgApplication ofer = buildClient("Ofer");
-//		ofer.login(x->{}, x -> true, (x, y) -> {});
-//		assertEquals(Optional.empty(), idan.isOnline("Ofer"));
-//	}
+	@Test
+	public void loginShouldGetOfflineFriendReplay() throws InterruptedException{
+		ClientMsgApplication idan = buildClient("Idan");
+		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
+		idan.sendMessage("Ofer", "Hi wanna be my friend?");
+		idan.requestFriendship("Ofer");
+
+		idan.logout();
+		ClientMsgApplication ofer = buildClient("Ofer");
+		ofer.login(x->{}, x -> true, (x, y) -> {});
+		idan.login(x->{}, x -> true,(x,y)->{
+				assertEquals("Ofer", x);
+				assertEquals(true, y);
+			});
+		idan.logout();
+		ofer.logout();
+	}
+	
+	@Test
+	public void noFriendShouldFailOnlineCheck(){
+		ClientMsgApplication idan = buildClient("Idan");
+		idan.login(x -> {}, x ->(x!="Gal")? true:false, (x, y) -> {});
+		ClientMsgApplication ofer = buildClient("Ofer");
+		ofer.login(x->{}, x -> true, (x, y) -> {});
+		assertEquals(Optional.empty(), idan.isOnline("Ofer"));
+		idan.logout();
+		ofer.logout();
+	}
 //	
 //	@Test
 //	public void onlineCheckReturnsGoodValues(){

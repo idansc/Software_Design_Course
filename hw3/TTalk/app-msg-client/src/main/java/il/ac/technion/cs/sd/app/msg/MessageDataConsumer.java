@@ -33,8 +33,10 @@ class MessageDataConsumer implements Consumer<MessageData> {
 			_mc.accept(messageData._message);
 			break;
 		case REQUEST_FRIENDSHIP_TASK:{
-			MessageData friendRequestReply = new MessageData(ServerTaskType.CLIENT_REPLY_FRIEND_REQUEST_TASK,
-					_frh.apply(messageData._from));
+			Boolean answer = _frh.apply(messageData._from);
+			MessageData friendRequestReply = new MessageData(ServerTaskType.CLIENT_REPLY_FRIEND_REQUEST_TASK,answer,
+					messageData._from
+					);
 			_client.send(friendRequestReply);
 		}
 		case CLIENT_REPLY_FRIEND_REQUEST_TASK:

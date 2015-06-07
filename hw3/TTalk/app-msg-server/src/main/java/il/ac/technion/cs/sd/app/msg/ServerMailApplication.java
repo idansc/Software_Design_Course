@@ -139,5 +139,8 @@ public class ServerMailApplication {
 	 */
 	public void clean() {
 		server.clearPersistentData();
+		_offlineMessages.clear();
+		_onlineClients.clear();
+		_clientFriends.clear();
 	}
 }
