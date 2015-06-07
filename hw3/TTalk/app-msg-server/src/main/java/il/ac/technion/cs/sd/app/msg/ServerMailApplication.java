@@ -102,10 +102,15 @@ public class ServerMailApplication {
 			handleReplyMessageData(from,messageData);
 			break;
 		case IS_ONLINE_TASK:
-			if(_clientFriends.containsKey(from))
-				if(_clientFriends.get(from).contains(messageData._target))
-					server.send(from, Optional.of(_onlineClients.contains(messageData._target)), true);
-			server.send(from, Optional.empty(), true);
+			Optional<Boolean> $;
+			if(_clientFriends.containsKey(from) && _clientFriends.get(from).contains(messageData._target))
+			{
+				$ = Optional.of(_onlineClients.contains(messageData._target));
+			} else
+			{	
+				$ = Optional.<Boolean>empty();
+			}
+			server.send(from, $, true);
 			break;
 		case LOGOUT_TASK:
 			_onlineClients.remove(from);

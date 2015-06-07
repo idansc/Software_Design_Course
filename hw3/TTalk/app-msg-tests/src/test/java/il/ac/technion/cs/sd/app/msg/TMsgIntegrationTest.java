@@ -121,18 +121,18 @@ public class TMsgIntegrationTest {
 	@Test
 	public void onlineCheckReturnsGoodValues() throws InterruptedException{
 		final BlockingQueue<String>	replayFriendRequest = new LinkedBlockingQueue<>();
-		ClientMsgApplication idan = buildClient("Idan");
-		ClientMsgApplication ofer = buildClient("Ofer");
-		idan.login(x->{}, x->true, (x, y) -> {replayFriendRequest.add(x);});
-		ofer.login(x->{}, x -> true, (x, y) -> {});
-		assertEquals(Optional.empty(), idan.isOnline("Ofer"));
-		idan.requestFriendship("Ofer");
-		assertEquals("Ofer", replayFriendRequest.take());
-		assertEquals(Optional.empty(), idan.isOnline("Gal"));
-		assertEquals(Optional.of(true), idan.isOnline("Ofer"));
-		ofer.logout();
-		assertEquals(Optional.of(false), idan.isOnline("Ofer"));
-		idan.logout();
+		ClientMsgApplication EEEIdan = buildClient("EEEIdan");
+		ClientMsgApplication EEEOfer = buildClient("EEEOfer");
+		EEEIdan.login(x->{}, x->true, (x, y) -> {replayFriendRequest.add(x);});
+		EEEOfer.login(x->{}, x -> true, (x, y) -> {});
+		assertEquals(Optional.empty(), EEEIdan.isOnline("EEEOfer"));
+		EEEIdan.requestFriendship("EEEOfer");
+		assertEquals("EEEOfer", replayFriendRequest.take());
+		assertEquals(Optional.empty(), EEEIdan.isOnline("Gal"));
+		assertEquals(Optional.of(true), EEEIdan.isOnline("EEEOfer"));
+		EEEOfer.logout();
+		assertEquals(Optional.of(false), EEEIdan.isOnline("EEEOfer"));
+		EEEIdan.logout();
 	}	
 
 }
