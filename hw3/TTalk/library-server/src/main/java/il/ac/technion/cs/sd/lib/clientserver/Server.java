@@ -32,11 +32,15 @@ import com.google.gson.stream.JsonWriter;
 /**
  * Represents a server that can communicate (reliably) with multiple clients, and save/load 
  * persistent data.
- * The messages sent and received consist of objects of any type.
  * 
- * This class is not thread-safe (meaning you must not access an object of this class from multiple 
- * threads simultaneously). 
+ * Each message sent/received can consist of an any object type you chose.
+ * The server can send a message to a client either synchronically (while it is blocking until a 
+ * response from the server is received), or asynchronously. 
+ * 
+ * This class is not thread-safe, meaning you must not access an object of this class from multiple 
+ * threads simultaneously. 
  */
+
 public class Server {
 
 	private ReliableHost _reliableHost;
@@ -48,6 +52,9 @@ public class Server {
 
 
 	/**
+	 * Creates a new server. 
+	 * A call to {@link #startListenLoop(BiConsumer, Type)} must be made before doing any 
+	 * communication with this server.
 	 * @param address - the address of the new server. 
 	 */
 	public Server(String address)
@@ -57,15 +64,14 @@ public class Server {
 
 
 	/**
-	 *  
-	 * Starts the server listen loop. 
-	 * While listening, the server process incoming messages from clients.
-	 * Each incoming message invokes a callback function. 
+	 * Starts listening for incoming messages from clients. You can't use the server for any
+	 * communication before starting it. 
+	 * Each incoming message from a client invokes a provided callback function.
 	 * @param consumer The consumer who's callback will be invoked for each message received from a client.
 	 * The first argument it takes is the data sent, and the second argument is the sender's address.
-	 * Any message sent back to the client via @{link {@link #sendResponse(String, Object)} 
-	 * from the callback function is considered by the client as a response to the specific message 
-	 * that invoked the callback.
+	 * From within the callback function, you can synchronically send a response back to the client that invoked it
+	 * via {@link #send(String, Object, boolean)} (the client is blocking until a response
+	 * from the server arrives). 
 	 * While the consumer's callback is running - the listen loop is frozen, so the code in the 
 	 * callback shouldn't wait for a new message to arrive. 
 	 * @param dataType The type of the object sent by the client in each message
@@ -110,6 +116,8 @@ public class Server {
 	 * @param isResponse true iff 'data' is a response to a message previously sent by the client.
 	 * When true, you must call this method only from the consumer of the listen loop (i.e., from the 
 	 * callback function invoked by the message to which the response is for).
+	 * This synchronically delivers the message to the client which is currently blocking until the 
+	 * response arrives.
 	 * @throws InvalidOperation Bad clientAddress address etc..
 	 */
 	public <T> void send(String clientAddress, T data, boolean isResponse)
@@ -266,4 +274,8 @@ public class Server {
 	{
 		return new File("./TMP___ServersData");
 	}
+	
+	@SuppressWarnings("serial")
+	public class BadFileContent extends RuntimeException {}
+	
 }
