@@ -56,13 +56,15 @@ public class ServerMailApplication {
 		server.saveObjectToFile(clientFriendsFileName, _clientFriends);
 		
 		
-		server.<Map<String, ArrayList<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
-				new TypeToken<Map<String, List<MessageData>>>(){}.getType())
+		server.<HashMap<String, ArrayList<MessageData>>>readObjectFromFile(offlineMessagesFileName, 
+				new TypeToken<HashMap<String, ArrayList<MessageData>>>(){}.getType())
 				.ifPresent((data)->_offlineMessages = data);
-		server.<Map<String, ArrayList<String>>>readObjectFromFile(onlineClientsFileName, new TypeToken<Map<String, Set<String>>>(){}.getType())
-				.ifPresent(data->_clientFriends = data);
-		server.<Set<String>>readObjectFromFile(clientFriendsFileName,new TypeToken<Set<String>>(){}.getType())
+		
+		server.<HashSet<String>>readObjectFromFile(onlineClientsFileName, new TypeToken<HashSet<String>>(){}.getType())
 				.ifPresent(data->_onlineClients = data);
+		
+		server.<HashMap<String, ArrayList<String>>>readObjectFromFile(clientFriendsFileName,new TypeToken<HashMap<String, ArrayList<String>>>(){}.getType())
+				.ifPresent(data->_clientFriends = data);
 	}
 	
 	private void handleReplyMessageData(String from, MessageData messageData){

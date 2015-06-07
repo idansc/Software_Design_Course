@@ -1,58 +1,23 @@
 ____________________queue empty for: Server
 ____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=0,responseTargetId=null]
 ===try #1     (by EEEIdan)
 ____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: EEEIdan |||||||||
 ""   _address=EEEIdan
+____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():89
 NewArrived. _address=Server, data.length()=89, data=[{"messageId":0
 ---regular-consume: [from:EEEIdan,messageId=0,responseTargetId=null]
 ____________________queue empty for: EEEIdan
 >>>Sending message from Server, msg=[from:Server,messageId=0,responseTargetId=0]
 ===try #1     (by Server)
-____________________queue empty for: EEEIdan
 |||||| Sending empty message, from: EEEIdan; to: Server |||||||||
+____________________queue empty for: EEEIdan
 ""   _address=Server
 ---responseBQ.put: [from:Server,messageId=0,responseTargetId=0]
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
@@ -62,28 +27,24 @@ ____________________queue empty for: EEEIdan
 ===success   (by EEEIdan)
 Took, _address=EEEIdan, msg=[from:Server,messageId=0,responseTargetId=0]
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEIdan
->>>Sending message from EEEOfer, msg=[from:EEEOfer,messageId=0,responseTargetId=null]
-===try #1     (by EEEOfer)
 ===success   (by Server)
 ____________________queue empty for: EEEIdan
-|||||| Sending empty message, from: Server; to: EEEOfer |||||||||
-____________________queue empty for: EEEOfer
-""   _address=EEEOfer
 ____________________queue empty for: Server
+>>>Sending message from EEEOfer, msg=[from:EEEOfer,messageId=0,responseTargetId=null]
+===try #1     (by EEEOfer)
+____________________queue empty for: EEEOfer
+|||||| Sending empty message, from: Server; to: EEEOfer |||||||||
+""   _address=EEEOfer
+____________________queue empty for: EEEIdan
 +++ Adding to regular queue of: Server, payload.length():89
 NewArrived. _address=Server, data.length()=89, data=[{"messageId":0
-____________________queue empty for: EEEIdan
 ---regular-consume: [from:EEEOfer,messageId=0,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=1,responseTargetId=0]
 ===try #1     (by Server)
 ____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: EEEOfer; to: Server |||||||||
-____________________queue empty for: EEEIdan
 ""   _address=Server
 ---responseBQ.put: [from:Server,messageId=1,responseTargetId=0]
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
@@ -98,29 +59,60 @@ ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
 ===success   (by EEEOfer)
 Took, _address=EEEOfer, msg=[from:Server,messageId=1,responseTargetId=0]
-____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=1,responseTargetId=null]
 ===try #1     (by EEEIdan)
-|||||| Sending empty message, from: Server; to: EEEIdan |||||||||
+===success   (by Server)
+____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+===try #2     (by EEEIdan)
+|||||| Sending empty message, from: Server; to: EEEIdan |||||||||
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
 ""   _address=EEEIdan
 +++ Adding to regular queue of: Server, payload.length():117
-____________________queue empty for: EEEOfer
-===success   (by Server)
 NewArrived. _address=Server, data.length()=117, data=[{"messageId":1
 ---regular-consume: [from:EEEIdan,messageId=1,responseTargetId=null]
+____________________queue empty for: EEEIdan
 >>>Sending message from Server, msg=[from:Server,messageId=2,responseTargetId=1]
 ===try #1     (by Server)
-____________________queue empty for: EEEIdan
 |||||| Sending empty message, from: EEEIdan; to: Server |||||||||
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
 ""   _address=Server
+____________________queue empty for: EEEOfer
 ---responseBQ.put: [from:Server,messageId=2,responseTargetId=1]
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
@@ -135,33 +127,32 @@ ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
 ===success   (by EEEIdan)
 Took, _address=EEEIdan, msg=[from:Server,messageId=2,responseTargetId=1]
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=2,responseTargetId=null]
 ===try #1     (by EEEIdan)
-____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: Server; to: EEEIdan |||||||||
 ""   _address=EEEIdan
+____________________queue empty for: EEEIdan
 +++ Adding to regular queue of: Server, payload.length():126
 ===success   (by Server)
 NewArrived. _address=Server, data.length()=126, data=[{"messageId":2
-____________________queue empty for: EEEIdan
 ---regular-consume: [from:EEEIdan,messageId=2,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=3,responseTargetId=null]
 ===try #1     (by Server)
 ____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: EEEOfer; to: Server |||||||||
 ""   _address=Server
+____________________queue empty for: EEEIdan
 +++ Adding to regular queue of: EEEOfer, payload.length():147
 NewArrived. _address=EEEOfer, data.length()=147, data=[{"messageId":3
 ---regular-consume: [from:Server,messageId=3,responseTargetId=null]
-____________________queue empty for: EEEIdan
 >>>Sending message from EEEOfer, msg=[from:EEEOfer,messageId=1,responseTargetId=null]
 ===try #1     (by EEEOfer)
-|||||| Sending empty message, from: Server; to: EEEOfer |||||||||
-""   _address=EEEOfer
-+++ Adding to regular queue of: Server, payload.length():165
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
@@ -173,37 +164,36 @@ ____________________queue empty for: EEEIdan
 ===success   (by EEEIdan)
 ____________________queue empty for: EEEIdan
 ===success   (by Server)
+____________________queue empty for: EEEIdan
+===try #2     (by EEEOfer)
+____________________queue empty for: Server
+|||||| Sending empty message, from: Server; to: EEEOfer |||||||||
+""   _address=EEEOfer
++++ Adding to regular queue of: Server, payload.length():165
 NewArrived. _address=Server, data.length()=165, data=[{"messageId":1
+____________________queue empty for: EEEIdan
 ---regular-consume: [from:EEEOfer,messageId=1,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=4,responseTargetId=null]
 ===try #1     (by Server)
 ____________________queue empty for: EEEIdan
 |||||| Sending empty message, from: EEEIdan; to: Server |||||||||
-===success   (by EEEOfer)
 ""   _address=Server
 +++ Adding to regular queue of: EEEIdan, payload.length():186
 NewArrived. _address=EEEIdan, data.length()=186, data=[{"messageId":4
 ---regular-consume: [from:Server,messageId=4,responseTargetId=null]
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=3,responseTargetId=null]
 ===try #1     (by EEEIdan)
-____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: Server; to: EEEIdan |||||||||
 ""   _address=EEEIdan
-____________________queue empty for: EEEIdan
 +++ Adding to regular queue of: Server, payload.length():113
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+===success   (by EEEOfer)
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
@@ -213,19 +203,40 @@ NewArrived. _address=Server, data.length()=113, data=[{"messageId":3
 >>>Sending message from Server, msg=[from:Server,messageId=5,responseTargetId=3]
 ===try #1     (by Server)
 ____________________queue empty for: EEEOfer
-|||||| Sending empty message, from: EEEIdan; to: Server |||||||||
-""   _address=Server
----responseBQ.put: [from:Server,messageId=5,responseTargetId=3]
 ____________________queue empty for: EEEIdan
 ===success   (by EEEIdan)
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+===try #2     (by Server)
+____________________queue empty for: EEEOfer
+|||||| Sending empty message, from: EEEIdan; to: Server |||||||||
+____________________queue empty for: EEEIdan
+""   _address=Server
+---responseBQ.put: [from:Server,messageId=5,responseTargetId=3]
 Took, _address=EEEIdan, msg=[from:Server,messageId=5,responseTargetId=3]
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=4,responseTargetId=null]
 ===try #1     (by EEEIdan)
-____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: Server; to: EEEIdan |||||||||
-""   _address=EEEIdan
+____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 +++ Adding to regular queue of: Server, payload.length():117
+""   _address=EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
@@ -234,51 +245,32 @@ ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ===success   (by Server)
 NewArrived. _address=Server, data.length()=117, data=[{"messageId":4
-____________________queue empty for: EEEOfer
 ---regular-consume: [from:EEEIdan,messageId=4,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=6,responseTargetId=4]
 ===try #1     (by Server)
 ____________________queue empty for: EEEIdan
-===success   (by EEEIdan)
 ____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-===try #2     (by Server)
-____________________queue empty for: EEEIdan
 |||||| Sending empty message, from: EEEIdan; to: Server |||||||||
 ""   _address=Server
 ---responseBQ.put: [from:Server,messageId=6,responseTargetId=4]
-Took, _address=EEEIdan, msg=[from:Server,messageId=6,responseTargetId=4]
+____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
+===success   (by EEEIdan)
+Took, _address=EEEIdan, msg=[from:Server,messageId=6,responseTargetId=4]
 >>>Sending message from EEEOfer, msg=[from:EEEOfer,messageId=2,responseTargetId=null]
 ===try #1     (by EEEOfer)
 ____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
 |||||| Sending empty message, from: Server; to: EEEOfer |||||||||
 ""   _address=EEEOfer
 +++ Adding to regular queue of: Server, payload.length():90
@@ -290,11 +282,10 @@ ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
@@ -302,32 +293,35 @@ ____________________queue empty for: EEEOfer
 ===success   (by Server)
 NewArrived. _address=Server, data.length()=90, data=[{"messageId":2
 ---regular-consume: [from:EEEOfer,messageId=2,responseTargetId=null]
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ===success   (by EEEOfer)
-____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEOfer
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEOfer
+____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: EEEOfer
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
 ____________________queue empty for: EEEOfer
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
@@ -338,16 +332,15 @@ ____________________queue empty for: EEEOfer
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: EEEOfer
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=5,responseTargetId=null]
 ===try #1     (by EEEIdan)
-____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: EEEIdan |||||||||
 ""   _address=EEEIdan
 +++ Adding to regular queue of: Server, payload.length():117
 NewArrived. _address=Server, data.length()=117, data=[{"messageId":5
 ---regular-consume: [from:EEEIdan,messageId=5,responseTargetId=null]
+____________________queue empty for: EEEIdan
 >>>Sending message from Server, msg=[from:Server,messageId=7,responseTargetId=5]
 ===try #1     (by Server)
-____________________queue empty for: EEEIdan
 |||||| Sending empty message, from: EEEIdan; to: Server |||||||||
 ""   _address=Server
 ---responseBQ.put: [from:Server,messageId=7,responseTargetId=5]
@@ -364,11 +357,32 @@ ____________________queue empty for: EEEIdan
 Took, _address=EEEIdan, msg=[from:Server,messageId=7,responseTargetId=5]
 >>>Sending message from EEEIdan, msg=[from:EEEIdan,messageId=6,responseTargetId=null]
 ===try #1     (by EEEIdan)
-|||||| Sending empty message, from: Server; to: EEEIdan |||||||||
-""   _address=EEEIdan
-+++ Adding to regular queue of: Server, payload.length():90
 ____________________queue empty for: EEEIdan
 ===success   (by Server)
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+____________________queue empty for: EEEIdan
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+===try #2     (by EEEIdan)
+|||||| Sending empty message, from: Server; to: EEEIdan |||||||||
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
+""   _address=EEEIdan
++++ Adding to regular queue of: Server, payload.length():90
 NewArrived. _address=Server, data.length()=90, data=[{"messageId":6
 ---regular-consume: [from:EEEIdan,messageId=6,responseTargetId=null]
 ____________________queue empty for: EEEIdan
@@ -381,19 +395,17 @@ ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: EEEIdan
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
-____________________queue empty for: EEEIdan
-____________________queue empty for: Server
-____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ===success   (by EEEIdan)
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
-____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
@@ -407,6 +419,7 @@ ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
+____________________queue empty for: Server
 ____________________queue empty for: Server
 ____________________queue empty for: EEEIdan
 ____________________queue empty for: Server
@@ -423,11 +436,31 @@ ____________________queue empty for: Server
 ____________________queue empty for: Server
 ____________________queue empty for: Server
 ____________________queue empty for: Server
-____________________queue empty for: Server
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Server
 ____________________queue empty for: Server
 >>>Sending message from Idan, msg=[from:Idan,messageId=0,responseTargetId=null]
 ===try #1     (by Idan)
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+===try #2     (by Idan)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():86
@@ -453,8 +486,8 @@ Took, _address=Idan, msg=[from:Server,messageId=0,responseTargetId=0]
 >>>Sending message from Idan, msg=[from:Idan,messageId=1,responseTargetId=null]
 ===try #1     (by Idan)
 ____________________queue empty for: Idan
-|||||| Sending empty message, from: Server; to: Idan |||||||||
 ===success   (by Server)
+|||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():202
 NewArrived. _address=Server, data.length()=202, data=[{"messageId":1
@@ -478,12 +511,12 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ===success   (by Idan)
-____________________queue empty for: Idan
 >>>Sending message from Idan, msg=[from:Idan,messageId=2,responseTargetId=null]
 ===try #1     (by Idan)
+____________________queue empty for: Idan
 |||||| Sending empty message, from: Server; to: Idan |||||||||
-____________________queue empty for: Server
 ""   _address=Idan
+____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():120
 NewArrived. _address=Server, data.length()=120, data=[{"messageId":2
 ---regular-consume: [from:Idan,messageId=2,responseTargetId=null]
@@ -520,8 +553,8 @@ ____________________queue empty for: Ofer
 >>>Sending message from Server, msg=[from:Server,messageId=1,responseTargetId=0]
 ===try #1     (by Server)
 |||||| Sending empty message, from: Ofer; to: Server |||||||||
-____________________queue empty for: Idan
 ""   _address=Server
+____________________queue empty for: Idan
 ---responseBQ.put: [from:Server,messageId=1,responseTargetId=0]
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
@@ -546,13 +579,13 @@ ____________________queue empty for: Idan
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=1,responseTargetId=null]
 ===try #1     (by Ofer)
 ____________________queue empty for: Ofer
-===success   (by Server)
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
+===success   (by Server)
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():159
 NewArrived. _address=Server, data.length()=159, data=[{"messageId":1
-____________________queue empty for: Idan
 ---regular-consume: [from:Ofer,messageId=1,responseTargetId=null]
+____________________queue empty for: Idan
 >>>Sending message from Server, msg=[from:Server,messageId=2,responseTargetId=null]
 ===try #1     (by Server)
 |||||| Sending empty message, from: Idan; to: Server |||||||||
@@ -581,8 +614,8 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 >>>Sending message from Idan, msg=[from:Idan,messageId=3,responseTargetId=null]
 ===try #1     (by Idan)
-|||||| Sending empty message, from: Server; to: Idan |||||||||
 ____________________queue empty for: Idan
+|||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():87
 ===success   (by Server)
@@ -621,8 +654,8 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -636,14 +669,14 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -651,14 +684,15 @@ ____________________queue empty for: Idan
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=2,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
+____________________queue empty for: Ofer
+____________________queue empty for: Server
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():87
-____________________queue empty for: Ofer
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":2
 ---regular-consume: [from:Ofer,messageId=2,responseTargetId=null]
+____________________queue empty for: Ofer
+____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -713,10 +747,10 @@ ____________________queue empty for: Server
 ____________________queue empty for: Server
 >>>Sending message from Idan, msg=[from:Idan,messageId=0,responseTargetId=null]
 ===try #1     (by Idan)
+____________________queue empty for: Server
+____________________queue empty for: Idan
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
-____________________queue empty for: Idan
-____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":0
 ---regular-consume: [from:Idan,messageId=0,responseTargetId=null]
@@ -733,19 +767,40 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Idan
 ____________________queue empty for: Idan
 ____________________queue empty for: Idan
+____________________queue empty for: Idan
 ===success   (by Idan)
 Took, _address=Idan, msg=[from:Server,messageId=0,responseTargetId=0]
 ____________________queue empty for: Idan
 >>>Sending message from Idan, msg=[from:Idan,messageId=1,responseTargetId=null]
 ===try #1     (by Idan)
+===success   (by Server)
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Server
+===try #2     (by Idan)
+____________________queue empty for: Idan
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
+____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():202
-===success   (by Server)
 NewArrived. _address=Server, data.length()=202, data=[{"messageId":1
 ---regular-consume: [from:Idan,messageId=1,responseTargetId=null]
 ____________________queue empty for: Idan
-____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
@@ -760,9 +815,10 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Idan
 ===success   (by Idan)
 >>>Sending message from Idan, msg=[from:Idan,messageId=2,responseTargetId=null]
 ===try #1     (by Idan)
@@ -796,7 +852,6 @@ ____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ____________________queue empty for: Idan
 ""   _address=Idan
-____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():87
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":3
 ---regular-consume: [from:Idan,messageId=3,responseTargetId=null]
@@ -817,8 +872,8 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
+____________________queue empty for: Server
 ===success   (by Idan)
-____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
@@ -834,28 +889,29 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
-____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
+____________________queue empty for: Server
+____________________queue empty for: Server
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=0,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":0
-____________________queue empty for: Ofer
 ---regular-consume: [from:Ofer,messageId=0,responseTargetId=null]
+____________________queue empty for: Ofer
 >>>Sending message from Server, msg=[from:Server,messageId=1,responseTargetId=0]
 ===try #1     (by Server)
 |||||| Sending empty message, from: Ofer; to: Server |||||||||
 ""   _address=Server
-____________________queue empty for: Ofer
 ---responseBQ.put: [from:Server,messageId=1,responseTargetId=0]
+____________________queue empty for: Ofer
 ____________________queue empty for: Ofer
 ____________________queue empty for: Ofer
 ____________________queue empty for: Ofer
@@ -871,8 +927,8 @@ Took, _address=Ofer, msg=[from:Server,messageId=1,responseTargetId=0]
 ____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
 ""   _address=Ofer
-+++ Adding to regular queue of: Server, payload.length():159
 ===success   (by Server)
++++ Adding to regular queue of: Server, payload.length():159
 NewArrived. _address=Server, data.length()=159, data=[{"messageId":1
 ---regular-consume: [from:Ofer,messageId=1,responseTargetId=null]
 ____________________queue empty for: Ofer
@@ -895,23 +951,23 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ===success   (by Ofer)
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
 >>>Sending message from Idan, msg=[from:Idan,messageId=4,responseTargetId=null]
 ===try #1     (by Idan)
-____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ____________________queue empty for: Ofer
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":4
-____________________queue empty for: Idan
 ---regular-consume: [from:Idan,messageId=4,responseTargetId=null]
+____________________queue empty for: Idan
 >>>Sending message from Server, msg=[from:Server,messageId=2,responseTargetId=4]
 ===try #1     (by Server)
 |||||| Sending empty message, from: Idan; to: Server |||||||||
-____________________queue empty for: Ofer
 ""   _address=Server
-____________________queue empty for: Idan
+____________________queue empty for: Ofer
 ---responseBQ.put: [from:Server,messageId=2,responseTargetId=4]
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
@@ -934,11 +990,13 @@ ____________________queue empty for: Ofer
 >>>Sending message from Idan, msg=[from:Idan,messageId=5,responseTargetId=null]
 ===try #1     (by Idan)
 ____________________queue empty for: Idan
+===success   (by Server)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
+____________________queue empty for: Ofer
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():87
-===success   (by Server)
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":5
+____________________queue empty for: Idan
 ---regular-consume: [from:Idan,messageId=5,responseTargetId=null]
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
@@ -965,9 +1023,6 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 ===success   (by Idan)
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
@@ -976,14 +1031,14 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Ofer
 ____________________queue empty for: Server
+____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Ofer
 ____________________queue empty for: Server
+____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Ofer
 ____________________queue empty for: Server
+____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -1001,12 +1056,12 @@ ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
+____________________queue empty for: Server
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=2,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
 ""   _address=Ofer
+____________________queue empty for: Ofer
 +++ Adding to regular queue of: Server, payload.length():87
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":2
 ---regular-consume: [from:Ofer,messageId=2,responseTargetId=null]
@@ -1028,8 +1083,8 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
-____________________queue empty for: Ofer
 ===success   (by Ofer)
+____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
@@ -1090,19 +1145,16 @@ ____________________queue empty for: Idan
 Took, _address=Idan, msg=[from:Server,messageId=0,responseTargetId=0]
 ===success   (by Server)
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=0,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":0
 ---regular-consume: [from:Ofer,messageId=0,responseTargetId=null]
+____________________queue empty for: Idan
 >>>Sending message from Server, msg=[from:Server,messageId=1,responseTargetId=0]
 ===try #1     (by Server)
-____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 |||||| Sending empty message, from: Ofer; to: Server |||||||||
 ""   _address=Server
@@ -1129,122 +1181,73 @@ ____________________queue empty for: Ofer
 Took, _address=Ofer, msg=[from:Server,messageId=1,responseTargetId=0]
 >>>Sending message from Idan, msg=[from:Idan,messageId=1,responseTargetId=null]
 ===try #1     (by Idan)
+____________________queue empty for: Idan
 ===success   (by Server)
-____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-===try #2     (by Idan)
-____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
 +++ Adding to regular queue of: Server, payload.length():111
 NewArrived. _address=Server, data.length()=111, data=[{"messageId":1
 ---regular-consume: [from:Idan,messageId=1,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=2,responseTargetId=1]
 ===try #1     (by Server)
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+===success   (by Idan)
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+===try #2     (by Server)
 |||||| Sending empty message, from: Idan; to: Server |||||||||
 ""   _address=Server
 ---responseBQ.put: [from:Server,messageId=2,responseTargetId=1]
-____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-===success   (by Idan)
 Took, _address=Idan, msg=[from:Server,messageId=2,responseTargetId=1]
+____________________queue empty for: Ofer
 >>>Sending message from Idan, msg=[from:Idan,messageId=2,responseTargetId=null]
 ===try #1     (by Idan)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():87
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
 ===success   (by Server)
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":2
 ---regular-consume: [from:Idan,messageId=2,responseTargetId=null]
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
 ===success   (by Idan)
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Idan
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
@@ -1261,18 +1264,33 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Server
 ____________________queue empty for: Idan
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
+____________________queue empty for: Ofer
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=1,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Server
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
+____________________queue empty for: Server
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():87
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":1
----regular-consume: [from:Ofer,messageId=1,responseTargetId=null]
 ____________________queue empty for: Ofer
+---regular-consume: [from:Ofer,messageId=1,responseTargetId=null]
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -1302,7 +1320,6 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
-____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
@@ -1328,20 +1345,21 @@ ____________________queue empty for: Server
 ____________________queue empty for: Server
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Server
 ____________________queue empty for: Server
+____________________queue empty for: Server
 >>>Sending message from Idan, msg=[from:Idan,messageId=0,responseTargetId=null]
 ===try #1     (by Idan)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
+____________________queue empty for: Idan
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":0
 ---regular-consume: [from:Idan,messageId=0,responseTargetId=null]
 >>>Sending message from Server, msg=[from:Server,messageId=0,responseTargetId=0]
 ===try #1     (by Server)
-____________________queue empty for: Idan
 |||||| Sending empty message, from: Idan; to: Server |||||||||
 ""   _address=Server
----responseBQ.put: [from:Server,messageId=0,responseTargetId=0]
 ____________________queue empty for: Idan
+---responseBQ.put: [from:Server,messageId=0,responseTargetId=0]
 ____________________queue empty for: Idan
 ____________________queue empty for: Idan
 ____________________queue empty for: Idan
@@ -1352,13 +1370,13 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Idan
 ===success   (by Idan)
 Took, _address=Idan, msg=[from:Server,messageId=0,responseTargetId=0]
+____________________queue empty for: Idan
 >>>Sending message from Idan, msg=[from:Idan,messageId=1,responseTargetId=null]
 ===try #1     (by Idan)
-===success   (by Server)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
-____________________queue empty for: Idan
 ""   _address=Idan
 +++ Adding to regular queue of: Server, payload.length():202
+===success   (by Server)
 NewArrived. _address=Server, data.length()=202, data=[{"messageId":1
 ---regular-consume: [from:Idan,messageId=1,responseTargetId=null]
 ____________________queue empty for: Idan
@@ -1379,10 +1397,10 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ===success   (by Idan)
 >>>Sending message from Idan, msg=[from:Idan,messageId=2,responseTargetId=null]
 ===try #1     (by Idan)
-____________________queue empty for: Idan
 |||||| Sending empty message, from: Server; to: Idan |||||||||
 ""   _address=Idan
 ____________________queue empty for: Server
@@ -1390,7 +1408,6 @@ ____________________queue empty for: Server
 NewArrived. _address=Server, data.length()=192, data=[{"messageId":2
 ---regular-consume: [from:Idan,messageId=2,responseTargetId=null]
 ____________________queue empty for: Idan
-____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
@@ -1403,16 +1420,19 @@ ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
+____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Idan
 ===success   (by Idan)
-____________________queue empty for: Idan
 >>>Sending message from Idan, msg=[from:Idan,messageId=3,responseTargetId=null]
 ===try #1     (by Idan)
 |||||| Sending empty message, from: Server; to: Idan |||||||||
-____________________queue empty for: Server
 ""   _address=Idan
+____________________queue empty for: Server
+____________________queue empty for: Idan
 +++ Adding to regular queue of: Server, payload.length():199
 NewArrived. _address=Server, data.length()=199, data=[{"messageId":3
 ---regular-consume: [from:Idan,messageId=3,responseTargetId=null]
@@ -1434,14 +1454,13 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
-____________________queue empty for: Idan
 ===success   (by Idan)
 >>>Sending message from Idan, msg=[from:Idan,messageId=4,responseTargetId=null]
 ===try #1     (by Idan)
-|||||| Sending empty message, from: Server; to: Idan |||||||||
-____________________queue empty for: Server
-""   _address=Idan
 ____________________queue empty for: Idan
+|||||| Sending empty message, from: Server; to: Idan |||||||||
+""   _address=Idan
+____________________queue empty for: Server
 +++ Adding to regular queue of: Server, payload.length():206
 NewArrived. _address=Server, data.length()=206, data=[{"messageId":4
 ---regular-consume: [from:Idan,messageId=4,responseTargetId=null]
@@ -1468,20 +1487,19 @@ ____________________queue empty for: Idan
 ____________________queue empty for: Server
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=0,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Idan
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
-____________________queue empty for: Ofer
-____________________queue empty for: Server
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():86
 NewArrived. _address=Server, data.length()=86, data=[{"messageId":0
 ---regular-consume: [from:Ofer,messageId=0,responseTargetId=null]
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
 >>>Sending message from Server, msg=[from:Server,messageId=1,responseTargetId=0]
 ===try #1     (by Server)
 ____________________queue empty for: Idan
 |||||| Sending empty message, from: Ofer; to: Server |||||||||
-____________________queue empty for: Ofer
 ""   _address=Server
+____________________queue empty for: Ofer
 ---responseBQ.put: [from:Server,messageId=1,responseTargetId=0]
 ____________________queue empty for: Idan
 ____________________queue empty for: Ofer
@@ -1506,12 +1524,15 @@ ____________________queue empty for: Idan
 ===try #1     (by Idan)
 ____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Idan |||||||||
-===success   (by Server)
 ""   _address=Idan
-____________________queue empty for: Idan
 +++ Adding to regular queue of: Server, payload.length():87
+===success   (by Server)
 NewArrived. _address=Server, data.length()=87, data=[{"messageId":5
 ---regular-consume: [from:Idan,messageId=5,responseTargetId=null]
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
@@ -1522,23 +1543,20 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
-____________________queue empty for: Ofer
 ____________________queue empty for: Idan
-____________________queue empty for: Server
 ===success   (by Idan)
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
@@ -1547,8 +1565,17 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
+____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Idan
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Idan
 ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
@@ -1559,45 +1586,12 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
-____________________queue empty for: Idan
 ____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Idan
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 ____________________queue empty for: Idan
 !!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: Idan
+____________________queue empty for: Ofer
 >>>Sending message from Ofer, msg=[from:Ofer,messageId=1,responseTargetId=null]
 ===try #1     (by Ofer)
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-===try #2     (by Ofer)
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 |||||| Sending empty message, from: Server; to: Ofer |||||||||
 ""   _address=Ofer
 +++ Adding to regular queue of: Server, payload.length():87
@@ -1621,22 +1615,24 @@ ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
+____________________queue empty for: Ofer
 ===success   (by Ofer)
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Server
+____________________queue empty for: Ofer
+____________________queue empty for: Server
+____________________queue empty for: Ofer
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
-____________________queue empty for: Server
-____________________queue empty for: Ofer
 ____________________queue empty for: Server
 ____________________queue empty for: Ofer
 ____________________queue empty for: Server
