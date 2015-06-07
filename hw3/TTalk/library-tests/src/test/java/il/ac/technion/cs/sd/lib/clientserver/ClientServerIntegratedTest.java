@@ -26,6 +26,7 @@ public class ClientServerIntegratedTest {
 	
 	Random rnd = new Random(); 
 	
+	int tmp; // for lambda closure.
 
 	List<Client> createClients(int clientsNum)
 	{
@@ -248,26 +249,71 @@ public class ClientServerIntegratedTest {
 		server1.stop();
 	}
 	
-	@Test(timeout=3000)
+	@Test(timeout=10000)
 	public void serverSendsToClientMessage() throws InterruptedException {
 		
-		clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-		server1.startListenLoop(biConsumer1, POJO1.class);
-
-		for (int i=0; i<10; i++)
+		for (int k=0; k<3; k++)
 		{
-			server1.send(clients.get(0).getAddress(), pojo1_a, false);
-			POJO1 $ = consumer1_bq.take();
-			assertEquals($, pojo1_a);
+			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
+			server1.startListenLoop(biConsumer1, POJO1.class);
+	
+			for (int i=0; i<10; i++)
+			{
+				server1.send(clients.get(0).getAddress(), pojo1_a, false);
+				POJO1 $ = consumer1_bq.take();
+				assertEquals($, pojo1_a);
+			}
+			
+			clients.get(0).stopListenLoop();
+			server1.stop();
 		}
+	}
+	
+	@Test(timeout=20000)
+	public void clientAndServerSendMessagesBackAndForth() throws InterruptedException {
 		
-		clients.get(0).stopListenLoop();
-		server1.stop();
+		for (int i=0; i<3; i++)
+		{
+			tmp = 0; // messages count;
+			final int messagesNumToSend = 7;
+
+			clients.get(0).startListenLoop(server1.getAddress(), (POJO1 p) ->
+			{
+				tmp++;
+				if (p.i > 0)
+				{
+					POJO1 p2 = new POJO1(p.i-1, "");
+					clients.get(0).send(p2);
+				}
+			}, POJO1.class);
+
+
+			server1.startListenLoop( (POJO1 p, String from) ->
+			{
+				tmp++;
+				if (p.i > 0)
+				{
+					POJO1 p2 = new POJO1(p.i-1, "");
+					server1.send(clients.get(0).getAddress(), p2, false);
+				}
+
+				biConsumer1_bq.add(new Pair<POJO1,String>(p,from));
+			}, POJO1.class);
+
+
+			clients.get(0).send(new POJO1(messagesNumToSend-1, "aaa"));
+			Thread.sleep(200 * messagesNumToSend);
+
+			assertEquals(tmp, messagesNumToSend);
+
+			clients.get(0).stopListenLoop();
+			server1.stop();
+		}
 	}
 	
 	
 	@Test(timeout=5000)
-	public void serverSendsResponseBackToClient() throws InterruptedException {
+	public void serverSendsResponseBackToClientManyTimes() throws InterruptedException {
 		clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
 		server1.startListenLoop((pojo, str) ->
 		{
@@ -306,7 +352,9 @@ public class ClientServerIntegratedTest {
 		server1.stop();
 	}
 	
-	@Test//TODO(timeout=5000)
+	
+	
+	@Test (timeout=100000)
 	public void serverRandomlyComunicatesWithTwoClients() throws InterruptedException {
 		
 		
@@ -324,23 +372,22 @@ public class ClientServerIntegratedTest {
 
 		int expectedCharsNum = 0;
 		int expectedQueueSize = 0;
-		for (int i=0; i<1; i++) //TODO
+		for (int i=0; i<50; i++)
 		{	
 			int r = rnd.nextInt(2);
 			
-			r = 1;//TODO
 			
 			if (r == 0)
 			{
-//				if (rnd.nextInt(2) == 0)
-//				{
-//					String str = "aaaaaaaaaa".substring(0,rnd.nextInt(5)+1);
-//					POJO1 p1 = new POJO1(0,str);
-//					expectedCharsNum += str.length();
-//					clients.get(rnd.nextInt(CLIENTS_NUM)).send(p1);
-//					expectedQueueSize++;
-//				}
-//				
+				if (rnd.nextInt(2) == 0)
+				{
+					String str = "aaaaaaaaaa".substring(0,rnd.nextInt(5)+1);
+					POJO1 p1 = new POJO1(0,str);
+					expectedCharsNum += str.length();
+					clients.get(rnd.nextInt(CLIENTS_NUM)).send(p1);
+					expectedQueueSize++;
+				}
+				
 
 			} else
 			{
@@ -361,10 +408,6 @@ public class ClientServerIntegratedTest {
 				
 				boolean use_t1 = (rnd.nextInt(2) == 0);
 				boolean use_t2 = (rnd.nextInt(2) == 0);
-				
-				//TODO
-				use_t1 = true;
-				use_t2 = true;
 				
 				if (use_t1)
 					t1.start(); 

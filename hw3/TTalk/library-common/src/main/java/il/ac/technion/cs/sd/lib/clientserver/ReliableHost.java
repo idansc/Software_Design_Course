@@ -368,8 +368,7 @@ class ReliableHost {
 			throw new InvalidOperation();
 		}
 		
-		assert(!messageRecivedIndicator);
-		assert(!waitingForRecepientConfirmation);
+
 		
 		if (newMessageId == null)
 		{
@@ -385,6 +384,9 @@ class ReliableHost {
 		
 		synchronized (sendingLock)
 		{
+			
+			assert(!messageRecivedIndicator);
+			assert(!waitingForRecepientConfirmation);
 			
 			
 			Utils.DEBUG_LOG_LINE(">>>Sending message from " + _address + ", msg=" + newMessage); //TODO: DELETE
@@ -416,9 +418,10 @@ class ReliableHost {
 			
 			Utils.DEBUG_LOG_LINE("===success   (by " + _address + ")"); //TODO:DELETE
 			
+			messageRecivedIndicator = false;
 		}
 		
-		messageRecivedIndicator = false;
+		
 	}
 
 
