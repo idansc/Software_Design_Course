@@ -139,6 +139,9 @@ public class ServerMailApplication {
 		server.saveObjectToFile(offlineMessagesFileName, _offlineMessages);
 		server.saveObjectToFile(onlineClientsFileName, _onlineClients);
 		server.saveObjectToFile(clientFriendsFileName, _clientFriends);
+		_offlineMessages.clear();
+		_onlineClients.clear();
+		_clientFriends.clear();
 		server.stop();
 	}
 	

@@ -41,6 +41,7 @@ class MessageDataConsumer implements Consumer<MessageData> {
 					messageData._from
 					);
 			_client.send(friendRequestReply);
+			break;
 		}
 		case CLIENT_REPLY_FRIEND_REQUEST_TASK:
 			_frc.accept(messageData._from,messageData._friendRequestAnswer);
