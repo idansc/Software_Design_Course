@@ -61,6 +61,7 @@ public class Client {
 				consumer.accept(Utils.fromGsonStrToObject(data, dataType));
 			});
 		} catch (MessengerException e) {
+			System.out.println(e.getMessage());//TODO:: delete
 			_serverAddress = originalServerAddress;
 			throw new CommunicationFailure();
 		}
@@ -115,5 +116,10 @@ public class Client {
 		
 	}
 	
+	@Override
+	public String toString() {
+
+		return _reliableHost.getAddress();
+	}
 	
 }
