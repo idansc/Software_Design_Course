@@ -233,20 +233,22 @@ public class ClientServerIntegratedTest {
 	@Test(timeout=5000)
 	public void clientSendsToServerMessage() throws InterruptedException {
 		
-		
-		clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-		server1.startListenLoop(biConsumer1, POJO1.class);
-
-		for (int i=0; i<20; i++)
+		for (int k=0; k<5; k++)
 		{
-			clients.get(0).send(pojo1_a);
-			Pair<POJO1,String> $ = biConsumer1_bq.take();
-			assertEquals($.first, pojo1_a);
-			assertEquals($.second, clients.get(0).getAddress());
+			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
+			server1.startListenLoop(biConsumer1, POJO1.class);
+
+			for (int i=0; i<4; i++)
+			{
+				clients.get(0).send(pojo1_a);
+				Pair<POJO1,String> $ = biConsumer1_bq.take();
+				assertEquals($.first, pojo1_a);
+				assertEquals($.second, clients.get(0).getAddress());
+			}
+			
+			clients.get(0).stopListenLoop();
+			server1.stop();
 		}
-		
-		clients.get(0).stopListenLoop();
-		server1.stop();
 	}
 	
 	@Test(timeout=10000)
@@ -313,23 +315,27 @@ public class ClientServerIntegratedTest {
 	
 	
 	@Test(timeout=5000)
-	public void serverSendsResponseBackToClientManyTimes() throws InterruptedException {
-		clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-		server1.startListenLoop((pojo, str) ->
-		{
-			assertEquals(str, clients.get(0).getAddress());
-			server1.send(clients.get(0).getAddress(), pojo1_b, true);
-		}, POJO1.class);
-
-
-		for (int i=0; i<10; i++)
-		{			
-			POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
-			assertEquals($,pojo1_b);
-		}			
+	public void serverSendsResponseBackToClient() throws InterruptedException {
 		
-		clients.get(0).stopListenLoop();
-		server1.stop();
+		for (int k=0; k<2; k++)
+		{
+			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
+			server1.startListenLoop((pojo, str) ->
+			{
+				assertEquals(str, clients.get(0).getAddress());
+				server1.send(clients.get(0).getAddress(), pojo1_b, true);
+			}, POJO1.class);
+	
+	
+			for (int i=0; i<6; i++)
+			{			
+				POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
+				assertEquals($,pojo1_b);
+			}			
+			
+			clients.get(0).stopListenLoop();
+			server1.stop();
+		}
 	}
 	
 	
@@ -358,85 +364,88 @@ public class ClientServerIntegratedTest {
 	public void serverRandomlyComunicatesWithTwoClients() throws InterruptedException {
 		
 		
-		for (int i=0; i<CLIENTS_NUM; i++)
+		for (int k=0; k<3; k++)
 		{
-			clients.get(i).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-		}
-		
-		
-		server1.startListenLoop(   (POJO1 pojo, String str) ->
-		{
-			server1.send(str, pojo, pojo.i > 0);
-		}, POJO1.class);
-
-
-		int expectedCharsNum = 0;
-		int expectedQueueSize = 0;
-		for (int i=0; i<50; i++)
-		{	
-			int r = rnd.nextInt(2);
-			
-			
-			if (r == 0)
+			for (int i=0; i<CLIENTS_NUM; i++)
 			{
-				if (rnd.nextInt(2) == 0)
-				{
-					String str = "aaaaaaaaaa".substring(0,rnd.nextInt(5)+1);
-					POJO1 p1 = new POJO1(0,str);
-					expectedCharsNum += str.length();
-					clients.get(rnd.nextInt(CLIENTS_NUM)).send(p1);
-					expectedQueueSize++;
-				}
-				
-
-			} else
-			{
-				
-				Thread t1 = new Thread( () -> {
-					POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
-					POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(
-							p, POJO1.class);
-					assertEquals($, p);
-				});
-				
-				Thread t2 = new Thread( () -> {
-					POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
-					POJO1 $ = clients.get(1).sendAndBlockUntilResponseArrives(
-							p, POJO1.class);
-					assertEquals($, p);
-				});
-				
-				boolean use_t1 = (rnd.nextInt(2) == 0);
-				boolean use_t2 = (rnd.nextInt(2) == 0);
-				
-				if (use_t1)
-					t1.start(); 
-				if (use_t2)
-					t2.start(); 		
-
-				if (use_t1)
-					t1.join();
-				if (use_t2)
-					t2.join();		
+				clients.get(i).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
 			}
-		}
-		
-		for (int i=0; i<expectedQueueSize; i++)
-		{
-			POJO1 p = consumer1_bq.take();
-			expectedCharsNum -= p.str.length();
-		}
-		
-		assertEquals(expectedCharsNum,0);
-		assertTrue(consumer1_bq.isEmpty());
+			
+			
+			server1.startListenLoop(   (POJO1 pojo, String str) ->
+			{
+				server1.send(str, pojo, pojo.i > 0);
+			}, POJO1.class);
+
+
+			int expectedCharsNum = 0;
+			int expectedQueueSize = 0;
+			for (int i=0; i<20; i++)
+			{	
+				int r = rnd.nextInt(2);
 				
-		
-		for (int i=0; i<CLIENTS_NUM; i++)
-		{
-			clients.get(i).stopListenLoop();
+				
+				if (r == 0)
+				{
+					if (rnd.nextInt(2) == 0)
+					{
+						String str = "aaaaaaaaaa".substring(0,rnd.nextInt(5)+1);
+						POJO1 p1 = new POJO1(0,str);
+						expectedCharsNum += str.length();
+						clients.get(rnd.nextInt(CLIENTS_NUM)).send(p1);
+						expectedQueueSize++;
+					}
+					
+
+				} else
+				{
+					
+					Thread t1 = new Thread( () -> {
+						POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
+						POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(
+								p, POJO1.class);
+						assertEquals($, p);
+					});
+					
+					Thread t2 = new Thread( () -> {
+						POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
+						POJO1 $ = clients.get(1).sendAndBlockUntilResponseArrives(
+								p, POJO1.class);
+						assertEquals($, p);
+					});
+					
+					boolean use_t1 = (rnd.nextInt(2) == 0);
+					boolean use_t2 = (rnd.nextInt(2) == 0);
+					
+					if (use_t1)
+						t1.start(); 
+					if (use_t2)
+						t2.start(); 		
+
+					if (use_t1)
+						t1.join();
+					if (use_t2)
+						t2.join();		
+				}
+			}
+			
+			for (int i=0; i<expectedQueueSize; i++)
+			{
+				POJO1 p = consumer1_bq.take();
+				expectedCharsNum -= p.str.length();
+			}
+			
+			assertEquals(expectedCharsNum,0);
+			assertTrue(consumer1_bq.isEmpty());
+					
+			
+			for (int i=0; i<CLIENTS_NUM; i++)
+			{
+				clients.get(i).stopListenLoop();
+			}
+			server1.stop();
 		}
-		server1.stop();
-		
+
 	}
 	
 	
