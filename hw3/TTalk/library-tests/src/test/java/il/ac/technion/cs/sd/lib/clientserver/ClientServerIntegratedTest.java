@@ -217,13 +217,13 @@ public class ClientServerIntegratedTest {
 
 		POJO1 pojo1 = new POJO1(1, "hi");
 
-		server1.startListenLoop(biConsumer1, POJO1.class);
+		server1.start(biConsumer1, POJO1.class);
 		server1.saveObjectToFile("pojo1", pojo1);
 		server1.stop();
 
 
 		Server s = new Server(server1.getAddress());
-		s.startListenLoop(biConsumer1, POJO1.class);
+		s.start(biConsumer1, POJO1.class);
 		Optional<POJO1> $ = s.readObjectFromFile("pojo1", POJO1.class);
 		s.stop();
 
@@ -248,8 +248,8 @@ public class ClientServerIntegratedTest {
 
 		for (int k=0; k<5; k++)
 		{
-			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-			server1.startListenLoop(biConsumer1, POJO1.class);
+			clients.get(0).start(server1.getAddress(), consumer1, POJO1.class);
+			server1.start(biConsumer1, POJO1.class);
 
 			for (int i=0; i<4; i++)
 			{
@@ -269,8 +269,8 @@ public class ClientServerIntegratedTest {
 
 		for (int k=0; k<3; k++)
 		{
-			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-			server1.startListenLoop(biConsumer1, POJO1.class);
+			clients.get(0).start(server1.getAddress(), consumer1, POJO1.class);
+			server1.start(biConsumer1, POJO1.class);
 
 			for (int i=0; i<10; i++)
 			{
@@ -292,7 +292,7 @@ public class ClientServerIntegratedTest {
 			tmp = 0; // messages count;
 			final int messagesNumToSend = 7;
 
-			clients.get(0).startListenLoop(server1.getAddress(), (POJO1 p) ->
+			clients.get(0).start(server1.getAddress(), (POJO1 p) ->
 			{
 				tmp++;
 				if (p.i > 0)
@@ -303,7 +303,7 @@ public class ClientServerIntegratedTest {
 			}, POJO1.class);
 
 
-			server1.startListenLoop( (POJO1 p, String from) ->
+			server1.start( (POJO1 p, String from) ->
 			{
 				tmp++;
 				if (p.i > 0)
@@ -332,8 +332,8 @@ public class ClientServerIntegratedTest {
 
 		for (int k=0; k<2; k++)
 		{
-			clients.get(0).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
-			server1.startListenLoop((pojo, str) ->
+			clients.get(0).start(server1.getAddress(), consumer1, POJO1.class);
+			server1.start((pojo, str) ->
 			{
 				assertEquals(str, clients.get(0).getAddress());
 				server1.send(clients.get(0).getAddress(), pojo1_b, true);
@@ -354,8 +354,8 @@ public class ClientServerIntegratedTest {
 
 	@Test(timeout=5000)
 	public void serverSendsComplexResponseBackToClient() throws InterruptedException {
-		clients.get(0).startListenLoop(server1.getAddress(), consumer2, POJO2.class);
-		server1.startListenLoop((pojo, str) ->
+		clients.get(0).start(server1.getAddress(), consumer2, POJO2.class);
+		server1.start((pojo, str) ->
 		{
 			assertEquals(str, clients.get(0).getAddress());
 			server1.send(clients.get(0).getAddress(), pojo2_a, true);
@@ -381,11 +381,11 @@ public class ClientServerIntegratedTest {
 		{
 			for (int i=0; i<CLIENTS_NUM; i++)
 			{
-				clients.get(i).startListenLoop(server1.getAddress(), consumer1, POJO1.class);
+				clients.get(i).start(server1.getAddress(), consumer1, POJO1.class);
 			}
 
 
-			server1.startListenLoop(   (POJO1 pojo, String str) ->
+			server1.start(   (POJO1 pojo, String str) ->
 			{
 				server1.send(str, pojo, pojo.i > 0);
 			}, POJO1.class);
@@ -462,10 +462,10 @@ public class ClientServerIntegratedTest {
 	}
 
 	
-	@Test//TODO(timeout=120000)
+	@Test
 	public void clientSendsToServerMessagesBothFromConsumerAndFromUserThread() throws InterruptedException {
 
-		for (int k=0; k<2; k++)//TODO
+		for (int k=0; k<2; k++)
 		{
 			
 			final Integer messagesToSendFromClient_block = 3*2 + 1; // MUST BE ODD FOR THIS TEST!
@@ -473,7 +473,7 @@ public class ClientServerIntegratedTest {
 			final Integer messagesToSendFromClient_total = 
 					messagesToSendFromClient_block + messagesToSendFromClient_nonblock;
 			
-			clients.get(0).startListenLoop(server1.getAddress(), (Integer i) ->
+			clients.get(0).start(server1.getAddress(), (Integer i) ->
 			{
 				if (i > 0)
 				{ 
@@ -497,7 +497,7 @@ public class ClientServerIntegratedTest {
 			}, Integer.class);
 
 
-			server1.startListenLoop((Integer i,String from) ->
+			server1.start((Integer i,String from) ->
 			{
 				if (i<0)
 				{
@@ -509,7 +509,7 @@ public class ClientServerIntegratedTest {
 			}, Integer.class);
 
 			
-			for (int i=0; i<2; i++)//TODO
+			for (int i=0; i<2; i++)
 			{
 				/* counter of [messages From Client send from consumer + messages server received from
 				 * user's thread */ 

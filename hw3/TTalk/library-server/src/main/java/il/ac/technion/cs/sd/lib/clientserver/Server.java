@@ -22,23 +22,19 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-//TODO: add documentation to the package.
-//TODO: compile to html javadoc.
-//TODO: consider giving in javadoc a tip on sending a type for generic types.
-//TODO: add to documentation each time there's a "Type" - the generic pattern.
-//TODO: recommend against nested classes because of gson.
-//TODO: rename "start listen loop" to "start", same for "end"
 
 /**
  * Represents a server that can communicate (reliably) with multiple clients, and save/load 
  * persistent data.
  * 
- * Each message sent/received can consist of an any object type you chose.
  * The server can send a message to a client either synchronically (while it is blocking until a 
  * response from the server is received), or asynchronously. 
  * 
- * This class is not thread-safe, meaning you must not access an object of this class from multiple 
- * threads simultaneously. 
+ * Each message sent/received synchronously can consist of an any object type you chose.
+ * All messages sent/received asynchronously consist of the same type of your choice.
+ * 
+ * This class is not thread-safe (meaning you must not access an object of this class from multiple 
+ * threads simultaneously). 
  */
 
 public class Server {
@@ -53,8 +49,8 @@ public class Server {
 
 	/**
 	 * Creates a new server. 
-	 * A call to {@link #startListenLoop(BiConsumer, Type)} must be made before doing any 
-	 * communication with this server.
+	 * A call to {@link #start(BiConsumer, Type)} must be made before sending/receiving any 
+	 * messages with this server.
 	 * @param address - the address of the new server. 
 	 */
 	public Server(String address)
@@ -73,15 +69,18 @@ public class Server {
 	 * via {@link #send(String, Object, boolean)} (the client is blocking until a response
 	 * from the server arrives). 
 	 * While the consumer's callback is running - the listen loop is frozen, so the code in the 
-	 * callback shouldn't wait for a new message to arrive. 
+	 * callback shouldn't wait for a new messages to arrive at the server. 
 	 * @param dataType The type of the object sent by the client in each message
 	 * (i.e., the type of the object passed to the consumer's callback function).
+	 * e.g.:
+	 * 		Integer.class
 	 * If the type is generic, for example, a list of Integers, you should pass as 'dataType' 
 	 * something created with the following pattern:
-	 * {@code new TypeToken<List<Integer>>(){}.getType())}
+	 * 		{@code new TypeToken<List<Integer>>(){}.getType())}
+	 * (sorry for that - it's a requirement by underlying GSON library).
 	 * @throws InvalidMessage If the listen loop is already running. 
 	 */
-	public <T> void startListenLoop(BiConsumer<T,String> consumer, Type dataType) { //TODO
+	public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 		
 		try {
 			_reliableHost.start((fromAddress, data) -> {
@@ -97,7 +96,9 @@ public class Server {
 	
 
 	/**
-	 * Stop the listen loop (messages sent from clients will no longer be consumed).
+	 * Stop the server.
+	 * Messages sent from clients will no longer be consumed, and you can no longer use the server for 
+	 * any communication, until starting the server again.
 	 *  {@link #saveObjectToFile(String, Object, boolean)} and {@link #readObjectFromFile(String, Type, boolean)} 
 	 *  will re-open streams, so you'll start reading/writing from the begining of the files).
 	 * @throws InvalidOperation When the listen loop was not running when calling this method.

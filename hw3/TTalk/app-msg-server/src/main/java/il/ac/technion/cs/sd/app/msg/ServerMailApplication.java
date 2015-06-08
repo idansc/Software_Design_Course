@@ -127,7 +127,7 @@ public class ServerMailApplication {
 
 		initializeDataFromFile();
 		
-		server.<MessageData>startListenLoop((messageData,from)->{
+		server.<MessageData>start((messageData,from)->{
 			dataConsumer(messageData, from);
 		}, MessageData.class);
 	}

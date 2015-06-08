@@ -31,7 +31,8 @@ public class ServerMailApplicationTest {
 	public void setUp() throws Exception {
 		appServer = new ServerMailApplication("T2");
 		mockServer = Mockito.mock(Server.class);
-		Mockito.when(mockServer.<Map<String, ArrayList<MessageData>>>readObjectFromFile(Mockito.any(), Mockito.any())).thenThrow(new RuntimeException());
+		appServer.setServer(mockServer);
+		Mockito.when(mockServer.<Map<String, ArrayList<MessageData>>>readObjectFromFile(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		Mockito.when(mockServer.<Map<String, ArrayList<String>>>readObjectFromFile(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		Mockito.when(mockServer.<Set<String>>readObjectFromFile(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		Mockito.when(mockServer.readObjectFromFile(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
@@ -47,10 +48,21 @@ public class ServerMailApplicationTest {
 
 	@Test
 	public void verifyStartListenLoop() {
-		mockServer = Mockito.mock(Server.class);
 		appServer.setServer(mockServer);
 		appServer.start();
-		Mockito.verify(mockServer,Mockito.atLeastOnce()).startListenLoop(Mockito.any(), Mockito.any());
+		Mockito.verify(mockServer,Mockito.atLeastOnce()).start(Mockito.any(), Mockito.any());
+	}
+	
+	@Test
+	public void serverShouldSaveFiles() {
+		appServer.stop();
+		Mockito.verify(mockServer,Mockito.atLeastOnce()).saveObjectToFile(Mockito.anyString(), Mockito.any());
+	}
+	
+	@Test
+	public void serverShouldCleanFiles() {
+		appServer.clean();
+		Mockito.verify(mockServer,Mockito.only()).clearPersistentData();
 	}
 
 }

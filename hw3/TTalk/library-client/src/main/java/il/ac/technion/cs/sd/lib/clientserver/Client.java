@@ -3,11 +3,17 @@ package il.ac.technion.cs.sd.lib.clientserver;
 import il.ac.technion.cs.sd.msg.MessengerException;
 
 import java.lang.reflect.Type;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
  * Represents a client that can communicate (reliably) with a single server.
- * The messages sent and received consist of objects of any type.
+ * 
+ * The server can send a message to a client either synchronically (while it is blocking until a 
+ * response from the server is received), or asynchronously. 
+ * 
+ * Each message sent/received synchronously can consist of an any object type you chose.
+ * All messages sent/received asynchronously consist of the same type of your choice.
  * 
  * This class is not thread-safe (meaning you must not access an object of this class from multiple 
  * threads simultaneously). 
@@ -18,7 +24,9 @@ public class Client {
 	private ReliableHost _reliableHost;
 	
 	/**
-	 * 
+	 * Creates a new client.
+	 * A call to {@link #start(String, Consumer, Type)} must be made before sending/receiving any 
+	 * messages with this client.
 	 * @param address The address of the new client.
 	 */
 	public Client(String address)
@@ -36,14 +44,24 @@ public class Client {
 	
 	
 	/**
-	 * Start the listen loop of the client during which messages sent from the server are consumed.
-	 * Each message received from the server invokes the consumer's callback function.
+	 * Starts listening for incoming messages from the server. You can't use the client for any
+	 * communication before starting it. 
+	 * After the client is started, each message received from the server invokes the consumer's 
+	 * callback function.
 	 * @param serverAddress The server's address.
 	 * @param consumer The consumer who's callback will be invoked for each message received from the server.
 	 * While the consumer's callback is running - the listen loop is frozen, so the code in the 
-	 * callback shouldn't wait for a new message to arrive. 
-	 * @param dataType The type of the object the server sends the client in each message as data.
+	 * callback shouldn't wait for a new message to be received by this client. 
+	 * @param dataType The type of the object the server sends asynchronously to the client in each 
+	 * message as data.
 	 * (i.e. the type of the parameter the consumer's callback function receives).
+	 * e.g.:
+	 * 		Integer.class
+	 * If the type is generic, for example, a list of Integers, you should pass as 'dataType' 
+	 * something created with the following pattern:
+	 * 		{@code new TypeToken<List<Integer>>(){}.getType())}
+	 * (sorry for that - it's a requirement by underlying GSON library).
+
 	 * If the type is generic, for example, a list of Integers, you should pass as 'dataType' 
 	 * something created with the following pattern:
 	 * {@code new TypeToken<List<Integer>>(){}.getType())}
@@ -51,7 +69,7 @@ public class Client {
 	 * For example: the object sent as message data was not of type 'type'.
 	 * @throws InvalidOperation When the listen loop is already running when calling this method.
 	 */
-	public <T> void startListenLoop(String serverAddress, Consumer<T> consumer, Type dataType) //TODO
+	public <T> void start(String serverAddress, Consumer<T> consumer, Type dataType)
 	{
 		String originalServerAddress = _serverAddress;
 		_serverAddress = serverAddress;
@@ -61,7 +79,6 @@ public class Client {
 				consumer.accept(Utils.fromGsonStrToObject(data, dataType));
 			});
 		} catch (MessengerException e) {
-			System.out.println(e.getMessage());//TODO:: delete
 			_serverAddress = originalServerAddress;
 			throw new CommunicationFailure();
 		}
@@ -103,7 +120,7 @@ public class Client {
 	 * (and not some other unrelated message the server sent the client).
 	 * @throws InvalidMessage Invalid message was received back from the server. 
 	 */
-	public <T, S> S sendAndBlockUntilResponseArrives(T data, Type responseType) //TODO
+	public <T, S> S sendAndBlockUntilResponseArrives(T data, Type responseType)
 	{
 		try {
 			String str = _reliableHost.sendAndBlockUntilResponseArrives(

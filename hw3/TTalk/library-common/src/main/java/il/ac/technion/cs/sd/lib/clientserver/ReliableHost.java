@@ -57,7 +57,7 @@ class ReliableHost {
 	/* maximum time for a successful message to be delivered (from sending time to receiving time), 
 	 * in milisec */
 	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 100; 
-	//TODO: Gal recommended MAX_TIME_FOR_SUCCESFUL_DELIVERY=100, but 4 seems to be enough.
+	//Gal recommended MAX_TIME_FOR_SUCCESFUL_DELIVERY=100, but 4 seems to be enough.
 	
 	/* the powerSend method "busy waits" on this field until its true, and then would resets it to
 	 * false.
@@ -137,7 +137,6 @@ class ReliableHost {
 				
 				if (payload.isEmpty())
 				{
-					//TODO: DELETE
 					Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(_address)); 
 					
 					assert(!messageRecivedIndicator);
@@ -152,7 +151,6 @@ class ReliableHost {
 				InnerMessage message = getInnerMessageFromPayload(payload);
 				if (message.responseTargetId != null)
 				{
-					//TODO: DELETE
 					Utils.DEBUG_LOG_LINE("---responseBQ.put: " + message);
 					
 					try {
@@ -166,7 +164,6 @@ class ReliableHost {
 				
 				
 				
-				//TODO: DELETE
 				Utils.DEBUG_LOG_LINE("+++ Adding to regular queue of: " + Utils.showable(_address) + ", payload.length():" + payload.length() );
 				
 				
@@ -299,7 +296,7 @@ class ReliableHost {
 			}
 			if (response.responseTargetId == responseRequestorId)
 			{
-				Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); //TODO:DELTE.
+				Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(_address) + ", msg=" + response); 
 				return response.data;
 			}
 			try {
@@ -320,7 +317,6 @@ class ReliableHost {
 	private void newMessageArrivedCallback(String data)
 	{
 		
-		//TODO: DELETE
 		Utils.DEBUG_LOG_LINE("NewArrived. _address="+ Utils.showable(_address) + ", data.length()="
 		+ data.length() + ", data=" + Utils.showable(data));
 		
@@ -330,7 +326,6 @@ class ReliableHost {
 		
 		assert(message.responseTargetId == null);
 		  
-		//TODO: DELETE
 		Utils.DEBUG_LOG_LINE("---regular-consume: " + message);
 
 		
@@ -369,7 +364,7 @@ class ReliableHost {
 		}
 		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data, _address);
 		
-		int TMP__tries = 0; //TODO:DELETE
+		int TMP__tries = 0;
 		
 		synchronized (sendingLock)
 		{
@@ -378,7 +373,7 @@ class ReliableHost {
 			assert(!waitingForRecepientConfirmation);
 			
 			
-			Utils.DEBUG_LOG_LINE(">>>Sending message from " + _address + ", msg=" + newMessage); //TODO: DELETE
+			Utils.DEBUG_LOG_LINE(">>>Sending message from " + _address + ", msg=" + newMessage); 
 			
 			
 			/*
@@ -388,7 +383,6 @@ class ReliableHost {
 			while (!messageRecivedIndicator)
 			{
 				
-				//TODO:DELETE
 				TMP__tries++;
 				Utils.DEBUG_LOG_LINE("===try #" + TMP__tries + "     (by " + _address + ")");
 				
@@ -405,7 +399,7 @@ class ReliableHost {
 			}
 			waitingForRecepientConfirmation = false;
 			
-			Utils.DEBUG_LOG_LINE("===success   (by " + _address + ")"); //TODO:DELETE
+			Utils.DEBUG_LOG_LINE("===success   (by " + _address + ")"); 
 			
 			messageRecivedIndicator = false;
 		}
@@ -458,14 +452,12 @@ class ReliableHost {
 				newMessageArrivedCallback(str);
 			} else
 			{
-				//TODO: delete
 				Utils.DEBUG_LOG_LINE("____________________queue empty for: " + _address); 
 			}
 		}
 		messageLoopRequestedToStop = false;
 		messageLoopCurrentlyRunning = false;
 		
-		//TODO
 		Utils.DEBUG_LOG_LINE("!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: " + _address);
 	}
 	

@@ -53,7 +53,7 @@ public class ClientMsgApplication {
 			Function<String, Boolean> friendshipRequestHandler,
 			BiConsumer<String, Boolean> friendshipReplyConsumer) {
 		
-		client.<MessageData>startListenLoop(_serverAddress,new MessageDataConsumer(client, messageConsumer, 
+		client.<MessageData>start(_serverAddress,new MessageDataConsumer(client, messageConsumer, 
 				friendshipRequestHandler, friendshipReplyConsumer),MessageData.class);
 		
 		Optional<List<MessageData>> messages = client.sendAndBlockUntilResponseArrives(

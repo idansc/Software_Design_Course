@@ -15,7 +15,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-//TODO: decide if this should be public.
 /**
  * Common utilities.
  */
@@ -118,7 +117,6 @@ class Utils {
 	
 	
 	
-	//TODO: DELETE
 	private static FileWriter logWriter = initLogWriter();
 	private static FileWriter initLogWriter()  {
 		try {
@@ -129,16 +127,16 @@ class Utils {
 	}
 	public static void DEBUG_LOG_LINE(String line)
 	{
-		synchronized(logWriter)
-		{
-			try {
-				logWriter.write(line + "\n");
-				logWriter.flush();
-			} catch (IOException e) {
-				throw new RuntimeException("failed to write to log");
-			}
-			
-		}
+//		synchronized(logWriter)
+//		{
+//			try {
+//				logWriter.write(line + "\n");
+//				logWriter.flush();
+//			} catch (IOException e) {
+//				throw new RuntimeException("failed to write to log");
+//			}
+//			
+//		}
 	}
 	
 	
