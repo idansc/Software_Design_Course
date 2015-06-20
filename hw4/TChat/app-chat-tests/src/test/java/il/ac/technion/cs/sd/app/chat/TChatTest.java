@@ -6,6 +6,7 @@ import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -25,6 +26,8 @@ public class TChatTest {
 	@Before
 	public void setup() {
 		server.start(); // non-blocking
+		announcements = new HashMap<String, BlockingQueue<RoomAnnouncement>>();
+		messages = new HashMap<String, BlockingQueue<ChatMessage>>();
 	}
 
 	@After
@@ -40,11 +43,13 @@ public class TChatTest {
 		ClientChatApplication gal = loginUser("Gal");
 		ClientChatApplication itay = loginUser("Itay");
 		gal.joinRoom("room");
-		assertEquals(announcements.get("Gal").take(), new RoomAnnouncement("Gal", "room", Announcement.JOIN));
 		itay.joinRoom("room");
 		assertEquals(announcements.get("Gal").take(), new RoomAnnouncement("Itay", "room", Announcement.JOIN));
 		itay.sendMessage("room", "Hi all");
 		assertEquals(messages.get("Gal").take(), new ChatMessage("Itay", "room", "Hi all"));
+		itay.logout();
+		assertEquals(announcements.get("Gal").take(), new RoomAnnouncement("Itay", "room", Announcement.DISCONNECT));
+		gal.logout();
 	}
 
 	@Test
@@ -56,9 +61,9 @@ public class TChatTest {
 		assertEquals(Arrays.asList("Itay"), gal.getClientsInRoom("room"));
 		itay.logout();
 		gal.joinRoom("room2");
-		assertEquals(Arrays.asList("room"), gal.getClientsInRoom("room2"));
+		assertEquals(Arrays.asList("Gal"), gal.getClientsInRoom("room2"));
 		assertEquals(Arrays.asList("room2"), gal.getAllRooms());
-		gal.leaveRoom("room");
+		gal.leaveRoom("room2");
 		assertEquals(Collections.EMPTY_LIST, gal.getAllRooms());
 		try {
 			gal.getClientsInRoom("room");

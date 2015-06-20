@@ -1,7 +1,13 @@
 package il.ac.technion.cs.sd.app.chat;
 
+import il.ac.technion.cs.sd.lib.clientserver.Client;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
+
+import com.google.gson.reflect.TypeToken;
 
 /**
  * The client side of the TChat application. Allows sending and getting messages
@@ -9,6 +15,10 @@ import java.util.function.Consumer;
  * You should implement all the methods in this class
  */
 public class ClientChatApplication {
+	Client _client;
+	String _serverAdress;
+	Boolean _isOnline;
+	
 
 	/**
 	 * Creates a new application, tied to a single user
@@ -19,7 +29,9 @@ public class ClientChatApplication {
 	 *            using this object
 	 */
 	public ClientChatApplication(String serverAddress, String username) {
-		throw new UnsupportedOperationException("Not implemented");
+		_serverAdress = serverAddress;
+		_client = new Client(username);
+		_isOnline = false;
 	}
 
 	/**
@@ -34,7 +46,10 @@ public class ClientChatApplication {
 	 */
 	public void login(Consumer<ChatMessage> chatMessageConsumer,
 			Consumer<RoomAnnouncement> announcementConsumer) {
-		throw new UnsupportedOperationException("Not implemented");
+		_client.start(_serverAdress, new ClientMessageConsumer(chatMessageConsumer,announcementConsumer), ClientMessage.class);
+		
+		_client.send(new ServerMessage(TaskServerType.LOGIN));
+		_isOnline = true;
 	}
 
 	/**
@@ -43,7 +58,9 @@ public class ClientChatApplication {
 	 * @throws AlreadyInRoomException If the client isn't currently in the room
 	 */
 	public void joinRoom(String room) throws AlreadyInRoomException {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<Boolean> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.JOIN_ROOM).setRoom(room), 
+				new TypeToken<Optional<Boolean>>(){}.getType());
+		$.orElseThrow(AlreadyInRoomException::new);
 	}
 
 	/**
@@ -52,14 +69,20 @@ public class ClientChatApplication {
 	 * @throws NotInRoomException If the client isn't currently in the room
 	 */
 	public void leaveRoom(String room) throws NotInRoomException {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<Boolean> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.LEAVE_ROOM).setRoom(room), 
+				new TypeToken<Optional<Boolean>>(){}.getType());
+		$.orElseThrow(NotInRoomException::new);
 	}
 
 	/**
 	 * Logs the user out of chat application. A logged out client perform any tasks other than logging in.
 	 */
 	public void logout() {
-		throw new UnsupportedOperationException("Not implemented");
+		if(_isOnline){
+			_client.send(new ServerMessage(TaskServerType.LOGOUT));
+			_client.stopListenLoop();
+			_isOnline = false;
+		}
 	}
 
 	/**
@@ -69,21 +92,28 @@ public class ClientChatApplication {
 	 * @throws NotInRoomException If the client isn't currently in the room
 	 */
 	public void sendMessage(String room, String what) throws NotInRoomException {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<Boolean> $ = _client.<ServerMessage,Optional<Boolean>>sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.SEND_MESSAGE)
+			.setChatMessage(new ChatMessage(_client.getAddress(), room, what)), 
+				new TypeToken<Optional<Boolean>>(){}.getType());
+		$.orElseThrow(NotInRoomException::new);
 	}
 
 	/**
 	 * @return All the rooms the client joined
 	 */
 	public List<String> getJoinedRooms() {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_JOINED_ROOM), 
+			new TypeToken<Optional<List<String>>>(){}.getType());
+		return $.orElse(null);
 	}
 
 	/**
 	 * @return all rooms that have clients currently online, i.e., logged in them
 	 */
 	public List<String> getAllRooms() {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_ALL_ROOMS), 
+				new TypeToken<Optional<List<String>>>(){}.getType());
+			return $.orElse(null);
 	}
 	
 	/**
@@ -94,7 +124,9 @@ public class ClientChatApplication {
 	 * @throws NoSuchRoomException If the room doesn't exist, or no clients are currently in it
 	 */
 	public List<String> getClientsInRoom(String room) throws NoSuchRoomException {
-		throw new UnsupportedOperationException("Not implemented");
+		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_CLIENTS_IN_ROOM).setRoom(room), 
+				new TypeToken<Optional<List<String>>>(){}.getType());
+			return $.orElseThrow(NoSuchRoomException::new);
 	}
 
 	/**
@@ -103,7 +135,7 @@ public class ClientChatApplication {
 	 * was logged in.
 	 */
 	public void stop() {
-		throw new UnsupportedOperationException("Not implemented");
+		//no need. 
 	}
 
 }
