@@ -117,14 +117,14 @@ class Utils {
 	
 	
 	
-	private static FileWriter logWriter = initLogWriter();
-	private static FileWriter initLogWriter()  {
-		try {
-			return new FileWriter(new File("./TMP__DEBUG__log.txt"));
-		} catch (IOException e) {
-			throw new RuntimeException("failed to open log to write");
-		}
-	}
+//	private static FileWriter logWriter = initLogWriter();
+//	private static FileWriter initLogWriter()  {
+//		try {
+//			return new FileWriter(new File("./TMP__DEBUG__log.txt"));
+//		} catch (IOException e) {
+//			throw new RuntimeException("failed to open log to write");
+//		}
+//	}
 	public static void DEBUG_LOG_LINE(String line)
 	{
 //		synchronized(logWriter)
