@@ -2,7 +2,6 @@ package il.ac.technion.cs.sd.app.chat;
 
 import il.ac.technion.cs.sd.lib.clientserver.Client;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
