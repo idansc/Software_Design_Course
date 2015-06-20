@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.app.chat;
 
 import static org.junit.Assert.fail;
+import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,8 @@ import static org.junit.Assert.*;
 
 public class TChatIntegratedTest {
 
+	final int CLIENTS_NUM = 20;
+	
 	private List<ClientChatApplication> clients;
 	
 	private ServerChatApplication server;
@@ -59,20 +62,21 @@ public class TChatIntegratedTest {
 	public void setUp() throws Exception {
 
 
-		chatMessageQueus = new LinkedList<>();
-		announcementsQueus = new LinkedList<>();			
-		for (int i=0; i<20; i++)
-		{
-			chatMessageQueus.add(new LinkedBlockingQueue<>());
-			announcementsQueus.add(new LinkedBlockingQueue<>());
-		}
 		
 		server = new ServerChatApplication("server_" + UUID.randomUUID());
 		server.clean();
 		server.start();
 		
 		clients = new LinkedList<>(); 
-		addClient(server.getAddress(), "client_" + UUID.randomUUID());
+		chatMessageQueus = new LinkedList<>();
+		announcementsQueus = new LinkedList<>();			
+		for (int i=0; i<CLIENTS_NUM; i++)
+		{
+			addClient(server.getAddress(), "client_" + UUID.randomUUID());
+			chatMessageQueus.add(new LinkedBlockingQueue<>());
+			announcementsQueus.add(new LinkedBlockingQueue<>());
+		}
+
 	}
 
 	@After
@@ -170,14 +174,11 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).leaveRoom("room1");
 		RoomAnnouncement ra = announcementsQueus.get(1).take();
-		assertEquals(new RoomAnnouncement(clients.get(0).get))
 		
-		
+		assertEquals(ra, new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.LEAVE));
 		
 		logoutClient(0);
 		logoutClient(1);
-		
-		
 	}
 		
 	
