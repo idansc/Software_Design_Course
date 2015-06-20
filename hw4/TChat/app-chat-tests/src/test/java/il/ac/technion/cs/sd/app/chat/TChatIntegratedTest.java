@@ -121,6 +121,44 @@ public class TChatIntegratedTest {
 	}
 	
 	
+	@Test
+	public void leaveRoomNotCurrentlyInWithServerRestart() throws NotInRoomException, AlreadyInRoomException {
+		
+		loginClient(0);
+		
+		
+		try{
+			clients.get(0).leaveRoom("room1");
+			fail();
+		} catch (NotInRoomException e)
+		{
+		} catch (Exception e)
+		{
+			fail();
+		}
+		
+		clients.get(0).joinRoom("room1");
+		
+		logoutClient(0);
+		restartServer();
+		loginClient(0);
+		
+		clients.get(0).leaveRoom("room1");
+		
+		try{
+			clients.get(0).leaveRoom("room1");
+			fail();
+		} catch (NotInRoomException e)
+		{
+		} catch (Exception e)
+		{
+			fail();
+		}
+		
+		logoutClient(0);
+	}
+	
+	
 
 
 }
