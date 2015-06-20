@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class TChatIntegratedTest {
 
 	private List<ClientChatApplication> clients;
@@ -157,6 +159,27 @@ public class TChatIntegratedTest {
 		
 		logoutClient(0);
 	}
+	
+	@Test
+	public void leaveRoomOccupiedByOthers() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
+		loginClient(0);
+		loginClient(1);
+		
+		clients.get(0).joinRoom("room1");
+		clients.get(1).joinRoom("room1");
+		
+		clients.get(0).leaveRoom("room1");
+		RoomAnnouncement ra = announcementsQueus.get(1).take();
+		assertEquals(new RoomAnnouncement(clients.get(0).get))
+		
+		
+		
+		logoutClient(0);
+		logoutClient(1);
+		
+		
+	}
+		
 	
 	
 
