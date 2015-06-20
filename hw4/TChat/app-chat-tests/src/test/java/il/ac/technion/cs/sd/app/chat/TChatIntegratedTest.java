@@ -34,6 +34,24 @@ public class TChatIntegratedTest {
 		return x -> queue.add(x);
 	}
 	
+	private void loginClient(int index) {
+		clients.get(index).login( 
+				createConsumer(chatMessageQueus.get(index)),
+				createConsumer(announcementsQueus.get(index)) );
+	}
+	
+	private void logoutClient(int index)
+	{
+		clients.get(index).logout();
+	}
+	
+	private void restartServer()
+	{
+		String address = server.getAddress();
+		server.stop();
+		server = new ServerChatApplication(address);
+		server.start();
+	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -62,14 +80,47 @@ public class TChatIntegratedTest {
 		server.stop();
 		server.clean();
 	}
+	
 
-	@Test
-	public void test() {
-		clients.get(0).login( 
-				createConsumer(chatMessageQueus.get(0)),
-				createConsumer(announcementsQueus.get(0)) );
+	@Test (expected = AlreadyInRoomException.class)
+	public void joinRoomAlreadyIn() throws AlreadyInRoomException {
 		
+		loginClient(0);
 		
+		try{
+			clients.get(0).joinRoom("room1");
+		} catch (AlreadyInRoomException e)
+		{
+			fail();
+		}
+		clients.get(0).joinRoom("room1");
+		
+		logoutClient(0);		
 	}
+	
+	
+	@Test (expected = AlreadyInRoomException.class)
+	public void joinRoomAlreadyInWithServerReset() throws AlreadyInRoomException {
+		
+		loginClient(0);
+		
+		try{
+			clients.get(0).joinRoom("room1");
+		} catch (AlreadyInRoomException e)
+		{
+			fail();
+		}
+		
+		logoutClient(0);
+		restartServer();
+		loginClient(0);
+		
+		clients.get(0).joinRoom("room1");
+		
+		logoutClient(0);
+	}
+	
+	
+
 
 }
