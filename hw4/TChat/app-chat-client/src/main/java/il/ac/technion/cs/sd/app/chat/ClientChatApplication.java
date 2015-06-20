@@ -33,6 +33,11 @@ public class ClientChatApplication {
 		_client = new Client(username);
 		_isOnline = false;
 	}
+	
+	public String getUsername()
+	{
+		return _client.getAddress();
+	}
 
 	/**
 	 * Logs the user to the server. The user automatically joins all the rooms he was
