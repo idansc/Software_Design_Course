@@ -14,7 +14,9 @@ import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.junit.After;
 import org.junit.Before;
@@ -184,7 +186,7 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).leaveRoom("room1");
 		
-		assertClientGetsSingleAnnouncement(1,
+		takeSingleAnnouncementAndAssertValue(1,
 				new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.LEAVE));
 		
 		logoutClient(0);
@@ -204,7 +206,7 @@ public class TChatIntegratedTest {
 		
 		logoutClient(0);
 		
-		assertClientGetsSingleAnnouncement(1,
+		takeSingleAnnouncementAndAssertValue(1,
 				new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.DISCONNECT));
 			
 		logoutClient(1);
@@ -213,7 +215,7 @@ public class TChatIntegratedTest {
 	
 	
 	
-	@Test (timeout = 1000)
+	@Test (timeout = 3000)
 	public void logoutAndThenLogInAgain() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
 		loginClient(0);
 		loginClient(1);
@@ -221,54 +223,60 @@ public class TChatIntegratedTest {
 		clients.get(0).joinRoom("room1");
 		clients.get(1).joinRoom("room1");
 		
+		takeSingleAnnouncementAndAssertValue(0,
+		new RoomAnnouncement(clients.get(1).getUsername(),"room1", Announcement.JOIN));
+
+		
+		Thread.sleep(100);
+		
 		logoutClient(0);
 		
-		assertClientGetsSingleAnnouncement(1,
+		takeSingleAnnouncementAndAssertValue(1,
 				new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.DISCONNECT));
 		
 		loginClient(0);
 		
-		assertClientGetsSingleAnnouncement(1,
+		takeSingleAnnouncementAndAssertValue(1,
 				new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.JOIN));
 		
-		//TODO: Seems like a bug, we are waiting forever here.
+	
+		logoutClient(1);
 		
+		takeSingleAnnouncementAndAssertValue(0,
+				new RoomAnnouncement(clients.get(1).getUsername(),"room1", Announcement.DISCONNECT));
 		
+		logoutClient(0);
 		
-		
-//TODO		
-//		logoutClient(1);
-//		
-//		assertClientGetsSingleAnnouncement(0,
-//				new RoomAnnouncement(clients.get(1).getUsername(),"room1", Announcement.DISCONNECT));
-//		
-//		logoutClient(0);
-//		
-//		assertAllBlockingQueuesAreCurrentlyEmpty();
+		assertAllBlockingQueuesAreCurrentlyEmpty();
 				
 	}
 	
 	
 
-//TODO
-//	@Test (timeout = 1000)//TODO: set good time 
-//	public void logsOutSendingAnnouncmentsToOthers() throws InterruptedException, NotInRoomException, AlreadyInRoomException {
-//		testAnnouncementsWhenUserLeaves(true);
-//	}
+	@Test //(timeout = 1000)//TODO  
+	public void logsOutSendingAnnouncmentsToOthers() throws InterruptedException, NotInRoomException, AlreadyInRoomException {
+		testAnnouncementsWhenUserLeaves(true);
+	}
 	
-		
+	@Test //(timeout = 1000)//TODO  
+	public void leaveRoomsSendingAnnouncmentsToOthers() throws InterruptedException, NotInRoomException, AlreadyInRoomException {
+		testAnnouncementsWhenUserLeaves(false);
+	}	
 
 
 	/**
 	 * 
-	 * @param isLogout - if true, then we check the scenario where a user logs-out, otherwise we check
-	 * the scenario where a user simply leaves the room.
+	 * @param isLogout - if true, then we check the scenario where a users leave by logs-out, otherwise we check
+	 * the scenario where a users simply leaves the room without logout.
 	 * @throws InterruptedException 
 	 * @throws NotInRoomException 
 	 * @throws AlreadyInRoomException 
 	 */
 	private void testAnnouncementsWhenUserLeaves(boolean isLogout) throws InterruptedException, NotInRoomException, AlreadyInRoomException
 	{
+		Announcement leaveType = isLogout ? Announcement.DISCONNECT : Announcement.LEAVE;
+			 
+				
 		// The user we focus on is user 0.
 		
 		loginClient(0); // in rooms: 1, 5, 9
@@ -286,7 +294,7 @@ public class TChatIntegratedTest {
 		clients.get(1).joinRoom("room2");
 		
 		
-		assertClientGetsSingleAnnouncement(0, 
+		takeSingleAnnouncementAndAssertValue(0, 
 				new RoomAnnouncement(clients.get(1).getUsername(),"room1", Announcement.JOIN));
 		
 		clients.get(2).joinRoom("room3");
@@ -295,77 +303,61 @@ public class TChatIntegratedTest {
 
 		clients.get(3).joinRoom("room5");
 
-		assertClientGetsSingleAnnouncement(0, 
+		takeSingleAnnouncementAndAssertValue(0, 
 				new RoomAnnouncement(clients.get(3).getUsername(),"room5", Announcement.JOIN));
 
 		
 		clients.get(3).joinRoom("room1");
 
-		assertClientGetsSingleAnnouncement(0, 
+		takeSingleAnnouncementAndAssertValue(0, 
 				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.JOIN));
 
-		assertClientGetsSingleAnnouncement(1, 
+		takeSingleAnnouncementAndAssertValue(1, 
 				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.JOIN));
 		
 		
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 		
-		/////////////// Step 2 : user 3 logs out and then logs in again  ///////////////
+		/////////////// Step 2 : user 3 leaves and then comes back again.  ///////////////
 		
-		logoutClient(3);
+		if (isLogout)
+			logoutClient(3);
+		else {
+			clients.get(3).leaveRoom("room1");
+			clients.get(3).leaveRoom("room5");
+		}
+			
 		
-		assertClientGetsExactlyTwoAnnouncement(0, 
-				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.DISCONNECT),
-				new RoomAnnouncement(clients.get(3).getUsername(),"room5", Announcement.DISCONNECT));
+		takeExactlyTwoAnnouncementAndAssertValues(0, 
+				new RoomAnnouncement(clients.get(3).getUsername(),"room1", leaveType),
+				new RoomAnnouncement(clients.get(3).getUsername(),"room5", leaveType));
 
-		assertClientGetsSingleAnnouncement(1, 
-				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.DISCONNECT));
+		takeSingleAnnouncementAndAssertValue(1, 
+				new RoomAnnouncement(clients.get(3).getUsername(),"room1", leaveType));
 		
-		loginClient(3);
+		if (isLogout)
+			loginClient(3);
+		else {
+			clients.get(3).joinRoom("room1");
+			clients.get(3).joinRoom("room5");
+		}
 		
 		
-		assertClientGetsSingleAnnouncement(0, 
-				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.JOIN));
+		takeExactlyTwoAnnouncementAndAssertValues(0, 
+				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.JOIN),
+				new RoomAnnouncement(clients.get(3).getUsername(),"room5", Announcement.JOIN));
 
-		assertClientGetsSingleAnnouncement(1, 
+		takeSingleAnnouncementAndAssertValue(1, 
 				new RoomAnnouncement(clients.get(3).getUsername(),"room1", Announcement.JOIN));
 		
+
 		
-		/////////////// Step 3 :
-		//TODO
-		
-//		
-//		if (isLogout)
-//			logoutClient(0);
-//		else
-//			clients.get(0).leaveRoom("room1");
-//		
-//		
-//		RoomAnnouncement expectedRoomAnnouncement = 
-//				new RoomAnnouncement(clients.get(0).getUsername(),"room1", 
-//						isLogout ? Announcement.DISCONNECT : Announcement.LEAVE );
-//		
-//		
-//		assertClientGetsSingleAnnouncement(1, expectedRoomAnnouncement);		
-//		assertClientGetsSingleAnnouncement(3, expectedRoomAnnouncement);
-//		
-//		
-//		assertClientDoesNotGetAnAnnouncement(0);
-//		assertClientDoesNotGetAnAnnouncement(2);
-//		
-//		
-//		logoutClient(1);
-//		logoutClient(2);
-//		logoutClient(3);
-//		
-//		if (!isLogout) // otherwise we've already logged out.
-//			logoutClient(0); 
-//		
-//		assertAllBlockingQueuesAreCurrentlyEmpty();
+		assertAllBlockingQueuesAreCurrentlyEmpty();
 		
 	}
 
-	private void assertClientGetsSingleAnnouncement(int clientInd, RoomAnnouncement expectedRoomAnnouncement)
+	/* Asserts a client receives exactly one given announcement, and no others. */
+	private void takeSingleAnnouncementAndAssertValue(int clientInd, RoomAnnouncement expectedRoomAnnouncement)
 			throws InterruptedException {
 		RoomAnnouncement ra = announcementsQueus.get(clientInd).take();
 		assertEquals(ra, expectedRoomAnnouncement);
@@ -373,8 +365,8 @@ public class TChatIntegratedTest {
 	}
 	
 	
-	/* Assers a client receives exactly two announcement (order doesn't matter */
-	private void assertClientGetsExactlyTwoAnnouncement(
+	/* Asserts a client receives exactly two announcement (order doesn't matter), and no others. */
+	private void takeExactlyTwoAnnouncementAndAssertValues(
 			int clientInd, RoomAnnouncement announcement1, RoomAnnouncement announcement2)
 					throws InterruptedException {
 		
