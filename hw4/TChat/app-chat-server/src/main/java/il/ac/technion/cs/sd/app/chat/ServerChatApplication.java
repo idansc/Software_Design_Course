@@ -54,8 +54,10 @@ public class ServerChatApplication {
 				_clientsToRooms.get(from).forEach(room->{
 					if(!_roomsToClient.containsKey(room))
 						_roomsToClient.put(room, new HashSet<>(Arrays.asList(from)));
-					else
+					else{						
+						sendAnnouncment(from, room, Announcement.JOIN);
 						_roomsToClient.get(room).add(from);
+					}
 				});;
 			break;
 		}
