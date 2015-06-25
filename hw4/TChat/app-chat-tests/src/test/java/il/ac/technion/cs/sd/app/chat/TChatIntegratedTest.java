@@ -276,18 +276,29 @@ public class TChatIntegratedTest {
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
 	
-//	@Test
-//	public void sendMessageToSingleRecepient() throws AlreadyInRoomException, NotInRoomException
-//	{
-//		//TODO
-//		loginClient(0);
-//		
-//		clients.get(0).joinRoom("room1");
-//		clients.get(0).sendMessage("room1", "hi");
-//		logoutClient(0);
-//		
-//		assertAllBlockingQueuesAreCurrentlyEmpty();
-//	}
+	@Test
+	public void sendMessageToSingleRecepient() throws AlreadyInRoomException, NotInRoomException
+	{
+		loginClient(0);
+		loginClient(1);
+		
+		clients.get(0).joinRoom("room1");
+		clients.get(0).sendMessage("room1", "hi");
+
+		
+		logoutClient(0);
+		logoutClient(1);
+		
+		restartServer();
+		
+		loginClient(0);
+		loginClient(1);
+		
+		
+		logoutClient(0);
+		
+		assertAllBlockingQueuesAreCurrentlyEmpty();
+	}
 	
 	/**
 	 * 
