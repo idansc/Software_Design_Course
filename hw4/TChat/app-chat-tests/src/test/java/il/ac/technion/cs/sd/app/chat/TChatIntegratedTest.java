@@ -107,7 +107,7 @@ public class TChatIntegratedTest {
 		}
 		clients.get(0).joinRoom("room1");
 		
-		logoutClient(0);		
+		logoutClient(0);	
 		
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
@@ -177,7 +177,7 @@ public class TChatIntegratedTest {
 	}
 	
 	@Test
-	public void leaveRoomOccupiedByOthers() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
+	public void leaveRoomOccupiedByOneOther() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
 		loginClient(0);
 		loginClient(1);
 		
@@ -197,7 +197,7 @@ public class TChatIntegratedTest {
 	
 	
 	@Test
-	public void logsoutWhenInRoomOccupiedByOthers() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
+	public void logsoutWhenInRoomOccupiedByOneOther() throws NotInRoomException, AlreadyInRoomException, InterruptedException {
 		loginClient(0);
 		loginClient(1);
 		
@@ -264,6 +264,31 @@ public class TChatIntegratedTest {
 	}	
 
 
+	@Test
+	public void sendMessageToNobody() throws AlreadyInRoomException, NotInRoomException
+	{
+		loginClient(0);
+		
+		clients.get(0).joinRoom("room1");
+		clients.get(0).sendMessage("room1", "hi");
+		logoutClient(0);
+		
+		assertAllBlockingQueuesAreCurrentlyEmpty();
+	}
+	
+//	@Test
+//	public void sendMessageToSingleRecepient() throws AlreadyInRoomException, NotInRoomException
+//	{
+//		//TODO
+//		loginClient(0);
+//		
+//		clients.get(0).joinRoom("room1");
+//		clients.get(0).sendMessage("room1", "hi");
+//		logoutClient(0);
+//		
+//		assertAllBlockingQueuesAreCurrentlyEmpty();
+//	}
+	
 	/**
 	 * 
 	 * @param isLogout - if true, then we check the scenario where a users leave by logs-out, otherwise we check
@@ -390,8 +415,16 @@ public class TChatIntegratedTest {
 	}
 	
 	
+	/**
+	 * Waits a bit and makes sure all queues are empty.
+	 */
 	private void assertAllBlockingQueuesAreCurrentlyEmpty()
 	{
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}
 		assertFalse(announcementsQueus.stream().anyMatch(x -> x.peek() != null));
 		assertFalse(chatMessageQueus.stream().anyMatch(x -> x.peek() != null));
 	}
