@@ -295,16 +295,13 @@ public class TChatIntegratedTest {
 		try
 		{
 			clients.get(0).sendMessage("room2", "hi");
-			fail();
 		} catch (NotInRoomException e)
 		{
+			logoutClient(0);
+			assertAllBlockingQueuesAreCurrentlyEmpty();
+			return;
 		}
-		catch (Exception e)
-		{
-			fail();
-		}
-		
-		logoutClient(0);
+		fail();
 	}
 	
 	
@@ -349,7 +346,19 @@ public class TChatIntegratedTest {
 		clients.get(0).joinRoom("room1");
 		clients.get(1).joinRoom("room1");
 		clients.get(2).joinRoom("room1");
+		
+		
+		logoutClient(0);
+		logoutClient(1);
+		logoutClient(2);	
 
+		restartServer();
+		
+		loginClient(0);
+		loginClient(1);
+		loginClient(2);
+
+		
 		clients.get(0).sendMessage("room1", "hi");
 		
 		takeSingleMessegeAndAssertValue(1, new ChatMessage(
@@ -363,6 +372,8 @@ public class TChatIntegratedTest {
 		logoutClient(1);
 		logoutClient(2);
 		
+		assertChatMessageQueusAreCurrentlyEmpty();
+
 	}
 	
 	/**
@@ -499,13 +510,35 @@ public class TChatIntegratedTest {
 	 */
 	private void assertAllBlockingQueuesAreCurrentlyEmpty()
 	{
+		assertChatMessageQueusAreCurrentlyEmpty();
+		assertAnnouncementsQueusAreCurrentlyEmpty();
+	}
+	
+	
+	/**
+	 * Waits a bit and makes sure all queues are empty.
+	 */
+	private void assertChatMessageQueusAreCurrentlyEmpty()
+	{
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}
+		assertFalse(chatMessageQueus.stream().anyMatch(x -> x.peek() != null));
+	}
+	
+	/**
+	 * Waits a bit and makes sure all queues are empty.
+	 */
+	private void assertAnnouncementsQueusAreCurrentlyEmpty()
+	{
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			throw new RuntimeException();
 		}
 		assertFalse(announcementsQueus.stream().anyMatch(x -> x.peek() != null));
-		assertFalse(chatMessageQueus.stream().anyMatch(x -> x.peek() != null));
 	}
 	
 }
