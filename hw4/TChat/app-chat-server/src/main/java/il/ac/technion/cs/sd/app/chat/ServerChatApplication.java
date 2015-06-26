@@ -112,12 +112,15 @@ public class ServerChatApplication {
 		}
 		case LOGOUT:{
 			if(_onlineClients.contains(from)){
-				_clientsToRooms.get(from).forEach(room->{
-					_roomsToClient.get(room).remove(from);
-					if(_roomsToClient.get(room).isEmpty()){
-						_roomsToClient.remove(room);
-					}
-				});
+				if (_clientsToRooms.containsKey(from))
+				{
+					_clientsToRooms.get(from).forEach(room->{
+						_roomsToClient.get(room).remove(from);
+						if(_roomsToClient.get(room).isEmpty()){
+							_roomsToClient.remove(room);
+						}
+					});
+				}
 				_onlineClients.remove(from);
 				if(!_onlineClients.isEmpty())
 					_clientsToRooms.get(from).stream().filter(room->_roomsToClient.containsKey(room))

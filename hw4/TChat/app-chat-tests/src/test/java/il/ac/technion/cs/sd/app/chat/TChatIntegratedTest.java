@@ -38,6 +38,8 @@ public class TChatIntegratedTest {
 	{
 		ClientChatApplication $ = new ClientChatApplication(serverAddress,username);
 		clients.add($);
+		
+		System.out.println("Added client: " + $.getUsername()); //TODO: delete
 	}
 	
 	private <T> Consumer<T> createConsumer(BlockingQueue<T> queue)
@@ -289,13 +291,14 @@ public class TChatIntegratedTest {
 		logoutClient(0);
 		logoutClient(1);
 		
-		restartServer();
+//		
+//		restartServer();
+//		
+//		loginClient(0);
+//		loginClient(1);
 		
-		loginClient(0);
-		loginClient(1);
-		
-		
-		logoutClient(0);
+//		
+//		logoutClient(0);
 		
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
