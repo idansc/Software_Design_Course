@@ -65,7 +65,7 @@ public class ServerChatApplication {
 			if(!_roomsToClient.containsKey(messageData.chatMessage.room))
 				server.send(from, Optional.empty(), true);
 			else{
-				_roomsToClient.get(messageData.chatMessage.room).stream().filter(client->client==from).forEach(client->server.send(client,
+				_roomsToClient.get(messageData.chatMessage.room).stream().filter(client->!client.equals(from)).forEach(client->server.send(client,
 						 new ClientMessage(TaskClientType.MESSAGE).setMessage(messageData.chatMessage),false));
 				server.send(from, Optional.of(true), true);
 			}
