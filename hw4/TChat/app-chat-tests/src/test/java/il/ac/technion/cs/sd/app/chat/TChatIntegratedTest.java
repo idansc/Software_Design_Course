@@ -38,8 +38,6 @@ public class TChatIntegratedTest {
 	{
 		ClientChatApplication $ = new ClientChatApplication(serverAddress,username);
 		clients.add($);
-		
-		System.out.println("Added client: " + $.getUsername()); //TODO: delete
 	}
 	
 	private <T> Consumer<T> createConsumer(BlockingQueue<T> queue)
@@ -270,36 +268,45 @@ public class TChatIntegratedTest {
 	public void sendMessageToNobody() throws AlreadyInRoomException, NotInRoomException
 	{
 		loginClient(0);
+		loginClient(1);
 		
 		clients.get(0).joinRoom("room1");
 		clients.get(0).sendMessage("room1", "hi");
 		logoutClient(0);
 		
 		assertAllBlockingQueuesAreCurrentlyEmpty();
+		logoutClient(1);
 	}
 	
 	@Test
-	public void sendMessageToSingleRecepient() throws AlreadyInRoomException, NotInRoomException
+	public void sendMessageToSingleRecepient() throws AlreadyInRoomException, NotInRoomException, InterruptedException
 	{
 		loginClient(0);
 		loginClient(1);
-		
+
 		clients.get(0).joinRoom("room1");
-		clients.get(0).sendMessage("room1", "hi");
+		clients.get(1).joinRoom("room1");
 
 		
+		takeSingleAnnouncementAndAssertValue(0, 
+				new RoomAnnouncement(clients.get(1).getUsername(),"room1", Announcement.JOIN));
+
+		
+		clients.get(0).sendMessage("room1", "hi");
+		
+		//TODO: BUG: the message is never delivered to the consumer of client 1.
+		takeSingleMessegeAndAssertValue(1, new ChatMessage(
+				clients.get(0).getUsername(), "room1", "hi"));
+		
+		
 		logoutClient(0);
+		
+		takeSingleAnnouncementAndAssertValue(1, 
+				new RoomAnnouncement(clients.get(0).getUsername(),"room1", Announcement.DISCONNECT));
+
 		logoutClient(1);
 		
-//		
-//		restartServer();
-//		
-//		loginClient(0);
-//		loginClient(1);
-		
-//		
-//		logoutClient(0);
-		
+	
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
 	
@@ -395,6 +402,14 @@ public class TChatIntegratedTest {
 		
 	}
 
+	/* Asserts a client receives exactly a single message, and no others. */
+	private void takeSingleMessegeAndAssertValue(int clientInd, ChatMessage expectedMsg)
+			throws InterruptedException {
+		ChatMessage msg = chatMessageQueus.get(clientInd).take();
+		assertEquals(msg, expectedMsg);
+		assertEquals(null, chatMessageQueus.get(clientInd).poll(100, TimeUnit.MILLISECONDS) );
+	}
+	
 	/* Asserts a client receives exactly one given announcement, and no others. */
 	private void takeSingleAnnouncementAndAssertValue(int clientInd, RoomAnnouncement expectedRoomAnnouncement)
 			throws InterruptedException {
@@ -422,11 +437,6 @@ public class TChatIntegratedTest {
 		assertEquals(null, announcementsQueus.get(clientInd).poll(100, TimeUnit.MILLISECONDS) );
 	}
 	
-	
-	private void assertClientDoesNotGetAnAnnouncement(int clientInd) throws InterruptedException
-	{
-		assertEquals(null, announcementsQueus.get(clientInd).poll(100, TimeUnit.MILLISECONDS) );
-	}
 	
 	
 	/**
