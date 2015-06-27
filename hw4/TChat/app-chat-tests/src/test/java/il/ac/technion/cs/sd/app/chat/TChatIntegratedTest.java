@@ -123,14 +123,12 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).joinRoom("room1");
 
-		//TODO: uncomment
-//		logoutClient(0);
-//		restartServer();
-//		loginClient(0);
+		logoutClient(0);
+		restartServer();
+		loginClient(0);
 		
 		
 		assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class );
-		//TODO: BUG. this causes a JOIN announcement to be sent to client 0.
 		
 		logoutClient(0);
 
@@ -238,12 +236,12 @@ public class TChatIntegratedTest {
 	
 	
 
-	@Test //(timeout = 1000)//TODO  
+	@Test  
 	public void logsOutSendingAnnouncmentsToOthers() throws InterruptedException, NotInRoomException, AlreadyInRoomException {
 		testAnnouncementsWhenUserLeaves(true);
 	}
 	
-	@Test //(timeout = 1000)//TODO  
+	@Test  
 	public void leaveRoomsSendingAnnouncmentsToOthers() throws InterruptedException, NotInRoomException, AlreadyInRoomException {
 		testAnnouncementsWhenUserLeaves(false);
 	}	
@@ -357,49 +355,47 @@ public class TChatIntegratedTest {
 	{
 		loginClient(0);
 		
-		//loginClient(1); //TODO: uncomment
+		loginClient(1);
 
 		
 		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
-		//TODO: BUG: this blocks forever!
 		
 		
-//TODO: uncomment		
-//		clients.get(0).joinRoom("room1");
-//
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
-//
-//		clients.get(1).joinRoom("room2");
-//
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
-//		
-//		clients.get(0).joinRoom("room2");
-//		
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
-//			
-//		
-//		logoutClient(0);
-//		logoutClient(1);
-//
-//		restartServer();
-//		
-//		loginClient(0);
-//		loginClient(1);
-//		
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
-//
-//		clients.get(0).leaveRoom("room1");
-//		
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room2");
-//		
-//		clients.get(0).leaveRoom("room2");
-//		
-//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
-//
-//		assertListContentOrderNotImportant( clients.get(1).getJoinedRooms(), "room2");
-//
-//		logoutClient(0);
-//		logoutClient(1);
+		clients.get(0).joinRoom("room1");
+
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
+
+		clients.get(1).joinRoom("room2");
+
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
+		
+		clients.get(0).joinRoom("room2");
+		
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
+			
+		
+		logoutClient(0);
+		logoutClient(1);
+
+		restartServer();
+		
+		loginClient(0);
+		loginClient(1);
+		
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
+
+		clients.get(0).leaveRoom("room1");
+		
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room2");
+		
+		clients.get(0).leaveRoom("room2");
+		
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
+
+		assertListContentOrderNotImportant( clients.get(1).getJoinedRooms(), "room2");
+
+		logoutClient(0);
+		logoutClient(1);
 		
 	}
 	
