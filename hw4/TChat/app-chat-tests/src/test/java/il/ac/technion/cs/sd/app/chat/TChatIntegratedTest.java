@@ -467,6 +467,57 @@ public class TChatIntegratedTest {
 
 	}
 	
+	
+	@Test
+	public void getClientsInRoom() throws AlreadyInRoomException, NoSuchRoomException, NotInRoomException
+	{
+		loginClient(0);
+		loginClient(1);
+		loginClient(2);
+		
+		
+		assertThrow( () -> clients.get(1).getClientsInRoom("room1"), NoSuchRoomException.class);
+		
+		clients.get(0).joinRoom("room1");
+		
+		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), clients.get(0).getUsername());
+		
+		clients.get(1).joinRoom("room1");
+		
+		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), 
+				clients.get(0).getUsername(), clients.get(1).getUsername());
+		
+		clients.get(2).joinRoom("room2");
+
+		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), 
+				clients.get(0).getUsername(), clients.get(1).getUsername());
+
+		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room2"), 
+				clients.get(2).getUsername());
+
+		
+		logoutClient(2);
+
+		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), 
+				clients.get(0).getUsername(), clients.get(1).getUsername());
+
+		assertThrow( () -> clients.get(1).getClientsInRoom("room2"), NoSuchRoomException.class);
+		
+
+		logoutClient(1);
+
+		assertListContentOrderNotImportant(clients.get(0).getClientsInRoom("room1"), clients.get(0).getUsername());
+
+		
+		clients.get(0).leaveRoom("room1");
+		
+		assertThrow( () -> clients.get(0).getClientsInRoom("room1"), NoSuchRoomException.class);
+				
+		logoutClient(0);
+	}
+	
+	
+	
 	/**
 	 * 
 	 * @param isLogout - if true, then we check the scenario where a users leave by logs-out, otherwise we check
@@ -637,6 +688,27 @@ public class TChatIntegratedTest {
 		Set<T> contentSet = new HashSet<>(Arrays.asList(content));
 		Set<T> listSet = new HashSet<>(list);
 		assertEquals(contentSet, listSet);
+	}
+	
+	@FunctionalInterface
+	private interface ThrowingRunnable
+	{
+		void run() throws Exception;
+	}
+	
+	/**
+	 * @param <T> The type of the exception that we expect consumer will throw when task is invoked.
+	 */
+	private<T> void assertThrow(ThrowingRunnable task, Class<T> exceptionClass)
+	{
+		try{
+			task.run();
+		} catch (Exception e)
+		{
+			if (e.getClass().equals(exceptionClass))
+				return;
+		}
+		fail();
 	}
 	
 }
