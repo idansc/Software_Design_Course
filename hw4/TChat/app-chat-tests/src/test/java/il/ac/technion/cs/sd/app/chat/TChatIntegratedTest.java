@@ -99,22 +99,20 @@ public class TChatIntegratedTest {
 	}
 	
 
-	@Test (expected = AlreadyInRoomException.class)
+	@Test
 	public void joinRoomAlreadyIn() throws AlreadyInRoomException {
 		
 		loginClient(0);
 		
-		try{
-			clients.get(0).joinRoom("room1");
-		} catch (AlreadyInRoomException e)
-		{
-			fail();
-		}
+		
+		
 		clients.get(0).joinRoom("room1");
+		
+		assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class);
 		
 		logoutClient(0);	
 		
-		assertAllBlockingQueuesAreCurrentlyEmpty();
+		assertAllBlockingQueuesAreCurrentlyEmpty();	
 	}
 	
 	
@@ -131,17 +129,12 @@ public class TChatIntegratedTest {
 //		loginClient(0);
 		
 		
-		try {
-			clients.get(0).joinRoom("room1");
-			//TODO: BUG. this causes a JOIN announcement to be sent to client 0.
-		} catch (AlreadyInRoomException e)
-		{
-			logoutClient(0);
+		assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class );
+		//TODO: BUG. this causes a JOIN announcement to be sent to client 0.
+		
+		logoutClient(0);
 
-			assertAllBlockingQueuesAreCurrentlyEmpty();
-			return;
-		}
-		fail();
+		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
 	
 	
@@ -151,15 +144,7 @@ public class TChatIntegratedTest {
 		loginClient(0);
 		
 		
-		try{
-			clients.get(0).leaveRoom("room1");
-			fail();
-		} catch (NotInRoomException e)
-		{
-		} catch (Exception e)
-		{
-			fail();
-		}
+		assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
 		
 		clients.get(0).joinRoom("room1");
 		
@@ -169,15 +154,7 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).leaveRoom("room1");
 		
-		try{
-			clients.get(0).leaveRoom("room1");
-			fail();
-		} catch (NotInRoomException e)
-		{
-		} catch (Exception e)
-		{
-			fail();
-		}
+		assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
 		
 		logoutClient(0);
 		
@@ -293,16 +270,9 @@ public class TChatIntegratedTest {
 
 		clients.get(0).joinRoom("room1");
 
-		try
-		{
-			clients.get(0).sendMessage("room2", "hi");
-		} catch (NotInRoomException e)
-		{
-			logoutClient(0);
-			assertAllBlockingQueuesAreCurrentlyEmpty();
-			return;
-		}
-		fail();
+		assertThrow( ()->clients.get(0).sendMessage("room2", "hi"), NotInRoomException.class);
+		logoutClient(0);
+		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
 	
 	
@@ -359,14 +329,19 @@ public class TChatIntegratedTest {
 		loginClient(1);
 		loginClient(2);
 
-		
-		clients.get(0).sendMessage("room1", "hi");
-		
-		takeSingleMessegeAndAssertValue(1, new ChatMessage(
-				clients.get(0).getUsername(), "room1", "hi"));
 
-		takeSingleMessegeAndAssertValue(2, new ChatMessage(
-				clients.get(0).getUsername(), "room1", "hi"));
+		for (int i=0; i<3; i++)
+		{
+			String msgText = Integer.toString(i);
+			clients.get(0).sendMessage("room1", msgText);
+
+			takeSingleMessegeAndAssertValue(1, new ChatMessage(
+					clients.get(0).getUsername(), "room1", msgText));
+
+			takeSingleMessegeAndAssertValue(2, new ChatMessage(
+					clients.get(0).getUsername(), "room1", msgText));
+		}
+
 
 		
 		logoutClient(0);
@@ -489,6 +464,20 @@ public class TChatIntegratedTest {
 		
 		clients.get(2).joinRoom("room2");
 
+		
+		
+		logoutClient(0);
+		logoutClient(1);
+		logoutClient(2);
+		
+		restartServer();
+		
+		loginClient(0);
+		loginClient(1);
+		loginClient(2);
+		
+		
+		
 		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), 
 				clients.get(0).getUsername(), clients.get(1).getUsername());
 
