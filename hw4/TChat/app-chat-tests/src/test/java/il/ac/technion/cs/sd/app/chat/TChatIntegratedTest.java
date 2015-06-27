@@ -388,6 +388,7 @@ public class TChatIntegratedTest {
 		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
 		//TODO: BUG: this blocks forever!
 		
+		
 //TODO: uncomment		
 //		clients.get(0).joinRoom("room1");
 //
@@ -427,6 +428,44 @@ public class TChatIntegratedTest {
 		
 	}
 	
+	
+	
+	@Test
+	public void getAllRooms() throws AlreadyInRoomException, NotInRoomException
+	{
+		loginClient(0);
+		loginClient(1);
+		loginClient(2);
+		
+		
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), new String[0]);
+		
+		clients.get(0).joinRoom("room1");
+		
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), "room1");
+		
+		clients.get(1).joinRoom("room1");
+		
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), "room1");
+		
+		clients.get(2).joinRoom("room2");
+		
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), "room1", "room2");
+		
+		logoutClient(2);
+
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), "room1");
+
+		logoutClient(1);
+
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), "room1");
+		
+		clients.get(0).leaveRoom("room1");
+		assertListContentOrderNotImportant(clients.get(0).getAllRooms(), new String[0]);
+		
+		logoutClient(0);
+
+	}
 	
 	/**
 	 * 
