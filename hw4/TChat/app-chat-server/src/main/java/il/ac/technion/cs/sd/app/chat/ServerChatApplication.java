@@ -3,8 +3,10 @@ package il.ac.technion.cs.sd.app.chat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -76,11 +78,11 @@ public class ServerChatApplication {
 			if(!_roomsToClient.containsKey(room))				
 				_roomsToClient.put(room, new HashSet<>(Arrays.asList(from)));
 			else{
-				sendAnnouncment(from, room, Announcement.JOIN);
 				if(!_roomsToClient.get(room).add(from)){
 					server.send(from, Optional.empty(), true);
 					break;
 				}
+				sendAnnouncment(from, room, Announcement.JOIN);
 			}
 			if(!_clientsToRooms.containsKey(from))
 				_clientsToRooms.put(from,  new HashSet<>(Arrays.asList(room)));		
@@ -129,7 +131,8 @@ public class ServerChatApplication {
 			}
 		}
 		case GET_JOINED_ROOM:
-			server.send(from, Optional.of(new ArrayList<>(_clientsToRooms.get(from))) , true);
+			List<String> $ = _clientsToRooms.containsKey(from)? new ArrayList<String>(_clientsToRooms.get(from)):Collections.emptyList();
+			server.send(from, Optional.of($) , true);
 			break;
 		case GET_ALL_ROOMS:
 			server.send(from, Optional.of(new ArrayList<>(_roomsToClient.keySet())), true);
@@ -147,7 +150,7 @@ public class ServerChatApplication {
 	}
 
 	private void sendAnnouncment(String from, String room, Announcement type) {
-		_roomsToClient.get(room).forEach(client->server.send(client,
+		_roomsToClient.get(room).stream().filter(client->!client.equals(from)).forEach(client->server.send(client,
 					new ClientMessage(TaskClientType.ANNOUNCEMENT).setAnnouncement(new RoomAnnouncement(from, room, type)),
 					false));
 	}
