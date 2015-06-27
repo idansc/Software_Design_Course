@@ -2,6 +2,7 @@ package il.ac.technion.cs.sd.app.chat;
 
 import il.ac.technion.cs.sd.lib.clientserver.Client;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -108,7 +109,7 @@ public class ClientChatApplication {
 	public List<String> getJoinedRooms() {
 		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_JOINED_ROOM), 
 			new TypeToken<Optional<List<String>>>(){}.getType());
-		return $.orElse(null);
+		return $.orElse(new LinkedList<String>());
 	}
 
 	/**

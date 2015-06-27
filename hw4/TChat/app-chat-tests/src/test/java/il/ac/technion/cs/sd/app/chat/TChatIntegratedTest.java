@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -376,6 +377,57 @@ public class TChatIntegratedTest {
 
 	}
 	
+	@Test
+	public void getJoinedRooms() throws AlreadyInRoomException, NotInRoomException
+	{
+		loginClient(0);
+		
+		//loginClient(1); //TODO: uncomment
+
+		
+		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
+		//TODO: BUG: this blocks forever!
+		
+//TODO: uncomment		
+//		clients.get(0).joinRoom("room1");
+//
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
+//
+//		clients.get(1).joinRoom("room2");
+//
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1");
+//		
+//		clients.get(0).joinRoom("room2");
+//		
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
+//			
+//		
+//		logoutClient(0);
+//		logoutClient(1);
+//
+//		restartServer();
+//		
+//		loginClient(0);
+//		loginClient(1);
+//		
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room1", "room2");
+//
+//		clients.get(0).leaveRoom("room1");
+//		
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), "room2");
+//		
+//		clients.get(0).leaveRoom("room2");
+//		
+//		assertListContentOrderNotImportant( clients.get(0).getJoinedRooms(), new String[0]);
+//
+//		assertListContentOrderNotImportant( clients.get(1).getJoinedRooms(), "room2");
+//
+//		logoutClient(0);
+//		logoutClient(1);
+		
+	}
+	
+	
 	/**
 	 * 
 	 * @param isLogout - if true, then we check the scenario where a users leave by logs-out, otherwise we check
@@ -539,6 +591,13 @@ public class TChatIntegratedTest {
 			throw new RuntimeException();
 		}
 		assertFalse(announcementsQueus.stream().anyMatch(x -> x.peek() != null));
+	}
+	
+	private <T>void assertListContentOrderNotImportant(List<T> list, T... content)
+	{
+		Set<T> contentSet = new HashSet<>(Arrays.asList(content));
+		Set<T> listSet = new HashSet<>(list);
+		assertEquals(contentSet, listSet);
 	}
 	
 }
