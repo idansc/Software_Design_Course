@@ -22,6 +22,10 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 
+/**
+ * sending data from messengerWrapper always successful
+ * keep sending data until ack
+ */
 public class MessengerWrapper {
 	final static String ENCODING = "UTF-8";
 	
@@ -46,33 +50,11 @@ public class MessengerWrapper {
 	Thread listenThread;
 
 	
-	/**
-	 * sending data from messengerWrapper always successful
-	 * keep sending data until ack
-	 * @param address
-	 * @param dedicatedConsumer
-	 */
+
 	public MessengerWrapper(String address,final Consumer<String> dedicatedConsumer) {
 		this.address = address;
 		ack = new LinkedBlockingQueue<>();
 		responds = new LinkedBlockingQueue<>();
-		BiConsumer<Messenger,String> messengerConsumer = (myMessenger,json)->{
-			if (json.equals(ack_mssg)){
-				ack.add(true);
-				return;
-			}
-			PayLoad tmp=PayLoad.fromString(json);
-			try {
-				myMessenger.send(tmp.sender,ack_mssg);
-			} catch (MessengerException e) {
-				throw new RuntimeException(e);
-			}
-			if (tmp.respond){
-				responds.add(tmp.payload);
-				return;
-			}
-			dedicatedConsumer.accept(tmp.payload);
-		};
 	}
 	
 	public MessengerWrapper(String address)

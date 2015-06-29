@@ -24,22 +24,22 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 public class ServerLib{
-	
+
 	private MessengerWrapper messenger;
 	private final BlockingQueue<String> tasks = new LinkedBlockingQueue<>();
 	private String address;
 	private BiConsumer<String,ServerLib> requestHandler;
 	private volatile boolean started = false;
 	private Thread start = new Thread(this::dedicatedListenToRequests);
-	
+
 	/**
 	 * 
 	 * @param address
-	 * @param requestHandler handle a request (string format of payload) will be run for every request 
+	 * @param dedicatedRequestHandler handle a request (string format of payload) will be run for every request 
 	 * once the start method is activated
 	 */
-	public ServerLib(String address,BiConsumer<String,ServerLib> requestHandler){
-		this.requestHandler = requestHandler;
+	public ServerLib(String address,BiConsumer<String,ServerLib> dedicatedRequestHandler){
+		this.requestHandler = dedicatedRequestHandler;
 		this.address = address;
 		messenger = new MessengerWrapper(address);
 	}
@@ -47,21 +47,22 @@ public class ServerLib{
 	{
 		this(address,null);
 	}
+
 	/**
 	 * change the request handler
 	 * @throws alreadyRunning
-	 * @param requestHandler
+	 * @param dedicatedRequestHandler
 	 */
-	public void setDedicatedRequestHandler(BiConsumer<String,ServerLib> requestHandler){
+	public void setDedicatedRequestHandler(BiConsumer<String,ServerLib> dedicatedRequestHandler){
 		if (started)
 			throw new alreadyRunning();
-		this.requestHandler = requestHandler;
+		this.requestHandler = dedicatedRequestHandler;
 	}
-	
-	
-	
-public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
-		
+
+
+
+	public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
+
 		try {
 			messenger.start((fromAddress, data) -> {
 				consumer.accept(MessengerWrapper.fromGsonStrToObject(data, dataType), fromAddress);
@@ -70,14 +71,14 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 			System.out.println(e.getMessage());
 			throw new InvalidOperation();
 		}
-		
+
 	}
 
 	public void stop()
 	{
 		messenger.stop();
 	}
-	
+
 
 	public <T> void send(String clientAddress, T data, boolean isResponse)
 	{
@@ -87,8 +88,8 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 			throw new CommunicationFailure();
 		}
 	}
-	
-	
+
+
 	public void clearPersistentData()
 	{
 		File persistentDataDir = getServerPersistentDir();
@@ -110,7 +111,7 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 	public <T> void saveObjectToFile(String filename, T data)
 	{
 		File file = getFileByName(filename, true);
-		
+
 		try (JsonWriter persistentDataWriter = createJsonWriter(file)) 
 		{
 			MessengerWrapper.writeObjectToJsonWriter(data,persistentDataWriter);
@@ -118,20 +119,20 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 			throw new RuntimeException("Failed to close stream");
 		}
 	}
-	 
-	
+
+
 	public <T> Optional<T> readObjectFromFile(String filename, Type type)
 	{
 		File file = getFileByName(filename, false);
-		
+
 		if (!file.exists())
 		{
 			return Optional.empty();
 		}
-		
-		
+
+
 		Optional<T> $;
-		
+
 		try (JsonReader persistentDataReader = createJsonReader(file))
 		{
 			$ =  Optional.of(MessengerWrapper.readObjectFromGsonReader(persistentDataReader, type));
@@ -142,10 +143,10 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 		} catch (IOException e1) {
 			throw new RuntimeException("Failed to close stream");
 		}
-		
+
 		return $;
 	}
-	
+
 	private JsonWriter createJsonWriter(File f)
 	{
 		try {
@@ -157,7 +158,7 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 			throw new RuntimeException("FileNotFoundException");
 		}
 	}
-	
+
 	private JsonReader createJsonReader(File f)
 	{
 		if(!f.exists())
@@ -187,22 +188,22 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 	private File getServerPersistentDir() {
 		return new File(getPesistentDirOfAllServers(), getServerPersistentDirName());
 	}
-	
+
 	private String getServerPersistentDirName()
 	{
 		return Integer.toString(getAddress().hashCode());
 	}
-	
+
 	private static File getPesistentDirOfAllServers()
 	{
 		return new File("./TMP___ServersData");
 	}
-	
+
 	@SuppressWarnings("serial")
 	public class BadFileContent extends RuntimeException {}
-	
-	
-	
+
+
+
 	private void dedicatedListenToRequests(){
 		started =true;
 		while (started){
@@ -225,7 +226,7 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 		start = new Thread(this::dedicatedListenToRequests);
 		start.start();
 	}
-	
+
 	/**
 	 * payload go to the client's consumer
 	 * can and should be used on request handler
@@ -236,7 +237,7 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 	public void dedicatedBlockingSend(String to,String payload){
 		messenger.dedicatedBlockingSend(to,payload,false);
 	}
-	
+
 	/**
 	 * payload don't go to client's consumer assume consumer is 
 	 * should be used just as a respond to user request where the user will sit and wait for it
@@ -246,12 +247,12 @@ public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
 	public void dedicatedBlockingRespond(String to,String payload){
 		messenger.dedicatedBlockingSend(to,payload,true);
 	}
-	
-	
+
+
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public static class TargetIsntLogedIn extends RuntimeException{}
 	public static class alreadyRunning extends RuntimeException{}
 }
