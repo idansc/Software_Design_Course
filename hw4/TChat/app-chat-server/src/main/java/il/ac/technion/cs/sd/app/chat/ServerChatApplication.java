@@ -22,7 +22,8 @@ import il.ac.technion.cs.sd.lib.ServerLib;
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerChatApplication {
-	ServerLib server;
+
+	private ServerLib server;
 	private static final String onlineClientsFileName = "onlineClients";
 	private static final String roomsToClientFileName = "roomsToClient";
 	private static final String clientsToRoomsFileName = "clientsToRooms";
@@ -191,5 +192,12 @@ public class ServerChatApplication {
 		_onlineClients.clear();
 		_clientsToRooms.clear();
 		_roomsToClient.clear();
+	}
+	
+	
+
+	// for testing.
+	void setServer(ServerLib server) {
+		this.server = server;
 	}
 }

@@ -665,7 +665,9 @@ public class TChatIntegratedTest {
 		assertFalse(announcementsQueus.stream().anyMatch(x -> x.peek() != null));
 	}
 	
-	private <T>void assertListContentOrderNotImportant(List<T> list, T... content)
+	private <T>void assertListContentOrderNotImportant(
+			List<T> list, 
+			@SuppressWarnings("unchecked") T... content)
 	{
 		Set<T> contentSet = new HashSet<>(Arrays.asList(content));
 		Set<T> listSet = new HashSet<>(list);

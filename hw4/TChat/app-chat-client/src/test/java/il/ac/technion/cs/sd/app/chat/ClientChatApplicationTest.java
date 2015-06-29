@@ -1,10 +1,8 @@
 package il.ac.technion.cs.sd.app.chat;
 
-import static org.junit.Assert.*;
+import il.ac.technion.cs.sd.lib.ClientLib;
 
 import java.util.UUID;
-
-import il.ac.technion.cs.sd.lib.ClientLib;
 
 import org.junit.After;
 import org.junit.Before;
