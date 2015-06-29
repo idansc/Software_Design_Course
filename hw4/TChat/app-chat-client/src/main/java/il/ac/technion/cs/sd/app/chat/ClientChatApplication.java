@@ -1,6 +1,6 @@
 package il.ac.technion.cs.sd.app.chat;
 
-import il.ac.technion.cs.sd.lib.clientserver.Client;
+import il.ac.technion.cs.sd.lib.clientserver.ClientLib;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
  * You should implement all the methods in this class
  */
 public class ClientChatApplication {
-	Client _client;
+	ClientLib _client;
 	String _serverAdress;
 	Boolean _isOnline;
 	
@@ -30,7 +30,7 @@ public class ClientChatApplication {
 	 */
 	public ClientChatApplication(String serverAddress, String username) {
 		_serverAdress = serverAddress;
-		_client = new Client(username);
+		_client = new ClientLib(username);
 		_isOnline = false;
 	}
 	
@@ -53,7 +53,7 @@ public class ClientChatApplication {
 			Consumer<RoomAnnouncement> announcementConsumer) {
 		_client.start(_serverAdress, new ClientMessageConsumer(chatMessageConsumer,announcementConsumer), ClientMessage.class);
 		
-		_client.send(new ServerMessage(TaskServerType.LOGIN));
+		_client.blockingSend(new ServerMessage(TaskServerType.LOGIN));
 		_isOnline = true;
 	}
 
@@ -63,7 +63,7 @@ public class ClientChatApplication {
 	 * @throws AlreadyInRoomException If the client isn't currently in the room
 	 */
 	public void joinRoom(String room) throws AlreadyInRoomException {
-		Optional<Boolean> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.JOIN_ROOM).setRoom(room), 
+		Optional<Boolean> $ = _client.sendRecieve(new ServerMessage(TaskServerType.JOIN_ROOM).setRoom(room), 
 				new TypeToken<Optional<Boolean>>(){}.getType());
 		$.orElseThrow(AlreadyInRoomException::new);
 	}
@@ -74,7 +74,7 @@ public class ClientChatApplication {
 	 * @throws NotInRoomException If the client isn't currently in the room
 	 */
 	public void leaveRoom(String room) throws NotInRoomException {
-		Optional<Boolean> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.LEAVE_ROOM).setRoom(room), 
+		Optional<Boolean> $ = _client.sendRecieve(new ServerMessage(TaskServerType.LEAVE_ROOM).setRoom(room), 
 				new TypeToken<Optional<Boolean>>(){}.getType());
 		$.orElseThrow(NotInRoomException::new);
 	}
@@ -84,8 +84,8 @@ public class ClientChatApplication {
 	 */
 	public void logout() {
 		if(_isOnline){
-			_client.send(new ServerMessage(TaskServerType.LOGOUT));
-			_client.stopListenLoop();
+			_client.blockingSend(new ServerMessage(TaskServerType.LOGOUT));
+			_client.kill();
 			_isOnline = false;
 		}
 	}
@@ -97,7 +97,7 @@ public class ClientChatApplication {
 	 * @throws NotInRoomException If the client isn't currently in the room
 	 */
 	public void sendMessage(String room, String what) throws NotInRoomException {
-		Optional<Boolean> $ = _client.<ServerMessage,Optional<Boolean>>sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.SEND_MESSAGE)
+		Optional<Boolean> $ = _client.<ServerMessage,Optional<Boolean>>sendRecieve(new ServerMessage(TaskServerType.SEND_MESSAGE)
 			.setChatMessage(new ChatMessage(_client.getAddress(), room, what)), 
 				new TypeToken<Optional<Boolean>>(){}.getType());
 		$.orElseThrow(NotInRoomException::new);
@@ -107,7 +107,7 @@ public class ClientChatApplication {
 	 * @return All the rooms the client joined
 	 */
 	public List<String> getJoinedRooms() {
-		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_JOINED_ROOM), 
+		Optional<List<String>> $ = _client.sendRecieve(new ServerMessage(TaskServerType.GET_JOINED_ROOM), 
 			new TypeToken<Optional<List<String>>>(){}.getType());
 		return $.orElse(new LinkedList<String>());
 	}
@@ -116,7 +116,7 @@ public class ClientChatApplication {
 	 * @return all rooms that have clients currently online, i.e., logged in them
 	 */
 	public List<String> getAllRooms() {
-		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_ALL_ROOMS), 
+		Optional<List<String>> $ = _client.sendRecieve(new ServerMessage(TaskServerType.GET_ALL_ROOMS), 
 				new TypeToken<Optional<List<String>>>(){}.getType());
 			return $.orElse(null);
 	}
@@ -129,7 +129,7 @@ public class ClientChatApplication {
 	 * @throws NoSuchRoomException If the room doesn't exist, or no clients are currently in it
 	 */
 	public List<String> getClientsInRoom(String room) throws NoSuchRoomException {
-		Optional<List<String>> $ = _client.sendAndBlockUntilResponseArrives(new ServerMessage(TaskServerType.GET_CLIENTS_IN_ROOM).setRoom(room), 
+		Optional<List<String>> $ = _client.sendRecieve(new ServerMessage(TaskServerType.GET_CLIENTS_IN_ROOM).setRoom(room), 
 				new TypeToken<Optional<List<String>>>(){}.getType());
 			return $.orElseThrow(NoSuchRoomException::new);
 	}

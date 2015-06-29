@@ -1,7 +1,7 @@
 package il.ac.technion.cs.sd.lib.clientserver;
 
 import static org.junit.Assert.*;
-import il.ac.technion.cs.sd.lib.clientserver.Client;
+import il.ac.technion.cs.sd.lib.clientserver.ClientLib;
 import il.ac.technion.cs.sd.lib.clientserver.InvalidOperation;
 
 import org.junit.After;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 
 public class ClientTest {
-	Client client;
+	ClientLib client;
 	class MessageData{
 		String data;
 		MessageData(String msg){
@@ -19,7 +19,7 @@ public class ClientTest {
 	}
 	@Before
 	public void setUp() throws Exception {
-		client = new Client("Idan");
+		client = new ClientLib("Idan");
 	}
 
 	@After
@@ -39,7 +39,7 @@ public class ClientTest {
 	
 	@Test(expected=InvalidOperation.class)
 	public void sendWithThrowWhenParmetric(){
-		client.send("Hello");
+		client.blockingSend("Hello");
 	}
 	
 //	@Test
@@ -50,13 +50,13 @@ public class ClientTest {
 	
 	@Test(expected=InvalidOperation.class)
 	public void shouldThrowWhenStopNoLoop(){
-		client.stopListenLoop();
-		client.stopListenLoop();
+		client.kill();
+		client.kill();
 	}
 	
 	@Test(expected=InvalidOperation.class)
 	public void sendShouldntThrowNoParam(){
-		client.send(new MessageData("Hello"));
+		client.blockingSend(new MessageData("Hello"));
 	}
 
 

@@ -21,20 +21,20 @@ public class ClientServerIntegratedTest {
 	final static int CLIENTS_NUM = 4;
 
 	private ServerLib server1;
-	private List<Client> clients = createClients(CLIENTS_NUM);
+	private List<ClientLib> clients = createClients(CLIENTS_NUM);
 
 
 	Random rnd = new Random(); 
 
 	int tmp; // for lambda closure.
 
-	List<Client> createClients(int clientsNum)
+	List<ClientLib> createClients(int clientsNum)
 	{
-		List<Client> $ = new LinkedList<>();
+		List<ClientLib> $ = new LinkedList<>();
 
 		for (int i=0; i<clientsNum; i++)
 		{
-			$.add(new Client("client_"+UUID.randomUUID().toString()));
+			$.add(new ClientLib("client_"+UUID.randomUUID().toString()));
 		}
 		return $;
 	}
@@ -253,13 +253,13 @@ public class ClientServerIntegratedTest {
 
 			for (int i=0; i<4; i++)
 			{
-				clients.get(0).send(pojo1_a);
+				clients.get(0).blockingSend(pojo1_a);
 				Pair<POJO1,String> $ = biConsumer1_bq.take();
 				assertEquals($.first, pojo1_a);
 				assertEquals($.second, clients.get(0).getAddress());
 			}
 
-			clients.get(0).stopListenLoop();
+			clients.get(0).kill();
 			server1.stop();
 		}
 	}
@@ -279,7 +279,7 @@ public class ClientServerIntegratedTest {
 				assertEquals($, pojo1_a);
 			}
 
-			clients.get(0).stopListenLoop();
+			clients.get(0).kill();
 			server1.stop();
 		}
 	}
@@ -298,7 +298,7 @@ public class ClientServerIntegratedTest {
 				if (p.i > 0)
 				{
 					POJO1 p2 = new POJO1(p.i-1, "");
-					clients.get(0).send(p2);
+					clients.get(0).blockingSend(p2);
 				}
 			}, POJO1.class);
 
@@ -316,12 +316,12 @@ public class ClientServerIntegratedTest {
 			}, POJO1.class);
 
 
-			clients.get(0).send(new POJO1(messagesNumToSend-1, "aaa"));
+			clients.get(0).blockingSend(new POJO1(messagesNumToSend-1, "aaa"));
 			Thread.sleep(200 * messagesNumToSend);
 
 			assertEquals(tmp, messagesNumToSend);
 
-			clients.get(0).stopListenLoop();
+			clients.get(0).kill();
 			server1.stop();
 		}
 	}
@@ -342,11 +342,11 @@ public class ClientServerIntegratedTest {
 
 			for (int i=0; i<6; i++)
 			{			
-				POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(pojo1_a, POJO1.class);
+				POJO1 $ = clients.get(0).sendRecieve(pojo1_a, POJO1.class);
 				assertEquals($,pojo1_b);
 			}			
 
-			clients.get(0).stopListenLoop();
+			clients.get(0).kill();
 			server1.stop();
 		}
 	}
@@ -363,11 +363,11 @@ public class ClientServerIntegratedTest {
 
 
 
-		POJO2 $ = clients.get(0).sendAndBlockUntilResponseArrives(pojo2_a, POJO2.class);
+		POJO2 $ = clients.get(0).sendRecieve(pojo2_a, POJO2.class);
 		assertEquals($,pojo2_a);
 
 
-		clients.get(0).stopListenLoop();
+		clients.get(0).kill();
 		server1.stop();
 	}
 
@@ -405,7 +405,7 @@ public class ClientServerIntegratedTest {
 						String str = "aaaaaaaaaa".substring(0,rnd.nextInt(5)+1);
 						POJO1 p1 = new POJO1(0,str);
 						expectedCharsNum += str.length();
-						clients.get(rnd.nextInt(CLIENTS_NUM)).send(p1);
+						clients.get(rnd.nextInt(CLIENTS_NUM)).blockingSend(p1);
 						expectedQueueSize++;
 					}
 
@@ -415,14 +415,14 @@ public class ClientServerIntegratedTest {
 
 					Thread t1 = new Thread( () -> {
 						POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
-						POJO1 $ = clients.get(0).sendAndBlockUntilResponseArrives(
+						POJO1 $ = clients.get(0).sendRecieve(
 								p, POJO1.class);
 						assertEquals($, p);
 					});
 
 					Thread t2 = new Thread( () -> {
 						POJO1 p = new POJO1(1, "bbbbbbbbb".substring(0,rnd.nextInt(5)+1));
-						POJO1 $ = clients.get(1).sendAndBlockUntilResponseArrives(
+						POJO1 $ = clients.get(1).sendRecieve(
 								p, POJO1.class);
 						assertEquals($, p);
 					});
@@ -454,7 +454,7 @@ public class ClientServerIntegratedTest {
 
 			for (int i=0; i<CLIENTS_NUM; i++)
 			{
-				clients.get(i).stopListenLoop();
+				clients.get(i).kill();
 			}
 			server1.stop();
 		}
@@ -481,7 +481,7 @@ public class ClientServerIntegratedTest {
 					tmp++;
 					assert(i%2 == 0);
 
-					Integer $ = clients.get(0).sendAndBlockUntilResponseArrives(
+					Integer $ = clients.get(0).sendRecieve(
 							i,Integer.class);
 					assertEquals((Integer)$, i);
 						
@@ -490,7 +490,7 @@ public class ClientServerIntegratedTest {
 						i--;
 						tmp++;
 						assert(i%2 == 1);
-						clients.get(0).send(i);
+						clients.get(0).blockingSend(i);
 					}
 
 				}
@@ -518,7 +518,7 @@ public class ClientServerIntegratedTest {
 				server1.send(clients.get(0).getAddress(), messagesToSendFromClient_block , false);
 				for (int s=0; s<messagesToSendFromClient_nonblock; s++)
 				{
-					clients.get(0).send(new Integer(-1));
+					clients.get(0).blockingSend(new Integer(-1));
 				}
 				
 				int total_transmitions = 
@@ -528,7 +528,7 @@ public class ClientServerIntegratedTest {
 				assertEquals(messagesToSendFromClient_total, new Integer(tmp));
 			}
 
-			clients.get(0).stopListenLoop();
+			clients.get(0).kill();
 			server1.stop();
 		}
 	}

@@ -9,7 +9,6 @@ import il.ac.technion.cs.sd.msg.Messenger;
 import il.ac.technion.cs.sd.msg.MessengerException;
 import il.ac.technion.cs.sd.msg.MessengerFactory;
 
-
 class MessengerWrapper {
 
 	private String address;
@@ -19,39 +18,36 @@ class MessengerWrapper {
 		return address;
 	}
 	private BiConsumer<String, String> consumer;
-	private BlockingQueue<InnerMessage> responseBQ = new LinkedBlockingQueue<InnerMessage>();
+	private BlockingQueue<PayLoad> responseBQ = new LinkedBlockingQueue<PayLoad>();
 	Long currentMessageConsumedId;	
 	Object consumptionLock = new Object();
 	Long nextMessageIdToGive = 0L;	
 	private static final int MAX_TIME_FOR_SUCCESFUL_DELIVERY = 100; 
 	private boolean messageRecivedIndicator = false;
-	private boolean waitingForRecepientConfirmation = false; // for debuging.
 	Object sendingLock = new Object();
-	
 	
 	boolean messageLoopRequestedToStop = false;
 	boolean messageLoopCurrentlyRunning = false;
 	BlockingQueue<String> primitiveMessagesToHandle = new LinkedBlockingQueue<>();
 	Thread listenThread;
 
-	private class InnerMessage
+	//TODO
+	private class PayLoad
 	{
 		@SuppressWarnings("unused")
-		InnerMessage() {}
-		InnerMessage(long messageId, Long respnseTargetId, String data, String fromAddress) {
+		PayLoad() {}
+		PayLoad(long messageId, Long respnseTargetId, String payload, String sender) {
 			this.messageId = messageId;
 			this.responseTargetId = respnseTargetId;
-			this.data = data;
-			this.fromAddress = fromAddress;
+			this.payload = payload;
+			this.sender = sender;
 		}
 
 		Long messageId;
 		Long responseTargetId; 
 		
-		String data;
-		
-		String fromAddress;
-
+		String payload;
+		String sender;
 	}
 
 	MessengerWrapper(String address)
@@ -77,7 +73,6 @@ class MessengerWrapper {
 					Utils.DEBUG_LOG_LINE("\"\"   _address=" + Utils.showable(address)); 
 					
 					assert(!messageRecivedIndicator);
-					assert(waitingForRecepientConfirmation);
 					messageRecivedIndicator = true;
 					
 					return;
@@ -85,7 +80,7 @@ class MessengerWrapper {
 				
 				sendRecipeintConfirmation(payload);
 				
-				InnerMessage message = getInnerMessageFromPayload(payload);
+				PayLoad message = getInnerMessageFromPayload(payload);
 				if (message.responseTargetId != null)
 				{
 					Utils.DEBUG_LOG_LINE("---responseBQ.put: " + message);
@@ -99,24 +94,18 @@ class MessengerWrapper {
 					return;
 				}
 				
-				
-				
 				Utils.DEBUG_LOG_LINE("+++ Adding to regular queue of: " + Utils.showable(address) + ", payload.length():" + payload.length() );
-				
 				
 				try {
 					primitiveMessagesToHandle.put(payload);
 				} catch (Exception e) {
 					throw new RuntimeException("failded to put in primitiveMessagesToHandle");
 				}
-				
-				
-				
 
 		});
 		
 		listenThread = new Thread(() -> {
-				listeningLoop();
+				listeningLoopOnDedicatedThread();
 		});
 		
 		listenThread.start();
@@ -202,7 +191,7 @@ class MessengerWrapper {
 		
 		send(targetAddress, data, null, responseRequestorId);
 		
-		InnerMessage response;
+		PayLoad response;
 		
 		while (true)
 		{
@@ -214,7 +203,7 @@ class MessengerWrapper {
 			if (response.responseTargetId == responseRequestorId)
 			{
 				Utils.DEBUG_LOG_LINE("Took, _address=" + Utils.showable(address) + ", msg=" + response); 
-				return response.data;
+				return response.payload;
 			}
 			try {
 				responseBQ.put(response);
@@ -239,7 +228,7 @@ class MessengerWrapper {
 		
 		assert (!data.isEmpty());
 		
-		InnerMessage message = getInnerMessageFromPayload(data);
+		PayLoad message = getInnerMessageFromPayload(data);
 		
 		assert(message.responseTargetId == null);
 		  
@@ -248,7 +237,7 @@ class MessengerWrapper {
 		
 		assert(currentMessageConsumedId == null);
 		currentMessageConsumedId = message.messageId;
-		consumer.accept(message.fromAddress, message.data);
+		consumer.accept(message.sender, message.payload);
 		currentMessageConsumedId = null;
 			
 	}
@@ -269,8 +258,6 @@ class MessengerWrapper {
 			throw new InvalidOperation();
 		}
 		
-
-		
 		if (newMessageId == null)
 		{
 			synchronized(nextMessageIdToGive)
@@ -279,34 +266,16 @@ class MessengerWrapper {
 				nextMessageIdToGive++;
 			}
 		}
-		InnerMessage newMessage = new InnerMessage(newMessageId,respnseTargetId, data, address);
-		
+		PayLoad newMessage = new PayLoad(newMessageId,respnseTargetId, data, address);
 		int TMP__tries = 0;
-		
 		synchronized (sendingLock)
 		{
-			
 			assert(!messageRecivedIndicator);
-			assert(!waitingForRecepientConfirmation);
-			
-			
-			Utils.DEBUG_LOG_LINE(">>>Sending message from " + address + ", msg=" + newMessage); 
-			
-			
-			/*
-			 * The synchronization is important, otherwise, we won't know for which message the 
-			 * "ok, I've got it" empty message refers to. 
-			 */
 			while (!messageRecivedIndicator)
 			{
-				
 				TMP__tries++;
-				Utils.DEBUG_LOG_LINE("===try #" + TMP__tries + "     (by " + address + ")");
-				
-				
 				String payload = Utils.fromObjectToGsonStr(newMessage);
 				
-				waitingForRecepientConfirmation = true;
 				primitiveSendRepeatedly(targetAddress, payload);
 				try {
 					Thread.sleep(MAX_TIME_FOR_SUCCESFUL_DELIVERY);
@@ -314,34 +283,19 @@ class MessengerWrapper {
 					throw new RuntimeException("InterruptedException");
 				}
 			}
-			waitingForRecepientConfirmation = false;
-			
-			Utils.DEBUG_LOG_LINE("===success   (by " + address + ")"); 
-			
 			messageRecivedIndicator = false;
 		}
-		
-		
 	}
 
-
-	/* sends a message via _messenger, repeatedly, until recipient is a valid messenger (note that 
-	 * it can still fail to be delivered).
-	 */
 	private void primitiveSendRepeatedly(String to, String payload)
 	{
 		assert(to != null && payload != null);	
 		while (true)
 		{	
 			try {
-				if (payload.isEmpty())
-				{
-					Utils.DEBUG_LOG_LINE("|||||| Sending empty message, from: " + me.getAddress() + "; to: " + to + " |||||||||");
-				}
 				me.send(to, payload);
 				return;
 			} catch (MessengerException e) {
-				//trying again///
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e1) {
@@ -351,9 +305,7 @@ class MessengerWrapper {
 		}
 	}
 
-	
-	/* Runs on a single dedicated thread */
-	private void listeningLoop()
+	private void listeningLoopOnDedicatedThread()
 	{
 		messageLoopCurrentlyRunning = true;
 		while (!messageLoopRequestedToStop)
@@ -367,30 +319,20 @@ class MessengerWrapper {
 			if (str != null)
 			{
 				newMessageArrivedCallback(str);
-			} else
-			{
-				Utils.DEBUG_LOG_LINE("____________________queue empty for: " + address); 
 			}
 		}
 		messageLoopRequestedToStop = false;
 		messageLoopCurrentlyRunning = false;
-		
-		Utils.DEBUG_LOG_LINE("!!!!!!!!!!!!!!!!!! LISTEN LOOP ENDED FOR: " + address);
 	}
 	
-	/**
-	 * sends a confirmation (empty message) that the payload was received.
-	 * @param payload - a primitive payload received by _messenger.
-	 */
 	private void sendRecipeintConfirmation(String payload)
 	{
-		InnerMessage m = getInnerMessageFromPayload(payload);
-		primitiveSendRepeatedly(m.fromAddress, "");
+		PayLoad m = getInnerMessageFromPayload(payload);
+		primitiveSendRepeatedly(m.sender, "");
 	}
 
-
-	private InnerMessage getInnerMessageFromPayload(String payload) {
-		return Utils.fromGsonStrToObject(payload, InnerMessage.class);
+	private PayLoad getInnerMessageFromPayload(String payload) {
+		return Utils.fromGsonStrToObject(payload, PayLoad.class);
 	}
 
 }
