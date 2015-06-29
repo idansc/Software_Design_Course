@@ -53,7 +53,7 @@ public class ServerLib{
 	public void kill(){
 		started = false;
 		start.interrupt();
-		messenger.kill();
+		messenger.stop();
 	}
 	/**
 	 * start waiting for requests 

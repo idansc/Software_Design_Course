@@ -1,15 +1,15 @@
 package il.ac.technion.cs.sd.lib;
 
-import java.lang.reflect.Type;
-
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class PayLoad {
-	public final String payload;
-	public final String sender;
-	public final boolean respond;
-	private PayLoad() {
+	public String payload;
+	public String sender;
+	public boolean respond;
+	Long messageId;
+	Long responseTargetId; 
+	
+	public  PayLoad() {
 		payload = null;
 		sender = null;
 		respond=false;
@@ -19,6 +19,13 @@ public class PayLoad {
 		this.payload = payload;
 		this.sender = sender;
 		this.respond=respond;
+	}
+	
+	PayLoad(long messageId, Long respnseTargetId, String payload, String sender) {
+		this.messageId = messageId;
+		this.responseTargetId = respnseTargetId;
+		this.payload = payload;
+		this.sender = sender;
 	}
 	
 	public String toJson(){

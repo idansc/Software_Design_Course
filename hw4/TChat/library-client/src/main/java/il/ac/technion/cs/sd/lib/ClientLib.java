@@ -21,8 +21,13 @@ public class ClientLib {
 	private String serverAddress;
 	private String myAddress;
 	
-	public ClientLib(String address,Consumer<String> onRecieve,String serverAddress){
-		messenger = new  ClientMessngerWrapper(address, onRecieve);
+	public ClientLib(String address)
+	{
+		this(address, null, null);
+	}
+	
+	public ClientLib(String address,Consumer<String> dedicatedConsumer,String serverAddress){
+		messenger = new  ClientMessngerWrapper(address, dedicatedConsumer);
 		this.serverAddress=serverAddress;
 		myAddress = address;
 	}
@@ -81,6 +86,12 @@ public class ClientLib {
 	
 	//TODO:OFER
 	public void kill() {
-		messenger.kill();
+		messenger.stop();
+	}
+	
+	@Override
+	public String toString() {
+
+		return messenger.getAddress();
 	}
 }
