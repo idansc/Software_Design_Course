@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 public class Client {
 
 	private String _serverAddress;
-	private ReliableHost _reliableHost;
+	private MessengerWrapper _reliableHost;
 	
 	/**
 	 * Creates a new client.
@@ -31,7 +31,7 @@ public class Client {
 	 */
 	public Client(String address)
 	{
-		_reliableHost = new ReliableHost(address);
+		_reliableHost = new MessengerWrapper(address);
 	}
 	
 	/**

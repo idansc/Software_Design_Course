@@ -20,7 +20,7 @@ public class ClientServerIntegratedTest {
 
 	final static int CLIENTS_NUM = 4;
 
-	private Server server1;
+	private ServerLib server1;
 	private List<Client> clients = createClients(CLIENTS_NUM);
 
 
@@ -150,7 +150,7 @@ public class ClientServerIntegratedTest {
 		pojo2_a = new POJO2(-19,"oh yea!",pojos);
 
 
-		server1 = new Server("server1_"+UUID.randomUUID().toString());
+		server1 = new ServerLib("server1_"+UUID.randomUUID().toString());
 		server1.clearPersistentData();
 
 		biConsumer1_bq = new LinkedBlockingQueue<>(); 
@@ -222,7 +222,7 @@ public class ClientServerIntegratedTest {
 		server1.stop();
 
 
-		Server s = new Server(server1.getAddress());
+		ServerLib s = new ServerLib(server1.getAddress());
 		s.start(biConsumer1, POJO1.class);
 		Optional<POJO1> $ = s.readObjectFromFile("pojo1", POJO1.class);
 		s.stop();

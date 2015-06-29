@@ -14,7 +14,7 @@ import java.util.Set;
 import com.google.gson.reflect.TypeToken;
 
 import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
-import il.ac.technion.cs.sd.lib.clientserver.Server;
+import il.ac.technion.cs.sd.lib.clientserver.ServerLib;
 
 
 /**
@@ -22,7 +22,7 @@ import il.ac.technion.cs.sd.lib.clientserver.Server;
  * This class is mainly used in our tests to start, stop, and clean the server
  */
 public class ServerChatApplication {
-	Server server;
+	ServerLib server;
 	private static final String onlineClientsFileName = "onlineClients";
 	private static final String roomsToClientFileName = "roomsToClient";
 	private static final String clientsToRoomsFileName = "clientsToRooms";
@@ -37,7 +37,7 @@ public class ServerChatApplication {
      */
 
 	public ServerChatApplication(String name) {
-		server = new Server(name);
+		server = new ServerLib(name);
 	}
 	
 	/**
