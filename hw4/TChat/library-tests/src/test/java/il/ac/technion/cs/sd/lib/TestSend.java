@@ -21,7 +21,7 @@ public class TestSend {
 		c1=new ClientLib("c1", (x)->{}, "s");
 		c2=new ClientLib("c2", (x)->{}, "s");
 		s=new ServerLib("s", (req,s)->{mails.add(req);});
-		s.start();
+		s.dedicatedStart();
 		Thread t=new Thread(()->{c2.dedicatedBlockingSendToServer("crap");});
 		t.start();
 		c1.dedicatedBlockingSend("s","crap");
@@ -39,7 +39,7 @@ public class TestSend {
 			c2.dedicatedSendFromConsumer("got it");
 			}, "s");
 		s=new ServerLib("s", (req,s)->{mails.add(req);});
-		s.start();
+		s.dedicatedStart();
 		c1.dedicatedBlockingSend("c2", "");
 		assertEquals("got it", mails.take());
 		
@@ -57,7 +57,7 @@ public class TestSend {
 		});
 		c1=new ClientLib("c1", (x)->{mails.add(x);}, "s");
 		c2=new ClientLib("c2", (x)->{},"s");
-		s.start();
+		s.dedicatedStart();
 		new Thread(()->{c2.dedicatedBlockingSendToServer("arg");}).start();
 		assertEquals(c1.dedicatedSendRecieve(""),"yo mama joke");
 		assertEquals("arg", mails.take());
@@ -74,7 +74,7 @@ public class TestSend {
 			mails.add(req);
 		}
 		});
-		s.start();
+		s.dedicatedStart();
 		c1=new ClientLib("c1", (x)->{}, "s");
 		c2=new ClientLib("c2", (x)->{c2.dedicatedSendFromConsumer("yo");},"s");
 		c1.dedicatedBlockingSendToServer("");
@@ -83,7 +83,7 @@ public class TestSend {
 	
 	@After
 	public void die(){
-		s.kill();
+		s.stop();
 		c1.kill();
 		c2.kill();
 	}

@@ -3,6 +3,7 @@ package il.ac.technion.cs.sd.lib;
 
 import il.ac.technion.cs.sd.msg.MessengerException;
 
+import java.lang.reflect.Type;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -19,7 +20,6 @@ public class ClientLib {
 	
 	private ClientMessngerWrapper messenger = null;
 	private String serverAddress;
-	private String myAddress;
 	
 	public ClientLib(String address)
 	{
@@ -29,18 +29,58 @@ public class ClientLib {
 	public ClientLib(String address,Consumer<String> dedicatedConsumer,String serverAddress){
 		messenger = new  ClientMessngerWrapper(address, dedicatedConsumer);
 		this.serverAddress=serverAddress;
-		myAddress = address;
 	}
 	
 	public ClientLib(String address,Consumer<String> onRecieve){
 		messenger = new  ClientMessngerWrapper(address, onRecieve);
-		myAddress = address;
 	}
 	
 	public ClientLib(String address,String serverAddress){
 		this.serverAddress=serverAddress;
-		myAddress = address;
 	}
+	
+	
+	public <T> void start(String serverAddress, Consumer<T> consumer, Type dataType)
+	{
+		String originalServerAddress = this.serverAddress;
+		this.serverAddress = serverAddress;
+		
+		try {
+			messenger.start((fromAddress,data) -> {
+				consumer.accept(MessengerWrapper.fromGsonStrToObject(data, dataType));
+			});
+		} catch (MessengerException e) {
+			this.serverAddress = originalServerAddress;
+			throw new RuntimeException("Communication Failure");
+		}
+		
+	}
+	
+	public <T> void blockingSend(T data) {
+		try {
+			String payload = MessengerWrapper.fromObjectToGsonStr(data);
+			messenger.send(this.serverAddress, payload, false);
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		} 
+	}
+	
+	
+	public <T, S> S sendRecieve(T data, Type responseType)
+	{
+		try {
+			String str = messenger.sendAndBlockUntilResponseArrives(
+					this.serverAddress, MessengerWrapper.fromObjectToGsonStr(data));
+			
+			return MessengerWrapper.fromGsonStrToObject(str, responseType);
+		} catch (MessengerException e) {
+			throw new InvalidOperation();
+		}
+		
+	}
+	
+	
+	
 	/**
 	 * send from a consumer without creating deadlock
 	 * have a bigger overhead
@@ -84,13 +124,17 @@ public class ClientLib {
 		return dedicatedSendRecieve(serverAddress, payload);
 	}
 	
-	//TODO:OFER
 	public void kill() {
 		messenger.stop();
 	}
 	
 	@Override
 	public String toString() {
+
+		return messenger.getAddress();
+	}
+	
+	public String getAddress() {
 
 		return messenger.getAddress();
 	}

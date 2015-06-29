@@ -73,11 +73,6 @@ public class MessengerWrapper {
 			}
 			dedicatedConsumer.accept(tmp.payload);
 		};
-		try {
-			me = new MessengerFactory().start(address, messengerConsumer);
-		} catch (MessengerException e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	public MessengerWrapper(String address)
