@@ -108,12 +108,11 @@ public class MessengerTest {
 	public void messagesAreLostAfterKilled() throws Exception {
 		// empty messages cannot fail
 		Messenger m1 = startAndAddToList();
-		Messenger m2 = startAndAddToList("Ofer");
+		Messenger m2 = startAndAddToList();
 		m1.send(m2.getAddress(), "");
-		Thread.sleep(100);
 		incomingMessages.clear();
 		m2.kill();
-		m2 = startAndAddToList("Ofer");
+		m2 = startAndAddToList();
 		assertTrue(incomingMessages.isEmpty());
 		m1.send(m2.getAddress(), "");
 		assertEquals(incomingMessages.take(), "");

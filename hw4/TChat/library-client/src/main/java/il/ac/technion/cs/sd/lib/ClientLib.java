@@ -1,77 +1,85 @@
 package il.ac.technion.cs.sd.lib;
 
-import il.ac.technion.cs.sd.lib.CommunicationFailure;
-import il.ac.technion.cs.sd.lib.InvalidOperation;
-import il.ac.technion.cs.sd.lib.MessengerWrapper;
-import il.ac.technion.cs.sd.lib.Utils;
+
 import il.ac.technion.cs.sd.msg.MessengerException;
 
-import java.lang.reflect.Type;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ClientLib {
-
+	private class ClientMessngerWrapper extends MessengerWrapper{
+		private ClientMessngerWrapper(String address,Consumer<String> onRecieve) {
+			super(address,onRecieve);
+		}
+		private BlockingQueue<String> getResponds(){
+			return responds;
+		}
+	}
+	
+	private ClientMessngerWrapper messenger = null;
 	private String serverAddress;
-	private MessengerWrapper messenger;
+	private String myAddress;
 	
-	public ClientLib(String address)
-	{
-		messenger = new MessengerWrapper(address);
+	public ClientLib(String address,Consumer<String> onRecieve,String serverAddress){
+		messenger = new  ClientMessngerWrapper(address, onRecieve);
+		this.serverAddress=serverAddress;
+		myAddress = address;
 	}
 	
-	public String getAddress()
-	{
-		return messenger.getAddress();
+	public ClientLib(String address,Consumer<String> onRecieve){
+		messenger = new  ClientMessngerWrapper(address, onRecieve);
+		myAddress = address;
 	}
 	
-	public <T> void start(String serverAddress, Consumer<T> consumer, Type dataType)
-	{
-		String originalServerAddress = this.serverAddress;
-		this.serverAddress = serverAddress;
-		
+	public ClientLib(String address,String serverAddress){
+		this.serverAddress=serverAddress;
+		myAddress = address;
+	}
+	/**
+	 * send from a consumer without creating deadlock
+	 * have a bigger overhead
+	 * @param to
+	 * @param payload
+	 */
+	public void sendFromConsumer(String to,String payload){
+		messenger.sendFromConsumer(to, payload);
+	}
+	/**
+	 * send from a consumer without creating deadlock
+	 * have a bigger overhead
+	 * @param payload
+	 */
+	public void sendFromConsumer(String payload){
+		this.sendFromConsumer(serverAddress, payload);
+	}
+	
+	public void blockingSend(String to,String payload){
+		messenger.blockingSend(to, payload,false);
+	}
+	
+	public void blockingSendToServer(String payload){
+		messenger.blockingSend(serverAddress, payload,false);
+	}
+	
+	public String sendRecieve(String to,String payload){
+		blockingSend(to, payload);
 		try {
-			messenger.start((fromAddress,data) -> {
-				consumer.accept(Utils.fromGsonStrToObject(data, dataType));
-			});
-		} catch (MessengerException e) {
-			this.serverAddress = originalServerAddress;
-			throw new CommunicationFailure();
+			String retVal = null;
+			while((retVal = messenger.getResponds().poll(500, TimeUnit.MILLISECONDS)) == null) {
+				blockingSend(to, payload);
+			}
+			return retVal;
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
-		
 	}
 	
-	public void kill()
-	{
-		messenger.stop();
-	}
-
-	public <T> void blockingSend(T data) {
-		try {
-			String payload = Utils.fromObjectToGsonStr(data);
-			messenger.send(this.serverAddress, payload, false);
-		} catch (MessengerException e) {
-			throw new InvalidOperation();
-		} 
+	public String sendRecieve(String payload){
+		return sendRecieve(serverAddress, payload);
 	}
 	
-	
-	public <T, S> S sendRecieve(T data, Type responseType)
-	{
-		try {
-			String str = messenger.sendAndBlockUntilResponseArrives(
-					this.serverAddress, Utils.fromObjectToGsonStr(data));
-			
-			return Utils.fromGsonStrToObject(str, responseType);
-		} catch (MessengerException e) {
-			throw new InvalidOperation();
-		}
-		
+	public void kill() {
+		messenger.kill();
 	}
-	
-	@Override
-	public String toString() {
-
-		return messenger.getAddress();
-	}
-	
 }

@@ -1,186 +1,94 @@
 package il.ac.technion.cs.sd.lib;
 
-import il.ac.technion.cs.sd.lib.CommunicationFailure;
-import il.ac.technion.cs.sd.lib.InvalidOperation;
-import il.ac.technion.cs.sd.lib.MessengerWrapper;
-import il.ac.technion.cs.sd.lib.Utils;
-import il.ac.technion.cs.sd.msg.MessengerException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 
-import org.apache.commons.io.FileUtils;
-
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
-
-
-public class ServerLib {
-
-	private MessengerWrapper messenger;
+public class ServerLib{
 	
+	private MessengerWrapper messenger = null;
+	private final BlockingQueue<String> tasks = new LinkedBlockingQueue<>();
+	private String address;
+	private BiConsumer<String,ServerLib> requestHandler;
+	private volatile boolean started = false;
+	private Thread start = new Thread(this::listenToRequests);
 	
-	public String getAddress() {
-		return messenger.getAddress();
+	/**
+	 * 
+	 * @param address
+	 * @param requestHandler handle a request (string format of payload) will be run for every request 
+	 * once the start method is activated
+	 */
+	public ServerLib(String address,BiConsumer<String,ServerLib> requestHandler){
+		this.requestHandler = requestHandler;
+		this.address = address;
 	}
-
-	public ServerLib(String address)
-	{
-		messenger = new MessengerWrapper(address);
-	}
-
-	public <T> void start(BiConsumer<T,String> consumer, Type dataType) {
-		
-		try {
-			messenger.start((fromAddress, data) -> {
-				consumer.accept(Utils.fromGsonStrToObject(data, dataType), fromAddress);
-			});
-		} catch (MessengerException e) {
-			System.out.println(e.getMessage());
-			throw new InvalidOperation();
-		}
-		
-	}
-
-	public void stop()
-	{
-		messenger.stop();
+	/**
+	 * change the request handler
+	 * @throws alreadyRunning
+	 * @param requestHandler
+	 */
+	public void setRequestHandler(BiConsumer<String,ServerLib> requestHandler){
+		if (started)
+			throw new alreadyRunning();
+		this.requestHandler = requestHandler;
 	}
 	
-
-	public <T> void send(String clientAddress, T data, boolean isResponse)
-	{
-		try {
-			messenger.send(clientAddress, Utils.fromObjectToGsonStr(data), isResponse);
-		} catch (MessengerException e) {
-			throw new CommunicationFailure();
-		}
-	}
-	
-	
-	public void clearPersistentData()
-	{
-		File persistentDataDir = getServerPersistentDir();
-		if (!persistentDataDir.exists())
-		{
-			return;
-		}
-		try {
-			if (!persistentDataDir.exists())
+	private void listenToRequests(){
+		started =true;
+		while (started){
+			String task = null;
+			try {
+				task = tasks.take();
+			} catch (InterruptedException e) {
 				return;
-				FileUtils.cleanDirectory(getServerPersistentDir());
-				FileUtils.deleteDirectory(getServerPersistentDir());
-		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
+			}
+			requestHandler.accept(task, this);
 		}
+	}
+	/**
+	 * release all resources 
+	 */
+	public void kill(){
+		started = false;
+		start.interrupt();
+		messenger.kill();
+	}
+	/**
+	 * start waiting for requests 
+	 * run requestHandler on each request (string argument)
+	 */
+	public void start(){
+		if (started)
+			throw new alreadyRunning();
+		messenger = new  MessengerWrapper(address, (x) -> tasks.add(x));
+		started = true;
+		start = new Thread(this::listenToRequests);
+		start.start();
 	}
 	
-
-	public <T> void saveObjectToFile(String filename, T data)
-	{
-		File file = getFileByName(filename, true);
-		
-		try (JsonWriter persistentDataWriter = createJsonWriter(file)) 
-		{
-			Utils.writeObjectToJsonWriter(data,persistentDataWriter);
-		} catch (IOException e) {			
-			throw new RuntimeException("Failed to close stream");
-		}
-	}
-	 
-	
-	public <T> Optional<T> readObjectFromFile(String filename, Type type)
-	{
-		File file = getFileByName(filename, false);
-		
-		if (!file.exists())
-		{
-			return Optional.empty();
-		}
-		
-		
-		Optional<T> $;
-		
-		try (JsonReader persistentDataReader = createJsonReader(file))
-		{
-			$ =  Optional.of(Utils.readObjectFromGsonReader(persistentDataReader, type));
-		}
-		catch (RuntimeException e)
-		{
-			throw new BadFileContent();
-		} catch (IOException e1) {
-			throw new RuntimeException("Failed to close stream");
-		}
-		
-		return $;
+	/**
+	 * payload go to the client's consumer
+	 * can and should be used on request handler
+	 * keep sending data until the target get it
+	 * @param to
+	 * @param payload
+	 */
+	public void blockingSend(String to,String payload){
+		messenger.blockingSend(to,payload,false);
 	}
 	
-	private JsonWriter createJsonWriter(File f)
-	{
-		try {
-			OutputStream stream = new FileOutputStream(f);
-			return  new JsonWriter(new OutputStreamWriter(stream, Utils.ENCODING));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("UnsupportedEncodingException");
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException("FileNotFoundException");
-		}
+	/**
+	 * payload don't go to client's consumer assume consumer is 
+	 * should be used just as a respond to user request where the user will sit and wait for it
+	 * @param to user
+	 * @param payload the respond
+	 */
+	public void blockingRespond(String to,String payload){
+		messenger.blockingSend(to,payload,true);
 	}
 	
-	private JsonReader createJsonReader(File f)
-	{
-		if(!f.exists())
-		{
-			throw new RuntimeException("File does not exist");
-		}
-		try {
-			InputStream stream = new FileInputStream(f);
-			return new JsonReader(new InputStreamReader(stream, Utils.ENCODING));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("UnsupportedEncodingException");
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException("FileNotFoundException");
-		}
-	}
-
-	private File getFileByName(String filename, boolean createItsDirIfNecessary)
-	{
-		File serverDir = getServerPersistentDir();
-		if (createItsDirIfNecessary)
-		{
-			serverDir.mkdirs();
-		}
-		return new File(serverDir, filename);
-	}
-
-	private File getServerPersistentDir() {
-		return new File(getPesistentDirOfAllServers(), getServerPersistentDirName());
-	}
 	
-	private String getServerPersistentDirName()
-	{
-		return Integer.toString(getAddress().hashCode());
-	}
-	
-	private static File getPesistentDirOfAllServers()
-	{
-		return new File("./TMP___ServersData");
-	}
-	
-	@SuppressWarnings("serial")
-	public class BadFileContent extends RuntimeException {}
-	
+	public static class TargetIsntLogedIn extends RuntimeException{}
+	public static class alreadyRunning extends RuntimeException{}
 }
