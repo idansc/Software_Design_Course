@@ -54,7 +54,7 @@ public class MessengerWrapper {
 	 * @param to
 	 * @param payload
 	 */
-	public synchronized void blockingSend(String to,String payload, boolean respond){
+	public synchronized void dedicatedBlockingSend(String to,String payload, boolean respond){
 		// try to resend every 100 milliseconds until ack 
 		try {
 			do {
@@ -72,6 +72,7 @@ public class MessengerWrapper {
 	 * kill the messenger wrapper 
 	 * don't use messenger wrapper after it have been killed
 	 */
+	//TODO:OFER
 	public void kill(){
 		try {
 			me.kill();
@@ -85,7 +86,7 @@ public class MessengerWrapper {
 	 * @param to
 	 * @param payload
 	 */
-	public void sendFromConsumer(String to,String payload){
+	public void dedicatedSendFromConsumer(String to,String payload){
 		try {
 			do {
 				me.send(to, new PayLoad(payload, me.getAddress(), false).toJson());

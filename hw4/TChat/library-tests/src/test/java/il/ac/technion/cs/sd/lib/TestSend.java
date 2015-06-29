@@ -22,9 +22,9 @@ public class TestSend {
 		c2=new ClientLib("c2", (x)->{}, "s");
 		s=new ServerLib("s", (req,s)->{mails.add(req);});
 		s.start();
-		Thread t=new Thread(()->{c2.blockingSendToServer("crap");});
+		Thread t=new Thread(()->{c2.dedicatedBlockingSendToServer("crap");});
 		t.start();
-		c1.blockingSend("s","crap");
+		c1.dedicatedBlockingSend("s","crap");
 		t.join();
 		assertEquals("crap",mails.take());
 		assertEquals("crap", mails.take());
@@ -36,11 +36,11 @@ public class TestSend {
 		s=new ServerLib("s", (req,s)->{mails.add(req);});
 		c1=new ClientLib("c1", (x)->{}, "s");
 		c2=new ClientLib("c2", (x)->{
-			c2.sendFromConsumer("got it");
+			c2.dedicatedSendFromConsumer("got it");
 			}, "s");
 		s=new ServerLib("s", (req,s)->{mails.add(req);});
 		s.start();
-		c1.blockingSend("c2", "");
+		c1.dedicatedBlockingSend("c2", "");
 		assertEquals("got it", mails.take());
 		
 	}
@@ -49,7 +49,7 @@ public class TestSend {
 	public void sendRecieve() throws InterruptedException{
 		BlockingQueue<String> mails = new LinkedBlockingQueue<>();
 		s=new ServerLib("s", (req,s)->{if (req.equals("")){
-			s.blockingRespond("c1", "yo mama joke");
+			s.dedicatedBlockingRespond("c1", "yo mama joke");
 			}
 		else {
 			mails.add(req);
@@ -58,8 +58,8 @@ public class TestSend {
 		c1=new ClientLib("c1", (x)->{mails.add(x);}, "s");
 		c2=new ClientLib("c2", (x)->{},"s");
 		s.start();
-		new Thread(()->{c2.blockingSendToServer("arg");}).start();
-		assertEquals(c1.sendRecieve(""),"yo mama joke");
+		new Thread(()->{c2.dedicatedBlockingSendToServer("arg");}).start();
+		assertEquals(c1.dedicatedSendRecieve(""),"yo mama joke");
 		assertEquals("arg", mails.take());
 		assertEquals(0,mails.size());
 	}
@@ -68,7 +68,7 @@ public class TestSend {
 	public void sendFromServer() throws InterruptedException{
 		BlockingQueue<String> mails = new LinkedBlockingQueue<>();
 		s=new ServerLib("s", (req,s)->{if (req.equals("")){
-			s.blockingSend("c2", "yo mama joke");
+			s.dedicatedBlockingSend("c2", "yo mama joke");
 			}
 		else {
 			mails.add(req);
@@ -76,8 +76,8 @@ public class TestSend {
 		});
 		s.start();
 		c1=new ClientLib("c1", (x)->{}, "s");
-		c2=new ClientLib("c2", (x)->{c2.sendFromConsumer("yo");},"s");
-		c1.blockingSendToServer("");
+		c2=new ClientLib("c2", (x)->{c2.dedicatedSendFromConsumer("yo");},"s");
+		c1.dedicatedBlockingSendToServer("");
 		assertEquals("yo", mails.take());
 	}
 	

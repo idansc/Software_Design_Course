@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 
 public class ClientLib {
 	private class ClientMessngerWrapper extends MessengerWrapper{
-		private ClientMessngerWrapper(String address,Consumer<String> onRecieve) {
-			super(address,onRecieve);
+		private ClientMessngerWrapper(String address,Consumer<String> dedicatedConsumer) {
+			super(address,dedicatedConsumer);
 		}
 		private BlockingQueue<String> getResponds(){
 			return responds;
@@ -42,32 +42,32 @@ public class ClientLib {
 	 * @param to
 	 * @param payload
 	 */
-	public void sendFromConsumer(String to,String payload){
-		messenger.sendFromConsumer(to, payload);
+	public void dedicatedSendFromConsumer(String to,String payload){
+		messenger.dedicatedSendFromConsumer(to, payload);
 	}
 	/**
 	 * send from a consumer without creating deadlock
 	 * have a bigger overhead
 	 * @param payload
 	 */
-	public void sendFromConsumer(String payload){
-		this.sendFromConsumer(serverAddress, payload);
+	public void dedicatedSendFromConsumer(String payload){
+		this.dedicatedSendFromConsumer(serverAddress, payload);
 	}
 	
-	public void blockingSend(String to,String payload){
-		messenger.blockingSend(to, payload,false);
+	public void dedicatedBlockingSend(String to,String payload){
+		messenger.dedicatedBlockingSend(to, payload,false);
 	}
 	
-	public void blockingSendToServer(String payload){
-		messenger.blockingSend(serverAddress, payload,false);
+	public void dedicatedBlockingSendToServer(String payload){
+		messenger.dedicatedBlockingSend(serverAddress, payload,false);
 	}
 	
-	public String sendRecieve(String to,String payload){
-		blockingSend(to, payload);
+	public String dedicatedSendRecieve(String to,String payload){
+		dedicatedBlockingSend(to, payload);
 		try {
 			String retVal = null;
 			while((retVal = messenger.getResponds().poll(500, TimeUnit.MILLISECONDS)) == null) {
-				blockingSend(to, payload);
+				dedicatedBlockingSend(to, payload);
 			}
 			return retVal;
 		} catch (InterruptedException e) {
@@ -75,10 +75,11 @@ public class ClientLib {
 		}
 	}
 	
-	public String sendRecieve(String payload){
-		return sendRecieve(serverAddress, payload);
+	public String dedicatedSendRecieve(String payload){
+		return dedicatedSendRecieve(serverAddress, payload);
 	}
 	
+	//TODO:OFER
 	public void kill() {
 		messenger.kill();
 	}

@@ -11,7 +11,7 @@ public class ServerLib{
 	private String address;
 	private BiConsumer<String,ServerLib> requestHandler;
 	private volatile boolean started = false;
-	private Thread start = new Thread(this::listenToRequests);
+	private Thread start = new Thread(this::dedicatedListenToRequests);
 	
 	/**
 	 * 
@@ -28,13 +28,13 @@ public class ServerLib{
 	 * @throws alreadyRunning
 	 * @param requestHandler
 	 */
-	public void setRequestHandler(BiConsumer<String,ServerLib> requestHandler){
+	public void setDedicatedRequestHandler(BiConsumer<String,ServerLib> requestHandler){
 		if (started)
 			throw new alreadyRunning();
 		this.requestHandler = requestHandler;
 	}
 	
-	private void listenToRequests(){
+	private void dedicatedListenToRequests(){
 		started =true;
 		while (started){
 			String task = null;
@@ -49,6 +49,7 @@ public class ServerLib{
 	/**
 	 * release all resources 
 	 */
+	//TODO:OFER
 	public void kill(){
 		started = false;
 		start.interrupt();
@@ -58,12 +59,13 @@ public class ServerLib{
 	 * start waiting for requests 
 	 * run requestHandler on each request (string argument)
 	 */
+	//TODO:OFER
 	public void start(){
 		if (started)
 			throw new alreadyRunning();
 		messenger = new  MessengerWrapper(address, (x) -> tasks.add(x));
 		started = true;
-		start = new Thread(this::listenToRequests);
+		start = new Thread(this::dedicatedListenToRequests);
 		start.start();
 	}
 	
@@ -74,8 +76,8 @@ public class ServerLib{
 	 * @param to
 	 * @param payload
 	 */
-	public void blockingSend(String to,String payload){
-		messenger.blockingSend(to,payload,false);
+	public void dedicatedBlockingSend(String to,String payload){
+		messenger.dedicatedBlockingSend(to,payload,false);
 	}
 	
 	/**
@@ -84,8 +86,8 @@ public class ServerLib{
 	 * @param to user
 	 * @param payload the respond
 	 */
-	public void blockingRespond(String to,String payload){
-		messenger.blockingSend(to,payload,true);
+	public void dedicatedBlockingRespond(String to,String payload){
+		messenger.dedicatedBlockingSend(to,payload,true);
 	}
 	
 	
