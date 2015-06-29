@@ -1,6 +1,6 @@
 package il.ac.technion.cs.sd.app.chat;
 
-import il.ac.technion.cs.sd.lib.clientserver.ClientLib;
+import il.ac.technion.cs.sd.lib.ClientLib;
 
 import java.util.LinkedList;
 import java.util.List;

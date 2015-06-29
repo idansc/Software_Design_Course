@@ -1,6 +1,8 @@
-package il.ac.technion.cs.sd.lib.clientserver;
+package il.ac.technion.cs.sd.lib;
 
 import static org.junit.Assert.*;
+import il.ac.technion.cs.sd.lib.ClientLib;
+import il.ac.technion.cs.sd.lib.ServerLib;
 
 import java.util.LinkedList;
 import java.util.List;

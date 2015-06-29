@@ -1,4 +1,4 @@
-package il.ac.technion.cs.sd.lib.clientserver;
+package il.ac.technion.cs.sd.lib;
 
 public class InvalidOperation extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package il.ac.technion.cs.sd.lib.clientserver;
+package il.ac.technion.cs.sd.lib;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

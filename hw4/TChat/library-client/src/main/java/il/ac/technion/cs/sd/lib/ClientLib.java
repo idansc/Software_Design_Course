@@ -1,5 +1,9 @@
-package il.ac.technion.cs.sd.lib.clientserver;
+package il.ac.technion.cs.sd.lib;
 
+import il.ac.technion.cs.sd.lib.CommunicationFailure;
+import il.ac.technion.cs.sd.lib.InvalidOperation;
+import il.ac.technion.cs.sd.lib.MessengerWrapper;
+import il.ac.technion.cs.sd.lib.Utils;
 import il.ac.technion.cs.sd.msg.MessengerException;
 
 import java.lang.reflect.Type;

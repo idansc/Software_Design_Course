@@ -14,7 +14,7 @@ import java.util.Set;
 import com.google.gson.reflect.TypeToken;
 
 import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
-import il.ac.technion.cs.sd.lib.clientserver.ServerLib;
+import il.ac.technion.cs.sd.lib.ServerLib;
 
 
 /**
