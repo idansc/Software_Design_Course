@@ -3,7 +3,6 @@ package il.ac.technion.cs.sd.app.chat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import il.ac.technion.cs.sd.app.chat.RoomAnnouncement.Announcement;
 
 import java.util.Arrays;
@@ -106,7 +105,7 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).joinRoom("room1");
 		
-		assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class);
+		Utils.assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class);
 		
 		logoutClient(0);	
 		
@@ -126,7 +125,7 @@ public class TChatIntegratedTest {
 		loginClient(0);
 		
 		
-		assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class );
+		Utils.assertThrow( ()->clients.get(0).joinRoom("room1"), AlreadyInRoomException.class );
 		
 		logoutClient(0);
 
@@ -140,7 +139,7 @@ public class TChatIntegratedTest {
 		loginClient(0);
 		
 		
-		assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
+		Utils.assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
 		
 		clients.get(0).joinRoom("room1");
 		
@@ -150,7 +149,7 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).leaveRoom("room1");
 		
-		assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
+		Utils.assertThrow( ()->clients.get(0).leaveRoom("room1"), NotInRoomException.class);
 		
 		logoutClient(0);
 		
@@ -266,7 +265,7 @@ public class TChatIntegratedTest {
 
 		clients.get(0).joinRoom("room1");
 
-		assertThrow( ()->clients.get(0).sendMessage("room2", "hi"), NotInRoomException.class);
+		Utils.assertThrow( ()->clients.get(0).sendMessage("room2", "hi"), NotInRoomException.class);
 		logoutClient(0);
 		assertAllBlockingQueuesAreCurrentlyEmpty();
 	}
@@ -445,7 +444,7 @@ public class TChatIntegratedTest {
 		loginClient(2);
 		
 		
-		assertThrow( () -> clients.get(1).getClientsInRoom("room1"), NoSuchRoomException.class);
+		Utils.assertThrow( () -> clients.get(1).getClientsInRoom("room1"), NoSuchRoomException.class);
 		
 		clients.get(0).joinRoom("room1");
 		
@@ -484,7 +483,7 @@ public class TChatIntegratedTest {
 		assertListContentOrderNotImportant(clients.get(1).getClientsInRoom("room1"), 
 				clients.get(0).getUsername(), clients.get(1).getUsername());
 
-		assertThrow( () -> clients.get(1).getClientsInRoom("room2"), NoSuchRoomException.class);
+		Utils.assertThrow( () -> clients.get(1).getClientsInRoom("room2"), NoSuchRoomException.class);
 		
 
 		logoutClient(1);
@@ -494,7 +493,7 @@ public class TChatIntegratedTest {
 		
 		clients.get(0).leaveRoom("room1");
 		
-		assertThrow( () -> clients.get(0).getClientsInRoom("room1"), NoSuchRoomException.class);
+		Utils.assertThrow( () -> clients.get(0).getClientsInRoom("room1"), NoSuchRoomException.class);
 				
 		logoutClient(0);
 	}
@@ -673,25 +672,8 @@ public class TChatIntegratedTest {
 		assertEquals(contentSet, listSet);
 	}
 	
-	@FunctionalInterface
-	private interface ThrowingRunnable
-	{
-		void run() throws Exception;
-	}
+
 	
-	/**
-	 * @param <T> The type of the exception that we expect consumer will throw when task is invoked.
-	 */
-	private<T> void assertThrow(ThrowingRunnable task, Class<T> exceptionClass)
-	{
-		try{
-			task.run();
-		} catch (Exception e)
-		{
-			if (e.getClass().equals(exceptionClass))
-				return;
-		}
-		fail();
-	}
+
 	
 }

@@ -1,6 +1,9 @@
 package il.ac.technion.cs.sd.app.chat;
 
 import static org.junit.Assert.*;
+
+import java.util.UUID;
+
 import il.ac.technion.cs.sd.lib.ClientLib;
 
 import org.junit.After;
@@ -20,14 +23,21 @@ import org.mockito.Mockito;
  * *************************************************************
  *************************************************************/
 
+
 public class ClientChatApplicationTest {
 
+	private String clientAddress;
+	private String serverAddress;
+	
 	private ClientChatApplication chatClient;
 	ClientLib clientMock;
 	
 	@Before
 	public void setUp() throws Exception {
-		chatClient = new ClientChatApplication("server1", "user1");
+		clientAddress = "client_" + UUID.randomUUID();
+		serverAddress = "server_" + UUID.randomUUID();
+		
+		chatClient = new ClientChatApplication(serverAddress, clientAddress);
 		clientMock = Mockito.mock(ClientLib.class);
 		
 		Mockito.when(clientMock.sendRecieve(Mockito.any(), Mockito.any())).thenReturn(null);
@@ -40,8 +50,51 @@ public class ClientChatApplicationTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void login() {
+		chatClient.login(x->{},y->{});
+		
+		Mockito.verify(clientMock,Mockito.times(1)).start(
+				Mockito.eq(serverAddress),Mockito.any(),Mockito.any());
+		
+		Mockito.verify(clientMock,Mockito.times(1)).blockingSend(Mockito.any());
+			
+	}
+	
+	
+	@Test
+	public void joinRoom() throws AlreadyInRoomException {
+		Utils.assertThrow(()-> chatClient.joinRoom("room1"), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
+	}
+	
+	@Test
+	public void leaveRoom() throws AlreadyInRoomException, NotInRoomException {
+		Utils.assertThrow(()-> chatClient.leaveRoom("room1"), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
+	}
+	
+	@Test
+	public void sendMessage() throws AlreadyInRoomException, NotInRoomException {
+		Utils.assertThrow(()-> chatClient.sendMessage("room1", "hi"), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
 	}
 
+	@Test
+	public void getJoinedRooms() throws AlreadyInRoomException, NotInRoomException {
+		Utils.assertThrow(()-> chatClient.getJoinedRooms(), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
+	}
+
+	@Test
+	public void getAllRooms() throws AlreadyInRoomException, NotInRoomException {
+		Utils.assertThrow(()-> chatClient.getAllRooms(), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
+	}
+	
+	@Test
+	public void getClientsInRoom() throws AlreadyInRoomException, NotInRoomException {
+		Utils.assertThrow(()-> chatClient.getClientsInRoom("room1"), NullPointerException.class);
+		Mockito.verify(clientMock,Mockito.times(1)).sendRecieve(Mockito.any(),Mockito.any());
+	}
+	
 }
