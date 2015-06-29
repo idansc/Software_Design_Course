@@ -15,10 +15,11 @@ import com.google.gson.reflect.TypeToken;
  * You should implement all the methods in this class
  */
 public class ClientChatApplication {
-	ClientLib _client;
-	String _serverAdress;
-	Boolean _isOnline;
 	
+
+	String _serverAdress;
+	Boolean _isOnline;	
+	ClientLib _client;
 
 	/**
 	 * Creates a new application, tied to a single user
@@ -32,6 +33,11 @@ public class ClientChatApplication {
 		_serverAdress = serverAddress;
 		_client = new ClientLib(username);
 		_isOnline = false;
+	}
+	
+	// for testing.
+	void setClient(ClientLib _client) {
+		this._client = _client;
 	}
 	
 	public String getUsername()
