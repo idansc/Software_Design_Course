@@ -105,18 +105,19 @@ public class MessengerTest {
 	}
 	
 	@Test
-	public void messagesAreLostAfterKilled() throws Exception {
-		// empty messages cannot fail
-		Messenger m1 = startAndAddToList();
-		Messenger m2 = startAndAddToList();
-		m1.send(m2.getAddress(), "");
-		incomingMessages.clear();
-		m2.kill();
-		m2 = startAndAddToList();
-		assertTrue(incomingMessages.isEmpty());
-		m1.send(m2.getAddress(), "");
-		assertEquals(incomingMessages.take(), "");
-	}
+    public void messagesAreLostAfterKilled() throws Exception {
+        // empty messages cannot fail
+        Messenger m1 = startAndAddToList();
+        Messenger m2 = startAndAddToList("Ofer");
+        m1.send(m2.getAddress(), "");
+        Thread.sleep(100);
+        incomingMessages.clear();
+        m2.kill();
+        m2 = startAndAddToList("Ofer");
+        assertTrue(incomingMessages.isEmpty());
+        m1.send(m2.getAddress(), "");
+        assertEquals(incomingMessages.take(), "");
+    }
 	
 	@Test(expected = MessengerException.class)
 	public void cantSendSerializedData() throws Exception {
