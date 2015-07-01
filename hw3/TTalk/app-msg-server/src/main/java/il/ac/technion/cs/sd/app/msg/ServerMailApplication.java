@@ -91,15 +91,14 @@ public class ServerMailApplication {
 		}
 		case CLIENT_REPLY_FRIEND_REQUEST_TASK:
 			if(messageData._friendRequestAnswer)
-				if(!_clientFriends.containsKey(from)){
-					assert(!_clientFriends.containsKey(messageData._target));
-					_clientFriends.put(from, new ArrayList<>(Arrays.asList(messageData._target)));
-					_clientFriends.put(messageData._target, new ArrayList<>(Arrays.asList(from)));
-				}else{
-					assert(_clientFriends.containsKey(messageData._target));
-					_clientFriends.get(from).add(messageData._target);
-					_clientFriends.get(messageData._target).add(from);
-				}
+			{
+				if(!_clientFriends.containsKey(from))
+					_clientFriends.put(from, new ArrayList<>());
+				if (!_clientFriends.containsKey(messageData._target))
+					_clientFriends.put(messageData._target, new ArrayList<>());
+				_clientFriends.get(from).add(messageData._target);
+				_clientFriends.get(messageData._target).add(from);
+			}
 		case SEND_MESSAGE_TASK:
 		case REQUEST_FRIENDSHIP_TASK:
 			handleReplyMessageData(from,messageData);
